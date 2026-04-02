@@ -1,0 +1,59 @@
+/* Variables CSS globales */
+:root {
+  /* Colores principales */
+  --color-primary: #ff7b00;
+  --color-secondary: #ff4500;
+  --color-accent: #f46a1f;
+  --color-background: #000;
+  --color-text: #fff;
+  --color-navbar: #111;
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(90deg, #ff7b00, #ff4500);
+  --gradient-card: linear-gradient(145deg, #fff5e1, #ffe4b3);
+  --gradient-navbar: linear-gradient(90deg, #111, #222);
+  
+  /* Sombras */
+  --shadow-primary: 0 4px 20px rgba(255, 94, 0, 0.4);
+  --shadow-card: 0 6px 15px rgba(255, 136, 0, 0.2);
+  --shadow-navbar: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-button: 0 4px 10px rgba(255, 136, 0, 0.5);
+  
+  /* Espaciado */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  
+  /* Tamaños de fuente */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  
+  /* Bordes */
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 18px;
+  --border-radius-xl: 30px;
+  
+  /* Transiciones */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Z-index */
+  --z-navbar: 1000;
+  --z-modal: 2000;
+  --z-tooltip: 3000;
+  
+  /* Breakpoints (para uso en JavaScript) */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+}

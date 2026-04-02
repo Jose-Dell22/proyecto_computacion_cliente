@@ -1,0 +1,145 @@
+/* === CONTENEDOR PRINCIPAL === */
+.menu-estatico-container {
+  background-image: url("https://images.unsplash.com/photo-1606756790138-287fb9f6a00a?auto=format&fit=crop&w=2070&q=80");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  min-height: 100vh;
+  padding: 4em 1em;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.menu-estatico-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* === ENCABEZADO === */
+.menu-estatico-header {
+  color: #fff;
+  padding: 0.6em 1.5em;
+  border-radius: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(45deg, #ff7b00, #ff4500);
+  box-shadow: 0 4px 15px rgba(255, 123, 0, 0.4);
+  display: inline-block;
+  font-size: 1.6em;
+  font-weight: 800;
+  transition: transform 0.3s ease;
+}
+
+.menu-estatico-header:hover {
+  transform: scale(1.03);
+}
+
+/* === TARJETAS === */
+.menu-estatico-card {
+  border-radius: 18px !important;
+  background: linear-gradient(145deg, #fff5e1, #ffe4b3);
+  box-shadow: 0 6px 15px rgba(255, 136, 0, 0.3);
+  border: 2px solid rgba(255, 136, 0, 0.2);
+  backdrop-filter: blur(8px);
+  width: 250px !important; /* tamaño fijo */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.menu-estatico-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(255, 136, 0, 0.4);
+}
+
+/* === IMÁGENES === */
+.menu-estatico-image {
+  width: 100%;
+  height: 170px !important;
+  object-fit: cover;
+  display: block;
+  border-bottom: 2px solid rgba(255, 136, 0, 0.2);
+}
+
+/* === CONTENIDO DE TEXTO === */
+.menu-estatico-title {
+  color: #ff7b00 !important;
+  font-size: 1.1em !important;
+  font-weight: 700 !important;
+  margin-bottom: 0.4em !important;
+}
+
+.menu-estatico-description {
+  font-size: 0.9em;
+  color: #333;
+  min-height: 60px;
+  line-height: 1.3;
+}
+
+/* === PRECIO Y BOTÓN === */
+.menu-estatico-price {
+  color: #d35400;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.menu-estatico-button {
+  margin-left: 0.8em !important;
+  background: linear-gradient(45deg, #ff7b00, #ff4500) !important;
+  color: #fff !important;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.menu-estatico-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(45deg, #ff9000, #ff5c00) !important;
+}
+
+/* === RESPONSIVO === */
+@media (max-width: 992px) {
+  .menu-estatico-card {
+    width: 45% !important;
+  }
+
+  .menu-estatico-image {
+    height: 160px !important;
+  }
+
+  .menu-estatico-header {
+    font-size: 1.4em;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-estatico-card {
+    width: 80% !important;
+  }
+
+  .menu-estatico-image {
+    height: 150px !important;
+    object-fit: cover;
+  }
+
+  .menu-estatico-header {
+    font-size: 1.3em;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-estatico-card {
+    width: 100% !important;
+  }
+
+  .menu-estatico-image {
+    height: 140px !important;
+    object-fit: cover;
+  }
+
+  .menu-estatico-header {
+    font-size: 1.1em;
+    padding: 0.5em 1em;
+  }
+}

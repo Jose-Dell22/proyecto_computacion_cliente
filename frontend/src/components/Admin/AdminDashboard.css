@@ -1,0 +1,39 @@
+.admin-dashboard {
+  padding: 2rem 0;
+}
+
+.admin-dashboard .ui.tab {
+  padding: 1.5rem;
+}
+
+.admin-dashboard .ui.table {
+  margin-top: 1rem;
+}
+
+.admin-dashboard .ui.card {
+  margin-bottom: 1rem;
+}
+
+.admin-dashboard .ui.segment {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.admin-info-segment {
+  background: linear-gradient(135deg, #ff7b00 0%, #ff4500 100%) !important;
+  color: white !important;
+}
+
+.admin-info-segment p {
+  color: white;
+  margin: 0.5em 0;
+  font-size: 1.05em;
+}
+
+.admin-info-segment strong {
+  color: white;
+  font-weight: 600;
+}
+
+.admin-info-segment .header {
+  color: white !important;
+}

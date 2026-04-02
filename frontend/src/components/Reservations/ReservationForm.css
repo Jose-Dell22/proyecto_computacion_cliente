@@ -1,0 +1,54 @@
+.reservation-card{
+  background: linear-gradient(180deg, #232427, #1b1c1d) !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  box-shadow: 0 12px 28px rgba(0,0,0,.35) !important;
+  border-radius: 16px !important;
+}
+
+.reservation-title{
+  color: #eaecef !important;
+}
+.reservation-title .sub.header{
+  color: #acb2b8 !important;
+}
+
+.reservation-form .field>label{
+  color: #acb2b8 !important;
+}
+
+.reservation-form .ui.input>input,
+.reservation-form textarea,
+.reservation-form .ui.dropdown>.text,
+.reservation-form .ui.dropdown>.search{
+  background: #121316 !important;
+  color: #eaecef !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+}
+
+.reservation-form .ui.input>input:focus,
+.reservation-form textarea:focus,
+.reservation-form .ui.dropdown.active,
+.reservation-form .ui.selection.active.dropdown{
+  border-color: #ff7a1a !important;
+  box-shadow: 0 0 0 1px #ff7a1a inset !important;
+}
+
+.acomp-wrap{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin: .5rem 0 1rem;
+}
+.acomp-item label{
+  color: #eaecef !important;
+}
+
+.ui.primary.button{
+  background: #ff7a1a !important;
+  border: none !important;
+}
+.ui.primary.button:hover,
+.ui.primary.button:focus{
+  background: #ff9d4d !important;
+  transform: translateY(-1px);
+}

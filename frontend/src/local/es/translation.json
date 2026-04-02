@@ -1,0 +1,258 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "specialties": "Especialidades",
+    "products": "Productos",
+    "contact": "Contacto",
+    "about": "Sobre nosotros",
+    "language": "Idioma"
+  },
+  "footer": {
+    "title": "Tradición, fuego y sabor artesanal",
+    "schedule_title": "Horario",
+    "contact_title": "Contacto",
+    "social_title": "Síguenos",
+    "rights": "Todos los derechos reservados."
+  },
+  "home": {
+    "subtitle": "El auténtico sabor del fuego",
+    "explore_menu": "Explora nuestro menú",
+    "explore_world": "Explora nuestro mundo",
+    "experience_text": "Descubre la magia de nuestra carne al barril",
+    "menu_title": "Nuestro Menú",
+    "menu_description": "Descubre nuestros mejores platos elaborados con la técnica tradicional del barril.",
+    "menu_button": "Ver menú completo",
+    "location_title": "Ubicación",
+    "location_description": "Visítanos y vive una experiencia única de carne al barril.",
+    "location_button": "Ver ubicación",
+    "about_title": "Sobre nosotros",
+    "about_description": "Conoce la historia detrás de nuestros sabores inolvidables.",
+    "about_button": "Leer más",
+    "specials_title": "Especialidades",
+    "specials_description": "Nuestros platos más populares y las especialidades que no puedes dejar de probar.",
+    "specials_button": "Ver especialidades"
+  },
+  "menu": {
+    "title": "Especialidades al Barril",
+    "added_message": "Agregado al carrito.",
+    "items": {
+      "beef_barrel": {
+        "title": "Carne al Barril",
+        "description": "Carne de res jugosa cocinada lentamente en barril, con un sabor ahumado irresistible."
+      },
+      "ribs_bbq": {
+        "title": "Costillas BBQ",
+        "description": "Tiernas costillas bañadas en salsa barbacoa artesanal, servidas con limón y hierbas."
+      },
+      "sausage": {
+        "title": "Chorizo a la Parrilla",
+        "description": "Chorizo artesanal a las brasas, acompañado de tortillas y chimichurri."
+      },
+      "picanha": {
+        "title": "Picanha",
+        "description": "Corte de res seleccionado con sal gruesa y mantequilla de ajo, jugoso y tierno."
+      },
+      "chicken_breast": {
+        "title": "Pechuga de Pollo",
+        "description": "Pollo marinado con hierbas, asado a la perfección."
+      },
+      "grill_trilogy": {
+        "title": "Trilogía a la Parrilla",
+        "description": "Tres cortes seleccionados —chorizo, picanha y lomo— cocinados al barril, con papas y chimichurri artesanal."
+      }
+    }
+  },
+  "products": {
+    "load_more": "Cargar más",
+    "search_placeholder": "Buscar producto..."
+
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "subtitle": "¿Reservas, dudas o sugerencias? Escríbenos.",
+    "cart_title": "Productos en el carrito",
+    "decrease": "Reducir cantidad",
+    "increase": "Aumentar cantidad",
+    "remove": "Eliminar producto",
+    "price": "Precio",
+    "total": "Total del pedido",
+    "clear_cart": "Vaciar carrito",
+    "write_us": "Escríbenos",
+    "error_header": "Ups…",
+    "sent": "Mensaje enviado",
+    "name": "Nombre",
+    "name_placeholder": "Tu nombre",
+    "email": "Correo electrónico",
+    "email_placeholder": "Tu correo",
+    "message": "Mensaje",
+    "message_placeholder": "¿Cómo podemos ayudarte?",
+    "send": "Enviar",
+    "also_here": "También puedes encontrarnos aquí",
+    "visit_us": "Visítanos",
+    "directions": "Ver cómo llegar",
+    "schedule": "Horario",
+    "reservations": "Reservas",
+    "map_title": "Mapa del restaurante",
+    "privacy": "Tu privacidad es muy importante para nosotros",
+    "success": "Tu mensaje ha sido enviado con éxito.",
+    "error": "Error al enviar el mensaje."
+  },
+  "about": {
+    "hero_subtitle": "Sabor, pasión y tradición auténtica",
+    "history_title": "Nuestra historia",
+    "history_paragraph1": "Fundado en 2010, {{name}} nació del amor por la cocina tradicional. De un pequeño restaurante familiar a una marca gastronómica reconocida.",
+    "history_paragraph2": "Durante más de una década, mantenemos la excelencia seleccionando cuidadosamente cada corte y usando métodos tradicionales.",
+    "stats_title": "Nuestras cifras",
+    "stats_years": "Años de tradición",
+    "stats_clients": "Clientes diarios",
+    "stats_cuts": "Cortes seleccionados",
+    "stats_satisfaction": "Satisfacción",
+    "values_title": "Nuestros valores",
+    "value_quality_title": "Calidad superior",
+    "value_quality_desc": "Seleccionamos solo la mejor carne, preparada a la parrilla con fuego de leña.",
+    "value_tradition_title": "Tradición y pasión",
+    "value_tradition_desc": "Cada plato refleja nuestro respeto por la cocina tradicional y la pasión por el fuego.",
+    "value_experience_title": "Experiencia auténtica",
+    "value_experience_desc": "Creamos un ambiente cálido y familiar, ofreciendo una experiencia única de carne al barril.",
+    "team_title": "Nuestro equipo",
+    "team_description": "Un grupo apasionado por la gastronomía, con experiencia y dedicación en cada detalle.",
+    "team_owner": "Propietario y Chef Principal",
+    "team_grill_chef": "Maestro Asador",
+    "team_manager": "Gerente del Restaurante",
+    "team_assistant_chef": "Chef Asistente",
+    "cta_title": "¿Quieres vivir la experiencia?",
+    "cta_description": "Ven a probar nuestra carne al barril y disfruta de calidad, pasión y sabor auténtico.",
+    "cta_button": "Reservar mesa"
+  },
+  "reservation": {
+    "title": "Reserva",
+    "subtitle": "Completa tus datos y te prepararemos la mesa.",
+    "cuts": {
+      "picanha": "Picanha",
+      "asado": "Asado de Tira",
+      "entrania": "Entraña",
+      "churrasco": "Churrasco"
+    },
+    "doneness": {
+      "blue": "Muy poco hecho",
+      "rare": "Poco hecho",
+      "medium": "Al punto",
+      "threeQuarters": "Tres cuartos",
+      "well": "Bien hecho"
+    },
+    "fields": {
+      "firstName": { "label": "Nombre", "placeholder": "Introduce tu nombre" },
+      "lastName": { "label": "Apellido", "placeholder": "Introduce tu apellido" },
+      "phone": { "label": "Teléfono", "placeholder": "WhatsApp o número móvil" },
+      "email": { "label": "Correo electrónico", "placeholder": "tu@email.com" },
+      "date": { "label": "Fecha" },
+      "time": { "label": "Hora" },
+      "people": { "label": "Personas" },
+      "cut": { "label": "Corte" },
+      "qty": { "label": "Porciones", "placeholder": "Ej: 2" },
+      "doneness": { "label": "Cocción", "placeholder": "Selecciona el punto" },
+      "table": { "label": "Mesa (opcional)", "placeholder": "Ej: Terraza 4" },
+      "notes": { "label": "Notas", "placeholder": "Alergias, ocasión especial, niños, etc." }
+    },
+    "sections": { "cuts": "Preferencias de cortes (puedes añadir varias líneas)" },
+    "placeholders": { "selectCut": "Selecciona un corte" },
+    "labels": {
+      "totalPortions": "Total de porciones: {{totalQty}}",
+      "people": "Personas: {{personas}}"
+    },
+    "actions": {
+      "reserve": "Reservar",
+      "addCut": "Agregar corte",
+      "removeLine": "Eliminar línea",
+      "reserveAnother": "Hacer otra reserva",
+      "backToAbout": "Volver a Sobre Nosotros"
+    },
+    "errors": {
+      "header": "Revisa el formulario",
+      "nameRequired": "El nombre y apellido son obligatorios.",
+      "phoneRequired": "Ingresa un número de teléfono.",
+      "datetimeRequired": "Selecciona fecha y hora.",
+      "peopleRequired": "Indica el número de personas.",
+      "qtyExceedsPeople": "El total de porciones ({{totalQty}}) no puede superar el número de personas ({{personas}}).",
+      "submitFailed": "No se pudo enviar la reserva, inténtalo nuevamente."
+    },
+    "success": {
+      "title": "¡Reserva recibida!",
+      "body": "Te contactaremos por WhatsApp o correo para confirmar. Serás redirigido en breve…"
+    }
+  },
+  "cart": {
+    "title": "Carrito",
+    "empty": "El carrito está vacío",
+    "total": "Total",
+    "goToContact": "Ir a contacto / ubicación",
+    "clear": "Vaciar carrito",
+    "decrease": "Reducir cantidad",
+    "increase": "Aumentar cantidad",
+    "remove": "Eliminar producto"
+  },
+  "notFound": {
+  "title": "Error 404",
+  "subtitle": "Ostras, se nos quemó el asado tío",
+  "back_button": "Volver al inicio"
+  },
+  "admin": {
+    "title": "Dashboard de Administrador",
+    "subtitle": "Gestiona productos, sugerencias y reservas",
+    "infoTitle": "Información del Administrador",
+    "name": "Nombre:",
+    "email": "Email:",
+    "phone": "Teléfono:",
+    "role": "Rol:",
+    "joinDate": "Fecha de ingreso:",
+    "logout": "Cerrar Sesión",
+    "confirmLogout": "¿Estás seguro de cerrar sesión?",
+    "login": "Entrar",
+    "password": "Contraseña",
+    "errorSave": "No se pudo completar la acción.",
+    "products": "Productos",
+    "addProduct": "Agregar Producto",
+    "noProducts": "No hay productos disponibles",
+    "image": "Imagen",
+    "productTitle": "Título",
+    "price": "Precio",
+    "description": "Descripción",
+    "category": "Categoría",
+    "actions": "Acciones",
+    "editProduct": "Editar Producto",
+    "productNamePlaceholder": "Nombre del producto",
+    "productDescPlaceholder": "Descripción del producto",
+    "imageUrlPlaceholder": "https://ejemplo.com/imagen.jpg",
+    "categoryPlaceholder": "food, drink, etc.",
+    "cancel": "Cancelar",
+    "update": "Actualizar",
+    "add": "Agregar",
+    "confirmDeleteProduct": "¿Estás seguro de eliminar este producto?",
+    "suggestions": "Sugerencias",
+    "noSuggestions": "No hay sugerencias",
+    "suggestionsEmpty": "El buzón de sugerencias está vacío.",
+    "delete": "Eliminar",
+    "reservations": "Reservas",
+    "createReservation": "Crear Reserva",
+    "noReservations": "No hay reservas",
+    "noReservationsRegistered": "No hay reservas registradas.",
+    "client": "Cliente",
+    "contact": "Contacto",
+    "date": "Fecha",
+    "time": "Hora",
+    "people": "Personas",
+    "table": "Mesa",
+    "editReservation": "Editar Reserva",
+    "create": "Crear",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "phoneLabel": "Teléfono",
+    "emailPlaceholder": "email@ejemplo.com",
+    "selectTerm": "Seleccionar término",
+    "tableNumber": "Número de mesa",
+    "notes": "Notas",
+    "additionalNotes": "Notas adicionales",
+    "confirmDeleteSuggestion": "¿Estás seguro de eliminar esta sugerencia?",
+    "confirmDeleteReservation": "¿Estás seguro de eliminar esta reserva?"
+  }
+}

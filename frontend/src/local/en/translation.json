@@ -1,0 +1,258 @@
+{
+  "navbar": {
+    "home": "Home",
+    "specialties": "Specialties",
+    "products": "Products",
+    "contact": "Contact",
+    "about": "About Us",
+    "language": "Language"
+  },
+  "footer": {
+    "title": "Tradition, Flame, and Handcrafted Flavor",
+    "schedule_title": "Opening Hours",
+    "contact_title": "Contact",
+    "social_title": "Follow Us",
+    "rights": "All rights reserved."
+  },
+  "home": {
+    "subtitle": "The Authentic Taste of Fire",
+    "explore_menu": "Explore Our Menu",
+    "explore_world": "Explore Our World",
+    "experience_text": "Discover the magic of our barrel-grilled meats",
+    "menu_title": "Our Menu",
+    "menu_description": "Enjoy the finest dishes prepared with traditional barrel-grilling techniques.",
+    "menu_button": "See Full Menu",
+    "location_title": "Location",
+    "location_description": "Visit us and experience the unique flavor of barrel-grilled meat.",
+    "location_button": "See Location",
+    "about_title": "About Us",
+    "about_description": "Learn about the story behind our unforgettable flavors.",
+    "about_button": "Read More",
+    "specials_title": "Specialties",
+    "specials_description": "Our most popular dishes and must-try specialties.",
+    "specials_button": "See Specials"
+  },
+  "menu": {
+    "title": "Barrel Specialties",
+    "added_message": "Added to cart.",
+    "items": {
+      "beef_barrel": {
+        "title": "Barrel Beef",
+        "description": "Juicy beef slowly cooked in a barrel, with an irresistible smoky flavor."
+      },
+      "ribs_bbq": {
+        "title": "BBQ Ribs",
+        "description": "Tender ribs glazed with handmade BBQ sauce, served with lime and herbs."
+      },
+      "sausage": {
+        "title": "Grilled Sausage",
+        "description": "Handmade sausage grilled over coals, served with tortillas and chimichurri."
+      },
+      "picanha": {
+        "title": "Picanha",
+        "description": "Selected beef cut seasoned with coarse salt and garlic butter, juicy and tender."
+      },
+      "chicken_breast": {
+        "title": "Grilled Chicken Breast",
+        "description": "Herb-marinated chicken breast grilled to perfection."
+      },
+      "grill_trilogy": {
+        "title": "Grill Trilogy",
+        "description": "Three selected meats —sausage, picanha, and tenderloin— barrel-cooked with potatoes and chimichurri."
+      }
+    }
+  },
+  "products": {
+    "load_more": "Load More",
+    "search_placeholder": "Search product..."
+
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Reservations, questions, or suggestions? Leave us a message.",
+    "cart_title": "Items in Cart",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity",
+    "remove": "Remove item",
+    "price": "Price",
+    "total": "Order Total",
+    "clear_cart": "Clear Cart",
+    "write_us": "Write to Us",
+    "error_header": "Oops…",
+    "sent": "Message Sent",
+    "name": "Name",
+    "name_placeholder": "Your name",
+    "email": "Email",
+    "email_placeholder": "Your email",
+    "message": "Message",
+    "message_placeholder": "How can we help you?",
+    "send": "Send",
+    "also_here": "You can also find us here",
+    "visit_us": "Visit Us",
+    "directions": "Get Directions",
+    "schedule": "Opening Hours",
+    "reservations": "Reservations",
+    "map_title": "Restaurant Map",
+    "privacy": "Your privacy is very important to us",
+    "success": "Your message has been sent successfully.",
+    "error": "There was an error sending your message."
+  },
+  "about": {
+    "hero_subtitle": "Flavor, Passion, and Authentic Tradition",
+    "history_title": "Our Story",
+    "history_paragraph1": "Founded in 2010, {{name}} was born out of a love for traditional cooking. From a small family restaurant to a renowned gastronomic brand.",
+    "history_paragraph2": "For over a decade, we have maintained excellence by carefully selecting each cut and using traditional techniques.",
+    "stats_title": "Our Numbers",
+    "stats_years": "Years of Tradition",
+    "stats_clients": "Daily Customers",
+    "stats_cuts": "Selected Cuts",
+    "stats_satisfaction": "Satisfaction",
+    "values_title": "Our Values",
+    "value_quality_title": "Superior Quality",
+    "value_quality_desc": "We choose only the finest meats, grilled over wood fire.",
+    "value_tradition_title": "Tradition & Passion",
+    "value_tradition_desc": "Every dish reflects our respect for tradition and passion for fire.",
+    "value_experience_title": "Authentic Experience",
+    "value_experience_desc": "We create a warm, welcoming atmosphere for a true barrel-grilled experience.",
+    "team_title": "Our Team",
+    "team_description": "A team passionate about gastronomy, bringing experience and dedication to every detail.",
+    "team_owner": "Owner & Head Chef",
+    "team_grill_chef": "Grill Master",
+    "team_manager": "Restaurant Manager",
+    "team_assistant_chef": "Assistant Chef",
+    "cta_title": "Want to Experience It?",
+    "cta_description": "Come and taste our barrel-grilled meats — quality, passion, and authentic flavor.",
+    "cta_button": "Book a Table"
+  },
+  "reservation": {
+    "title": "Reservation",
+    "subtitle": "Fill in your details and we’ll prepare your table.",
+    "cuts": {
+      "picanha": "Picanha",
+      "asado": "Short Rib",
+      "entrania": "Skirt Steak",
+      "churrasco": "Churrasco"
+    },
+    "doneness": {
+      "blue": "Blue Rare",
+      "rare": "Rare",
+      "medium": "Medium",
+      "threeQuarters": "Medium-Well",
+      "well": "Well Done"
+    },
+    "fields": {
+      "firstName": { "label": "First Name", "placeholder": "Enter your first name" },
+      "lastName": { "label": "Last Name", "placeholder": "Enter your last name" },
+      "phone": { "label": "Phone", "placeholder": "WhatsApp or mobile number" },
+      "email": { "label": "Email", "placeholder": "your@email.com" },
+      "date": { "label": "Date" },
+      "time": { "label": "Time" },
+      "people": { "label": "People" },
+      "cut": { "label": "Cut" },
+      "qty": { "label": "Portions", "placeholder": "e.g. 2" },
+      "doneness": { "label": "Doneness", "placeholder": "Select doneness" },
+      "table": { "label": "Table (optional)", "placeholder": "e.g. Terrace 4" },
+      "notes": { "label": "Notes", "placeholder": "Allergies, special occasions, kids, etc." }
+    },
+    "sections": { "cuts": "Preferred Cuts (you can add multiple lines)" },
+    "placeholders": { "selectCut": "Select a cut" },
+    "labels": {
+      "totalPortions": "Total Portions: {{totalQty}}",
+      "people": "People: {{personas}}"
+    },
+    "actions": {
+      "reserve": "Reserve",
+      "addCut": "Add Cut",
+      "removeLine": "Remove Line",
+      "reserveAnother": "Make Another Reservation",
+      "backToAbout": "Back to About Us"
+    },
+    "errors": {
+      "header": "Please check the form",
+      "nameRequired": "First and last name are required.",
+      "phoneRequired": "Please enter a phone number.",
+      "datetimeRequired": "Please select date and time.",
+      "peopleRequired": "Please specify the number of people.",
+      "qtyExceedsPeople": "Total portions ({{totalQty}}) cannot exceed the number of people ({{personas}}).",
+      "submitFailed": "Reservation could not be submitted. Please try again."
+    },
+    "success": {
+      "title": "Reservation Received!",
+      "body": "We’ll contact you by WhatsApp or email. Redirecting shortly…"
+    }
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Cart is empty",
+    "total": "Total",
+    "goToContact": "Go to Contact/Location",
+    "clear": "Clear Cart",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity",
+    "remove": "Remove product"
+  },
+  "notFound": {
+  "title": "Error 404",
+  "subtitle": "Oops, we burned the barbecue mate",
+  "back_button": "Go back home"
+  },
+  "admin": {
+    "title": "Administrator Dashboard",
+    "subtitle": "Manage products, suggestions and reservations",
+    "infoTitle": "Administrator Information",
+    "name": "Name:",
+    "email": "Email:",
+    "phone": "Phone:",
+    "role": "Role:",
+    "joinDate": "Join date:",
+    "logout": "Log Out",
+    "confirmLogout": "Are you sure you want to log out?",
+    "login": "Sign in",
+    "password": "Password",
+    "errorSave": "Could not complete the action.",
+    "products": "Products",
+    "addProduct": "Add Product",
+    "noProducts": "No products available",
+    "image": "Image",
+    "productTitle": "Title",
+    "price": "Price",
+    "description": "Description",
+    "category": "Category",
+    "actions": "Actions",
+    "editProduct": "Edit Product",
+    "productNamePlaceholder": "Product name",
+    "productDescPlaceholder": "Product description",
+    "imageUrlPlaceholder": "https://example.com/image.jpg",
+    "categoryPlaceholder": "food, drink, etc.",
+    "cancel": "Cancel",
+    "update": "Update",
+    "add": "Add",
+    "confirmDeleteProduct": "Are you sure you want to delete this product?",
+    "suggestions": "Suggestions",
+    "noSuggestions": "No suggestions",
+    "suggestionsEmpty": "The suggestions inbox is empty.",
+    "delete": "Delete",
+    "reservations": "Reservations",
+    "createReservation": "Create Reservation",
+    "noReservations": "No reservations",
+    "noReservationsRegistered": "No reservations registered.",
+    "client": "Client",
+    "contact": "Contact",
+    "date": "Date",
+    "time": "Time",
+    "people": "People",
+    "table": "Table",
+    "editReservation": "Edit Reservation",
+    "create": "Create",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phoneLabel": "Phone",
+    "emailPlaceholder": "your@email.com",
+    "selectTerm": "Select doneness",
+    "tableNumber": "Table number",
+    "notes": "Notes",
+    "additionalNotes": "Additional notes",
+    "confirmDeleteSuggestion": "Are you sure you want to delete this suggestion?",
+    "confirmDeleteReservation": "Are you sure you want to delete this reservation?"
+  }
+}

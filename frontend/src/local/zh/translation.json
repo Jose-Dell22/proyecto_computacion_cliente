@@ -1,0 +1,257 @@
+{
+  "navbar": {
+    "home": "首页",
+    "specialties": "特色菜",
+    "products": "产品",
+    "contact": "联系方式",
+    "about": "关于我们",
+    "language": "语言"
+  },
+  "footer": {
+    "title": "传统、火焰与手工风味",
+    "schedule_title": "营业时间",
+    "contact_title": "联系方式",
+    "social_title": "关注我们",
+    "rights": "版权所有。"
+  },
+  "home": {
+    "subtitle": "火焰的正宗味道",
+    "explore_menu": "探索我们的菜单",
+    "explore_world": "探索我们的世界",
+    "experience_text": "发现我们桶烤肉的魔力",
+    "menu_title": "我们的菜单",
+    "menu_description": "探索我们用传统桶烤技术制作的最佳菜肴。",
+    "menu_button": "查看完整菜单",
+    "location_title": "位置",
+    "location_description": "欢迎光临，体验我们独特的桶烤美味。",
+    "location_button": "查看位置",
+    "about_title": "关于我们",
+    "about_description": "了解我们令人难忘的味道背后的故事。",
+    "about_button": "阅读更多",
+    "specials_title": "特色菜",
+    "specials_description": "我们最受欢迎的菜肴和您必须尝试的特色美食。",
+    "specials_button": "查看特色菜"
+  },
+  "menu": {
+    "title": "木桶特色菜",
+    "added_message": "已添加到购物车。",
+    "items": {
+      "beef_barrel": {
+        "title": "木桶牛肉",
+        "description": "慢火在木桶中烹制的多汁牛肉，带有无法抗拒的烟熏风味。"
+      },
+      "ribs_bbq": {
+        "title": "烧烤排骨",
+        "description": "嫩滑的排骨淋上手工烧烤酱，搭配青柠和香草。"
+      },
+      "sausage": {
+        "title": "烤香肠",
+        "description": "手工香肠炭火烤制，配玉米饼和香草酱。"
+      },
+      "picanha": {
+        "title": "牛臀尖",
+        "description": "精选牛排配粗盐和蒜味黄油，鲜嫩多汁。"
+      },
+      "chicken_breast": {
+        "title": "烤鸡胸",
+        "description": "用香草腌制的鸡胸肉，完美烤制。"
+      },
+      "grill_trilogy": {
+        "title": "烤肉三重奏",
+        "description": "精选三种肉类——香肠、牛臀尖和里脊——在木桶中烹制，配土豆和手工香草酱。"
+      }
+    }
+  },
+  "products": {
+    "load_more": "加载更多",
+    "search_placeholder": "搜索产品..."
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "预订、疑问或建议？请留言。",
+    "cart_title": "购物车中的商品",
+    "decrease": "减少数量",
+    "increase": "增加数量",
+    "remove": "删除商品",
+    "price": "价格",
+    "total": "订单总额",
+    "clear_cart": "清空购物车",
+    "write_us": "给我们留言",
+    "error_header": "哎呀…",
+    "sent": "消息已发送",
+    "name": "姓名",
+    "name_placeholder": "您的姓名",
+    "email": "电子邮件",
+    "email_placeholder": "您的邮箱",
+    "message": "留言内容",
+    "message_placeholder": "我们能帮您什么？",
+    "send": "发送",
+    "also_here": "也可以通过以下方式联系我们",
+    "visit_us": "欢迎光临",
+    "directions": "查看路线",
+    "schedule": "营业时间",
+    "reservations": "预订",
+    "map_title": "餐厅地图",
+    "privacy": "您的隐私对我们非常重要",
+    "success": "您的消息已成功发送。",
+    "error": "发送消息时出错。"
+  },
+  "about": {
+    "hero_subtitle": "味道、热情与真实的传统",
+    "history_title": "我们的故事",
+    "history_paragraph1": "成立于2010年，{{name}}源自对传统烹饪技艺的热爱。从一个家庭小餐馆发展为知名美食品牌。",
+    "history_paragraph2": "十多年来，我们始终坚持卓越，亲自挑选每一块肉，并采用传统工艺。",
+    "stats_title": "我们的数据",
+    "stats_years": "传统年数",
+    "stats_clients": "每日顾客",
+    "stats_cuts": "精选肉类",
+    "stats_satisfaction": "满意度",
+    "values_title": "我们的价值观",
+    "value_quality_title": "优质品质",
+    "value_quality_desc": "我们只选用最优质的肉类，精心挑选并以木桶炭火烹制。",
+    "value_tradition_title": "传统与热情",
+    "value_tradition_desc": "每道菜都体现了我们对烹饪传统的坚持与热情。",
+    "value_experience_title": "真实体验",
+    "value_experience_desc": "我们致力于营造温馨的氛围，让每位顾客都能感受正宗的桶烤肉体验。",
+    "team_title": "我们的团队",
+    "team_description": "一支热爱烹饪的团队，每位成员都拥有丰富的经验和奉献精神。",
+    "team_owner": "老板兼主厨",
+    "team_grill_chef": "烧烤主厨",
+    "team_manager": "餐厅经理",
+    "team_assistant_chef": "副主厨",
+    "cta_title": "想来体验吗？",
+    "cta_description": "欢迎品尝我们独特的桶烤肉体验，我们以最佳品质与热情欢迎您！",
+    "cta_button": "预订座位"
+  },
+  "reservation": {
+    "title": "预订",
+    "subtitle": "请填写您的信息，我们将为您准备餐桌。",
+    "cuts": {
+      "picanha": "Picanha（牛臀峰）",
+      "asado": "Short Rib（牛小排）",
+      "entrania": "Skirt Steak（牛裙肉）",
+      "churrasco": "Churrasco（巴西烤牛排）"
+    },
+    "doneness": {
+      "blue": "蓝生（几乎不熟）",
+      "rare": "偏生（约三分熟）",
+      "medium": "五分熟",
+      "threeQuarters": "七分熟",
+      "well": "全熟"
+    },
+    "fields": {
+      "firstName": { "label": "名", "placeholder": "请输入名字" },
+      "lastName": { "label": "姓", "placeholder": "请输入姓氏" },
+      "phone": { "label": "电话", "placeholder": "WhatsApp 或手机号码" },
+      "email": { "label": "电子邮箱", "placeholder": "your@email.com" },
+      "date": { "label": "日期" },
+      "time": { "label": "时间" },
+      "people": { "label": "人数" },
+      "cut": { "label": "牛排部位" },
+      "qty": { "label": "份数", "placeholder": "例如：2" },
+      "doneness": { "label": "熟度", "placeholder": "选择熟度" },
+      "table": { "label": "餐桌（可选）", "placeholder": "例如：露台 4" },
+      "notes": { "label": "备注", "placeholder": "过敏信息、特殊场合、儿童座椅等" }
+    },
+    "sections": { "cuts": "偏好部位（可多行并设置份数）" },
+    "placeholders": { "selectCut": "选择一个部位" },
+    "labels": {
+      "totalPortions": "总份数：{{totalQty}}",
+      "people": "人数：{{personas}}"
+    },
+    "actions": {
+      "reserve": "预订",
+      "addCut": "添加部位",
+      "removeLine": "删除一行",
+      "reserveAnother": "再提交一份预订",
+      "backToAbout": "返回“关于我们”"
+    },
+    "errors": {
+      "header": "请检查表单",
+      "nameRequired": "名字和姓氏为必填项。",
+      "phoneRequired": "请填写联系电话。",
+      "datetimeRequired": "请选择日期和时间。",
+      "peopleRequired": "请填写人数。",
+      "qtyExceedsPeople": "份数总和（{{totalQty}}）不能超过人数（{{personas}}）。",
+      "submitFailed": "未能提交预订，请重试。"
+    },
+    "success": {
+      "title": "预订已收到！",
+      "body": "我们将通过 WhatsApp 或邮箱与您确认。稍后将自动跳转…"
+    }
+  },
+  "cart": {
+    "title": "购物车",
+    "empty": "购物车是空的",
+    "total": "总计",
+    "goToContact": "前往联系/位置",
+    "clear": "清空购物车",
+    "decrease": "减少数量",
+    "increase": "增加数量",
+    "remove": "删除商品"
+  },
+  "notFound": {
+  "title": "错误 404",
+  "subtitle": "哎呀，烧烤糊了，兄弟",
+  "back_button": "返回首页"
+  },
+  "admin": {
+    "title": "管理员面板",
+    "subtitle": "管理产品、建议与预订",
+    "infoTitle": "管理员信息",
+    "name": "姓名：",
+    "email": "邮箱：",
+    "phone": "电话：",
+    "role": "角色：",
+    "joinDate": "加入日期：",
+    "logout": "退出登录",
+    "confirmLogout": "确定要退出登录吗？",
+    "login": "登录",
+    "password": "密码",
+    "errorSave": "操作失败。",
+    "products": "产品",
+    "addProduct": "添加产品",
+    "noProducts": "暂无产品",
+    "image": "图片",
+    "productTitle": "标题",
+    "price": "价格",
+    "description": "描述",
+    "category": "分类",
+    "actions": "操作",
+    "editProduct": "编辑产品",
+    "productNamePlaceholder": "产品名称",
+    "productDescPlaceholder": "产品描述",
+    "imageUrlPlaceholder": "https://example.com/image.jpg",
+    "categoryPlaceholder": "食品、饮料等",
+    "cancel": "取消",
+    "update": "更新",
+    "add": "添加",
+    "confirmDeleteProduct": "确定要删除此产品吗？",
+    "suggestions": "建议",
+    "noSuggestions": "暂无建议",
+    "suggestionsEmpty": "建议收件箱为空。",
+    "delete": "删除",
+    "reservations": "预订",
+    "createReservation": "创建预订",
+    "noReservations": "暂无预订",
+    "noReservationsRegistered": "暂无已登记的预订。",
+    "client": "客户",
+    "contact": "联系方式",
+    "date": "日期",
+    "time": "时间",
+    "people": "人数",
+    "table": "桌位",
+    "editReservation": "编辑预订",
+    "create": "创建",
+    "firstName": "名",
+    "lastName": "姓",
+    "phoneLabel": "电话",
+    "emailPlaceholder": "your@email.com",
+    "selectTerm": "选择熟度",
+    "tableNumber": "桌号",
+    "notes": "备注",
+    "additionalNotes": "附加备注",
+    "confirmDeleteSuggestion": "确定要删除此建议吗？",
+    "confirmDeleteReservation": "确定要删除此预订吗？"
+  }
+}
