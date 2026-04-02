@@ -95,7 +95,9 @@
     "map_title": "Mapa del restaurante",
     "privacy": "Tu privacidad es muy importante para nosotros",
     "success": "Tu mensaje ha sido enviado con éxito.",
-    "error": "Error al enviar el mensaje."
+    "error": "Error al enviar el mensaje.",
+    "suggestions_title": "Buzón de sugerencias",
+    "suggestions_empty": "Aún no hay sugerencias. ¡Sé el primero en escribir!"
   },
   "about": {
     "hero_subtitle": "Sabor, pasión y tradición auténtica",
@@ -253,6 +255,13 @@
     "notes": "Notas",
     "additionalNotes": "Notas adicionales",
     "confirmDeleteSuggestion": "¿Estás seguro de eliminar esta sugerencia?",
-    "confirmDeleteReservation": "¿Estás seguro de eliminar esta reserva?"
+    "confirmDeleteReservation": "¿Estás seguro de eliminar esta reserva?",
+    "workers": "Trabajadores",
+    "workersInfoTitle": "Alta de personal",
+    "workersInfoBody": "Solo un administrador puede registrar cuentas con rol trabajador. Ese personal puede iniciar sesión en la API, pero no accede a este panel (solo administradores).",
+    "createWorker": "Registrar trabajador",
+    "workerRole": "Trabajador",
+    "noWorkers": "Aún no hay trabajadores registrados.",
+    "testAccountsHint": "Cuentas de prueba: admin@carnesalbarril.com / admin123 (admin). cliente@carnesalbarril.com / cliente123 (cliente)."
   }
 }

@@ -94,7 +94,9 @@
     "map_title": "餐厅地图",
     "privacy": "您的隐私对我们非常重要",
     "success": "您的消息已成功发送。",
-    "error": "发送消息时出错。"
+    "error": "发送消息时出错。",
+    "suggestions_title": "建议信箱",
+    "suggestions_empty": "暂无建议。请先留言！"
   },
   "about": {
     "hero_subtitle": "味道、热情与真实的传统",
@@ -252,6 +254,13 @@
     "notes": "备注",
     "additionalNotes": "附加备注",
     "confirmDeleteSuggestion": "确定要删除此建议吗？",
-    "confirmDeleteReservation": "确定要删除此预订吗？"
+    "confirmDeleteReservation": "确定要删除此预订吗？",
+    "workers": "员工",
+    "workersInfoTitle": "员工注册",
+    "workersInfoBody": "只有管理员可以创建员工账号。员工可登录 API，但无法访问此管理面板（仅限管理员）。",
+    "createWorker": "注册员工",
+    "workerRole": "员工",
+    "noWorkers": "尚未注册任何员工。",
+    "testAccountsHint": "测试账号：admin@carnesalbarril.com / admin123（管理员）。cliente@carnesalbarril.com / cliente123（客户）。"
   }
 }

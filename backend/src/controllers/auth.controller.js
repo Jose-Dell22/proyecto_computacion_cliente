@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { createAccessToken } from "../libs/jwt.js";
 
 export const register = async (req, res) => {
-  const { name, lastName, email, password, phone, role } = req.body;
+  const { name, lastName, email, password, phone } = req.body;
 
   try {
 
@@ -23,7 +23,7 @@ export const register = async (req, res) => {
       email,
       password: passwordHash,
       phone,
-      role
+      role: "customer",
     });
 
     const userSaved = await newUser.save();
@@ -139,5 +139,42 @@ export const profile = async (req, res) => {
       message: "Error getting profile",
       error: error.message,
     });
+  }
+};
+
+export const createWorker = async (req, res) => {
+  const { name, lastName, email, password, phone } = req.body;
+
+  try {
+    const userFound = await User.findOne({ email });
+    if (userFound) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const worker = new User({
+      name,
+      lastName,
+      email,
+      password: passwordHash,
+      phone,
+      role: "worker",
+    });
+
+    const saved = await worker.save();
+    const { password: _pw, ...safe } = saved.toObject();
+
+    return res.status(201).json({
+      id: safe._id,
+      name: safe.name,
+      lastName: safe.lastName,
+      email: safe.email,
+      phone: safe.phone,
+      role: safe.role,
+      createdAt: safe.createdAt,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
   }
 };

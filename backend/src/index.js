@@ -7,6 +7,8 @@ import dotenv from "dotenv";
 
 import authRoutes from "./routes/Auth.routes.js";
 import taskRoute from "./routes/task.routes.js";
+import { seedProductsIfEmpty } from "./seed/seedProducts.js";
+import { seedTestUsersIfMissing } from "./seed/seedUsers.js";
 
 const app = express();
 dotenv.config();
@@ -17,6 +19,9 @@ const envOrigins = (process.env.FRONTEND_URL || "")
   .map((o) => o.trim())
   .filter(Boolean);
 const allowedOrigins = [...new Set([...defaultOrigins, ...envOrigins])];
+
+/** Primera URL de FRONTEND_URL (o Vite por defecto) para el mensaje al iniciar */
+const FRONTEND_APP_URL = envOrigins[0] || defaultOrigins[0];
 
 app.use(
   cors({
@@ -36,9 +41,6 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
 
-// Conexión a la base de datos
-connectDB();
-
 // Rutas de la API
 app.use("/api", authRoutes);
 app.use("/api", taskRoute);
@@ -51,6 +53,16 @@ app.get("/", (req, res) => {
 // Puerto
 const PORT = Number(process.env.PORT) || 4000;
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+async function start() {
+  await connectDB();
+  await seedProductsIfEmpty();
+  await seedTestUsersIfMissing();
+  app.listen(PORT, () => {
+    console.log(`Abre la aplicación en: ${FRONTEND_APP_URL}`);
+  });
+}
+
+start().catch((err) => {
+  console.error("No se pudo iniciar el servidor:", err);
+  process.exit(1);
 });

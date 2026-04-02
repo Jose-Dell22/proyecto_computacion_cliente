@@ -95,7 +95,9 @@
     "map_title": "Restaurant Map",
     "privacy": "Your privacy is very important to us",
     "success": "Your message has been sent successfully.",
-    "error": "There was an error sending your message."
+    "error": "There was an error sending your message.",
+    "suggestions_title": "Suggestions mailbox",
+    "suggestions_empty": "No suggestions yet. Be the first to write!"
   },
   "about": {
     "hero_subtitle": "Flavor, Passion, and Authentic Tradition",
@@ -253,6 +255,13 @@
     "notes": "Notes",
     "additionalNotes": "Additional notes",
     "confirmDeleteSuggestion": "Are you sure you want to delete this suggestion?",
-    "confirmDeleteReservation": "Are you sure you want to delete this reservation?"
+    "confirmDeleteReservation": "Are you sure you want to delete this reservation?",
+    "workers": "Staff",
+    "workersInfoTitle": "Staff onboarding",
+    "workersInfoBody": "Only an administrator can create worker accounts. Workers can sign in to the API, but cannot access this dashboard (administrators only).",
+    "createWorker": "Register worker",
+    "workerRole": "Worker",
+    "noWorkers": "No workers registered yet.",
+    "testAccountsHint": "Test accounts: admin@carnesalbarril.com / admin123 (admin). cliente@carnesalbarril.com / cliente123 (customer)."
   }
 }

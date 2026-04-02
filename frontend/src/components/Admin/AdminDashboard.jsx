@@ -41,6 +41,8 @@ const AdminDashboard = () => {
     deleteReservation,
     logoutAdmin,
     loginAdmin,
+    workers,
+    createWorker,
   } = useApp();
 
   const [loginEmail, setLoginEmail] = useState("");
@@ -71,6 +73,13 @@ const AdminDashboard = () => {
     mesa: "",
     termino: "",
     notas: "",
+  });
+  const [workerForm, setWorkerForm] = useState({
+    name: "",
+    lastName: "",
+    email: "",
+    password: "",
+    phone: "",
   });
 
   const CUT_KEYS = ["picanha", "asado", "entrania", "churrasco"];
@@ -400,6 +409,131 @@ const AdminDashboard = () => {
               </Button>
             </Modal.Actions>
           </Modal>
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: {
+        key: "workers",
+        content: (
+          <span>
+            <Icon name="users" /> {t("admin.workers")} ({workers.length})
+          </span>
+        ),
+      },
+      render: () => (
+        <Tab.Pane>
+          <Message info>
+            <Message.Header>{t("admin.workersInfoTitle")}</Message.Header>
+            <p>{t("admin.workersInfoBody")}</p>
+          </Message>
+          <Segment>
+            <Header as="h4">{t("admin.createWorker")}</Header>
+            <Form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (
+                  !workerForm.name ||
+                  !workerForm.email ||
+                  !workerForm.password ||
+                  workerForm.password.length < 5
+                ) {
+                  return;
+                }
+                try {
+                  await createWorker(workerForm);
+                  setWorkerForm({
+                    name: "",
+                    lastName: "",
+                    email: "",
+                    password: "",
+                    phone: "",
+                  });
+                } catch (err) {
+                  window.alert(err.message || t("admin.errorSave"));
+                }
+              }}
+            >
+              <Form.Group widths="equal">
+                <Form.Field
+                  control={Input}
+                  label={t("admin.firstName")}
+                  value={workerForm.name}
+                  onChange={(e) =>
+                    setWorkerForm({ ...workerForm, name: e.target.value })
+                  }
+                  required
+                />
+                <Form.Field
+                  control={Input}
+                  label={t("admin.lastName")}
+                  value={workerForm.lastName}
+                  onChange={(e) =>
+                    setWorkerForm({ ...workerForm, lastName: e.target.value })
+                  }
+                />
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field
+                  control={Input}
+                  type="email"
+                  label={t("admin.email").replace(":", "")}
+                  value={workerForm.email}
+                  onChange={(e) =>
+                    setWorkerForm({ ...workerForm, email: e.target.value })
+                  }
+                  required
+                />
+                <Form.Field
+                  control={Input}
+                  type="password"
+                  label={t("admin.password")}
+                  value={workerForm.password}
+                  onChange={(e) =>
+                    setWorkerForm({ ...workerForm, password: e.target.value })
+                  }
+                  required
+                />
+              </Form.Group>
+              <Form.Field
+                control={Input}
+                label={t("admin.phoneLabel")}
+                value={workerForm.phone}
+                onChange={(e) =>
+                  setWorkerForm({ ...workerForm, phone: e.target.value })
+                }
+              />
+              <Button type="submit" color="orange">
+                <Icon name="save" /> {t("admin.createWorker")}
+              </Button>
+            </Form>
+          </Segment>
+          {workers.length === 0 ? (
+            <Message warning>{t("admin.noWorkers")}</Message>
+          ) : (
+            <Table celled striped style={{ marginTop: "1em" }}>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>{t("admin.client")}</Table.HeaderCell>
+                  <Table.HeaderCell>{t("admin.email")}</Table.HeaderCell>
+                  <Table.HeaderCell>{t("admin.phoneLabel")}</Table.HeaderCell>
+                  <Table.HeaderCell>{t("admin.role")}</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {workers.map((w) => (
+                  <Table.Row key={w.id}>
+                    <Table.Cell>
+                      {w.nombre} {w.apellido}
+                    </Table.Cell>
+                    <Table.Cell>{w.email}</Table.Cell>
+                    <Table.Cell>{w.telefono || "—"}</Table.Cell>
+                    <Table.Cell>{t("admin.workerRole")}</Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          )}
         </Tab.Pane>
       ),
     },
@@ -745,6 +879,9 @@ const AdminDashboard = () => {
             {loginError && (
               <Message error header={t("reservation.errors.header")} content={loginError} />
             )}
+            <Message info size="small">
+              <p>{t("admin.testAccountsHint")}</p>
+            </Message>
             <Form.Field
               control={Input}
               type="email"

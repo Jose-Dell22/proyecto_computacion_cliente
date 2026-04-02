@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './ContactoUbicacion.css'
 import {
   Container,
@@ -24,6 +24,7 @@ export default function ContactoUbicacion() {
   const {
     config,
     contactForm,
+    suggestions,
     updateContactForm,
     resetContactForm,
     cart,
@@ -33,6 +34,7 @@ export default function ContactoUbicacion() {
     increaseQuantity,
     clearCart,
     submitContactMessage,
+    loadSuggestions,
   } = useApp()
 
   const { values, errors, isSubmitting, handleChange, handleSubmit, reset } = useForm()
@@ -44,12 +46,17 @@ export default function ContactoUbicacion() {
       email: formValues.email,
       mensaje: formValues.mensaje,
     })
+    await loadSuggestions()
     updateContactForm({
       successMessage: t('contact.success'),
       data: { nombre: '', email: '', mensaje: '' },
     })
     reset()
   }
+
+  useEffect(() => {
+    loadSuggestions()
+  }, [loadSuggestions])
 
   return (
     <Container className="contact-page">
@@ -284,6 +291,42 @@ export default function ContactoUbicacion() {
                   </List.Content>
                 </List.Item>
               </List>
+            </Segment>
+
+            {/* Buzón de sugerencias */}
+            <Segment secondary className="suggestions-card" style={{ marginTop: '1em' }}>
+              <Header as="h4" className="section-subtitle">
+                {t('contact.suggestions_title')}
+              </Header>
+
+              {suggestions.length === 0 ? (
+                <Message info>
+                  <Message.Header>{t('contact.suggestions_empty')}</Message.Header>
+                </Message>
+              ) : (
+                <List divided relaxed>
+                  {suggestions.slice(0, 5).map((s) => (
+                    <List.Item key={s.id}>
+                      <List.Content>
+                        <List.Header>
+                          {s.nombre}
+                          {s.email ? (
+                            <span style={{ marginLeft: 6, opacity: 0.75, fontWeight: 400 }}>
+                              ({s.email})
+                            </span>
+                          ) : null}
+                        </List.Header>
+                        <List.Description>{s.mensaje}</List.Description>
+                        {s.fecha ? (
+                          <div style={{ fontSize: '0.85em', color: '#666', marginTop: '0.35em' }}>
+                            {new Date(s.fecha).toLocaleString('es-CO')}
+                          </div>
+                        ) : null}
+                      </List.Content>
+                    </List.Item>
+                  ))}
+                </List>
+              )}
             </Segment>
 
             <div className="map-wrap">

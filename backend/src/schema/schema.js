@@ -22,9 +22,17 @@ export const registerSchema = z.object({
   }),
 
   phone: z.string().optional(),
-  role: z.enum(["customer", "admin"]).optional()
 });
 
+export const workerCreateSchema = z.object({
+  name: z.string().min(1, { message: "Name cannot be empty" }),
+  lastName: z.string().optional(),
+  email: z.string().email({ message: "Invalid email format" }),
+  password: z
+    .string()
+    .min(5, { message: "Password must be at least 5 characters" }),
+  phone: z.string().optional(),
+});
 
 export const loginSchema = z.object({
   email: z.string({

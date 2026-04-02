@@ -84,6 +84,18 @@ function mapContactToSuggestion(c) {
   };
 }
 
+function mapWorkerRow(u) {
+  if (!u || u.role !== 'worker') return null;
+  return {
+    id: toId(u),
+    nombre: u.name,
+    apellido: u.lastName || '',
+    email: u.email,
+    telefono: u.phone || '',
+    rol: u.role,
+  };
+}
+
 export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
@@ -97,6 +109,7 @@ export const AppProvider = ({ children }) => {
   });
   const [suggestions, setSuggestions] = useState([]);
   const [reservations, setReservations] = useState([]);
+  const [workers, setWorkers] = useState([]);
   const [adminUser, setAdminUser] = useState(null);
 
   const fetchReservations = useCallback(async () => {
@@ -116,6 +129,17 @@ export const AppProvider = ({ children }) => {
       if (!res.ok) return;
       const data = await res.json();
       setSuggestions(data.map(mapContactToSuggestion));
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
+  const fetchWorkers = useCallback(async () => {
+    try {
+      const res = await apiFetch('/api/objects/users');
+      if (!res.ok) return;
+      const data = await res.json();
+      setWorkers(data.map(mapWorkerRow).filter(Boolean));
     } catch (e) {
       console.error(e);
     }
@@ -163,7 +187,8 @@ export const AppProvider = ({ children }) => {
     if (!adminUser) return;
     fetchReservations();
     fetchContactsAsSuggestions();
-  }, [adminUser, fetchReservations, fetchContactsAsSuggestions]);
+    fetchWorkers();
+  }, [adminUser, fetchReservations, fetchContactsAsSuggestions, fetchWorkers]);
 
   const addToCart = (item) => {
     const pid = item.id ?? item._id;
@@ -379,6 +404,7 @@ export const AppProvider = ({ children }) => {
     });
     await fetchReservations();
     await fetchContactsAsSuggestions();
+    await fetchWorkers();
     await loadProducts();
   };
 
@@ -387,6 +413,26 @@ export const AppProvider = ({ children }) => {
     setAdminUser(null);
     setSuggestions([]);
     setReservations([]);
+    setWorkers([]);
+  };
+
+  const createWorker = async (payload) => {
+    const { name, lastName, email, password, phone } = payload;
+    const res = await apiFetch('/api/workers', {
+      method: 'POST',
+      body: JSON.stringify({
+        name,
+        lastName: lastName || '',
+        email,
+        password,
+        phone: phone || undefined,
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Error al crear trabajador');
+    }
+    await fetchWorkers();
   };
 
   const value = {
@@ -397,6 +443,7 @@ export const AppProvider = ({ children }) => {
     contactForm,
     suggestions,
     reservations,
+    workers,
     adminUser,
     config: APP_CONFIG,
     addToCart,
@@ -409,6 +456,7 @@ export const AppProvider = ({ children }) => {
     updateContactForm,
     resetContactForm,
     submitContactMessage,
+    loadSuggestions: fetchContactsAsSuggestions,
     loadProducts,
     addProduct,
     updateProduct,
@@ -419,6 +467,7 @@ export const AppProvider = ({ children }) => {
     deleteReservation,
     loginAdmin,
     logoutAdmin,
+    createWorker,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
