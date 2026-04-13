@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Container,
   Header,
@@ -25,8 +25,9 @@ import { useTranslation } from "react-i18next";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+
   const {
     products,
     suggestions,
@@ -45,6 +46,13 @@ const AdminDashboard = () => {
     createWorker,
   } = useApp();
 
+  const locale =
+    i18n.language === "en"
+      ? "en-US"
+      : i18n.language === "zh"
+      ? "zh-CN"
+      : "es-CO";
+
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -55,6 +63,7 @@ const AdminDashboard = () => {
   const [reservationModalOpen, setReservationModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [editingReservation, setEditingReservation] = useState(null);
+
   const [productForm, setProductForm] = useState({
     title: "",
     price: "",
@@ -62,6 +71,7 @@ const AdminDashboard = () => {
     image: "",
     category: "",
   });
+
   const [reservationForm, setReservationForm] = useState({
     nombre: "",
     apellido: "",
@@ -74,6 +84,7 @@ const AdminDashboard = () => {
     termino: "",
     notas: "",
   });
+
   const [workerForm, setWorkerForm] = useState({
     name: "",
     lastName: "",
@@ -82,7 +93,6 @@ const AdminDashboard = () => {
     phone: "",
   });
 
-  const CUT_KEYS = ["picanha", "asado", "entrania", "churrasco"];
   const DONENESS_KEYS = ["blue", "rare", "medium", "threeQuarters", "well"];
   const PEOPLE = Array.from({ length: 12 }, (_, i) => ({
     key: i + 1,
@@ -90,22 +100,66 @@ const AdminDashboard = () => {
     value: i + 1,
   }));
 
-  const CUTS = CUT_KEYS.map((k) => ({
-    key: k,
-    text: t(`reservation.cuts.${k}`),
-    value: k,
-  }));
   const DONENESS = DONENESS_KEYS.map((k) => ({
     key: k,
     text: t(`reservation.doneness.${k}`),
     value: k,
   }));
 
-  // Funciones para productos
+  const formatNumber = (value) =>
+    new Intl.NumberFormat(locale).format(Number(value) || 0);
+
+  const formatLongDate = (date) => {
+    if (!date) return "—";
+    return new Date(date).toLocaleDateString(locale, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const formatDateTime = (date) => {
+    if (!date) return "—";
+    return new Date(date).toLocaleString(locale);
+  };
+
+  const truncateText = (text, max = 72) => {
+    if (!text) return "—";
+    return text.length > max ? `${text.substring(0, max)}...` : text;
+  };
+
+  const statsCards = useMemo(
+    () => [
+      {
+        key: "products",
+        icon: "box",
+        value: products.length,
+        label: t("admin.products"),
+      },
+      {
+        key: "workers",
+        icon: "users",
+        value: workers.length,
+        label: t("admin.workers"),
+      },
+      {
+        key: "suggestions",
+        icon: "mail",
+        value: suggestions.length,
+        label: t("admin.suggestions"),
+      },
+      {
+        key: "reservations",
+        icon: "calendar check",
+        value: reservations.length,
+        label: t("admin.reservations"),
+      },
+    ],
+    [products.length, workers.length, suggestions.length, reservations.length, t]
+  );
+
   const handleProductSubmit = async () => {
-    if (!productForm.title || !productForm.price || !productForm.image) {
-      return;
-    }
+    if (!productForm.title || !productForm.price || !productForm.image) return;
 
     const productData = {
       title: productForm.title,
@@ -160,7 +214,6 @@ const AdminDashboard = () => {
     setEditingProduct(null);
   };
 
-  // Funciones para reservas
   const handleReservationSubmit = async () => {
     if (
       !reservationForm.nombre ||
@@ -177,11 +230,13 @@ const AdminDashboard = () => {
         ...reservationForm,
         cortesDetalle: [{ corte: "", qty: 1 }],
       };
+
       if (editingReservation) {
         await updateReservation(editingReservation.id, flat);
       } else {
         await addReservation(flat);
       }
+
       resetReservationForm();
       setReservationModalOpen(false);
     } catch (e) {
@@ -251,12 +306,13 @@ const AdminDashboard = () => {
         ),
       },
       render: () => (
-        <Tab.Pane>
-          <div style={{ marginBottom: "1em" }}>
+        <Tab.Pane className="admin-tab-pane">
+          <div className="admin-pane-toolbar">
             <Button
               color="orange"
               icon
               labelPosition="left"
+              className="admin-primary-btn"
               onClick={() => {
                 resetProductForm();
                 setProductModalOpen(true);
@@ -267,7 +323,7 @@ const AdminDashboard = () => {
             </Button>
           </div>
 
-          <Table celled striped>
+          <Table celled striped className="admin-data-table">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>{t("admin.image")}</Table.HeaderCell>
@@ -278,6 +334,7 @@ const AdminDashboard = () => {
                 <Table.HeaderCell>{t("admin.actions")}</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
+
             <Table.Body>
               {products.length === 0 ? (
                 <Table.Row>
@@ -292,30 +349,43 @@ const AdminDashboard = () => {
                       <Image
                         src={product.image}
                         alt={product.title}
-                        size="tiny"
-                        style={{ maxWidth: "80px", maxHeight: "80px" }}
+                        className="admin-thumb"
                       />
                     </Table.Cell>
-                    <Table.Cell>{product.title}</Table.Cell>
-                    <Table.Cell>${product.price?.toLocaleString("es-CO")}</Table.Cell>
-                    <Table.Cell>
-                      {product.description?.substring(0, 50)}...
+
+                    <Table.Cell className="admin-cell-title">
+                      {product.title}
                     </Table.Cell>
-                    <Table.Cell>{product.category}</Table.Cell>
+
+                    <Table.Cell>${formatNumber(product.price)}</Table.Cell>
+
+                    <Table.Cell className="admin-description-cell">
+                      {truncateText(product.description, 70)}
+                    </Table.Cell>
+
                     <Table.Cell>
+                      <Label className="admin-tag">
+                        {product.category || "food"}
+                      </Label>
+                    </Table.Cell>
+
+                    <Table.Cell className="admin-actions-cell">
                       <Button
                         size="small"
-                        color="blue"
                         icon
+                        className="admin-icon-btn edit"
                         onClick={() => handleEditProduct(product)}
                       >
                         <Icon name="edit" />
                       </Button>
+
                       <Button
                         size="small"
-                        color="red"
                         icon
-                        onClick={() => handleDeleteProduct(product.id ?? product._id)}
+                        className="admin-icon-btn delete"
+                        onClick={() =>
+                          handleDeleteProduct(product.id ?? product._id)
+                        }
                       >
                         <Icon name="trash" />
                       </Button>
@@ -333,12 +403,14 @@ const AdminDashboard = () => {
               resetProductForm();
             }}
             size="large"
+            className="admin-modal"
           >
             <Modal.Header>
               {editingProduct ? t("admin.editProduct") : t("admin.addProduct")}
             </Modal.Header>
+
             <Modal.Content>
-              <Form>
+              <Form className="admin-form">
                 <Form.Field
                   control={Input}
                   label={t("admin.productTitle")}
@@ -349,6 +421,7 @@ const AdminDashboard = () => {
                   }
                   required
                 />
+
                 <Form.Field
                   control={Input}
                   type="number"
@@ -361,6 +434,7 @@ const AdminDashboard = () => {
                   }
                   required
                 />
+
                 <Form.Field
                   control={TextArea}
                   label={t("admin.description")}
@@ -374,6 +448,7 @@ const AdminDashboard = () => {
                   }
                   rows={3}
                 />
+
                 <Form.Field
                   control={Input}
                   label={`${t("admin.image")} URL`}
@@ -384,6 +459,7 @@ const AdminDashboard = () => {
                   }
                   required
                 />
+
                 <Form.Field
                   control={Input}
                   label={t("admin.category")}
@@ -395,6 +471,7 @@ const AdminDashboard = () => {
                 />
               </Form>
             </Modal.Content>
+
             <Modal.Actions>
               <Button
                 onClick={() => {
@@ -404,6 +481,7 @@ const AdminDashboard = () => {
               >
                 {t("admin.cancel")}
               </Button>
+
               <Button color="orange" onClick={handleProductSubmit}>
                 {editingProduct ? t("admin.update") : t("admin.add")}
               </Button>
@@ -422,16 +500,20 @@ const AdminDashboard = () => {
         ),
       },
       render: () => (
-        <Tab.Pane>
-          <Message info>
+        <Tab.Pane className="admin-tab-pane">
+          <Message info className="admin-message">
             <Message.Header>{t("admin.workersInfoTitle")}</Message.Header>
             <p>{t("admin.workersInfoBody")}</p>
           </Message>
-          <Segment>
+
+          <Segment className="admin-inner-segment">
             <Header as="h4">{t("admin.createWorker")}</Header>
+
             <Form
+              className="admin-form"
               onSubmit={async (e) => {
                 e.preventDefault();
+
                 if (
                   !workerForm.name ||
                   !workerForm.email ||
@@ -440,6 +522,7 @@ const AdminDashboard = () => {
                 ) {
                   return;
                 }
+
                 try {
                   await createWorker(workerForm);
                   setWorkerForm({
@@ -473,6 +556,7 @@ const AdminDashboard = () => {
                   }
                 />
               </Form.Group>
+
               <Form.Group widths="equal">
                 <Form.Field
                   control={Input}
@@ -495,6 +579,7 @@ const AdminDashboard = () => {
                   required
                 />
               </Form.Group>
+
               <Form.Field
                 control={Input}
                 label={t("admin.phoneLabel")}
@@ -503,15 +588,19 @@ const AdminDashboard = () => {
                   setWorkerForm({ ...workerForm, phone: e.target.value })
                 }
               />
-              <Button type="submit" color="orange">
+
+              <Button type="submit" color="orange" className="admin-primary-btn">
                 <Icon name="save" /> {t("admin.createWorker")}
               </Button>
             </Form>
           </Segment>
+
           {workers.length === 0 ? (
-            <Message warning>{t("admin.noWorkers")}</Message>
+            <Message warning className="admin-message">
+              {t("admin.noWorkers")}
+            </Message>
           ) : (
-            <Table celled striped style={{ marginTop: "1em" }}>
+            <Table celled striped className="admin-data-table admin-spacing-top">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>{t("admin.client")}</Table.HeaderCell>
@@ -520,6 +609,7 @@ const AdminDashboard = () => {
                   <Table.HeaderCell>{t("admin.role")}</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
+
               <Table.Body>
                 {workers.map((w) => (
                   <Table.Row key={w.id}>
@@ -528,7 +618,9 @@ const AdminDashboard = () => {
                     </Table.Cell>
                     <Table.Cell>{w.email}</Table.Cell>
                     <Table.Cell>{w.telefono || "—"}</Table.Cell>
-                    <Table.Cell>{t("admin.workerRole")}</Table.Cell>
+                    <Table.Cell>
+                      <Label className="admin-tag">{t("admin.workerRole")}</Label>
+                    </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
@@ -547,33 +639,37 @@ const AdminDashboard = () => {
         ),
       },
       render: () => (
-        <Tab.Pane>
+        <Tab.Pane className="admin-tab-pane">
           {suggestions.length === 0 ? (
-            <Message info>
+            <Message info className="admin-message">
               <Message.Header>{t("admin.noSuggestions")}</Message.Header>
               <p>{t("admin.suggestionsEmpty")}</p>
             </Message>
           ) : (
-            <Card.Group>
+            <Card.Group className="admin-suggestion-group">
               {suggestions.map((suggestion) => (
-                <Card key={suggestion.id} fluid>
+                <Card key={suggestion.id} fluid className="admin-suggestion-card">
                   <Card.Content>
                     <Card.Header>
                       <Icon name="user" /> {suggestion.nombre}
                     </Card.Header>
+
                     <Card.Meta>
                       <Icon name="mail" /> {suggestion.email}
                     </Card.Meta>
+
                     <Card.Meta>
-                      <Icon name="calendar" />{" "}
-                      {new Date(suggestion.fecha).toLocaleString("es-CO")}
+                      <Icon name="calendar" /> {formatDateTime(suggestion.fecha)}
                     </Card.Meta>
+
                     <Divider />
+
                     <Card.Description>{suggestion.mensaje}</Card.Description>
                   </Card.Content>
+
                   <Card.Content extra>
                     <Button
-                      color="red"
+                      className="admin-danger-btn"
                       icon
                       labelPosition="left"
                       onClick={() => handleDeleteSuggestion(suggestion.id)}
@@ -599,12 +695,13 @@ const AdminDashboard = () => {
         ),
       },
       render: () => (
-        <Tab.Pane>
-          <div style={{ marginBottom: "1em" }}>
+        <Tab.Pane className="admin-tab-pane">
+          <div className="admin-pane-toolbar">
             <Button
               color="orange"
               icon
               labelPosition="left"
+              className="admin-primary-btn"
               onClick={() => {
                 resetReservationForm();
                 setReservationModalOpen(true);
@@ -616,12 +713,12 @@ const AdminDashboard = () => {
           </div>
 
           {reservations.length === 0 ? (
-            <Message info>
+            <Message info className="admin-message">
               <Message.Header>{t("admin.noReservations")}</Message.Header>
               <p>{t("admin.noReservationsRegistered")}</p>
             </Message>
           ) : (
-            <Table celled striped>
+            <Table celled striped className="admin-data-table">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>{t("admin.client")}</Table.HeaderCell>
@@ -633,37 +730,44 @@ const AdminDashboard = () => {
                   <Table.HeaderCell>{t("admin.actions")}</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
+
               <Table.Body>
                 {reservations.map((reservation) => (
                   <Table.Row key={reservation.id}>
-                    <Table.Cell>
+                    <Table.Cell className="admin-cell-title">
                       {reservation.nombre} {reservation.apellido}
                     </Table.Cell>
+
                     <Table.Cell>
                       <div>{reservation.telefono}</div>
                       {reservation.email && (
-                        <div style={{ fontSize: "0.9em", color: "#666" }}>
+                        <div className="admin-secondary-text">
                           {reservation.email}
                         </div>
                       )}
                     </Table.Cell>
+
                     <Table.Cell>{reservation.fecha}</Table.Cell>
                     <Table.Cell>{reservation.hora}</Table.Cell>
-                    <Table.Cell>{reservation.personas}</Table.Cell>
-                    <Table.Cell>{reservation.mesa || "-"}</Table.Cell>
                     <Table.Cell>
+                      <Label className="admin-tag">{reservation.personas}</Label>
+                    </Table.Cell>
+                    <Table.Cell>{reservation.mesa || "-"}</Table.Cell>
+
+                    <Table.Cell className="admin-actions-cell">
                       <Button
                         size="small"
-                        color="blue"
                         icon
+                        className="admin-icon-btn edit"
                         onClick={() => handleEditReservation(reservation)}
                       >
                         <Icon name="edit" />
                       </Button>
+
                       <Button
                         size="small"
-                        color="red"
                         icon
+                        className="admin-icon-btn delete"
                         onClick={() => handleDeleteReservation(reservation.id)}
                       >
                         <Icon name="trash" />
@@ -682,12 +786,16 @@ const AdminDashboard = () => {
               resetReservationForm();
             }}
             size="large"
+            className="admin-modal"
           >
             <Modal.Header>
-              {editingReservation ? t("admin.editReservation") : t("admin.createReservation")}
+              {editingReservation
+                ? t("admin.editReservation")
+                : t("admin.createReservation")}
             </Modal.Header>
+
             <Modal.Content>
-              <Form>
+              <Form className="admin-form">
                 <Form.Group widths="equal">
                   <Form.Field
                     control={Input}
@@ -702,6 +810,7 @@ const AdminDashboard = () => {
                     }
                     required
                   />
+
                   <Form.Field
                     control={Input}
                     label={t("admin.lastName")}
@@ -716,6 +825,7 @@ const AdminDashboard = () => {
                     required
                   />
                 </Form.Group>
+
                 <Form.Group widths="equal">
                   <Form.Field
                     control={Input}
@@ -730,6 +840,7 @@ const AdminDashboard = () => {
                     }
                     required
                   />
+
                   <Form.Field
                     control={Input}
                     type="email"
@@ -744,6 +855,7 @@ const AdminDashboard = () => {
                     }
                   />
                 </Form.Group>
+
                 <Form.Group widths="equal">
                   <Form.Field
                     control={Input}
@@ -758,6 +870,7 @@ const AdminDashboard = () => {
                     }
                     required
                   />
+
                   <Form.Field
                     control={Input}
                     type="time"
@@ -771,6 +884,7 @@ const AdminDashboard = () => {
                     }
                     required
                   />
+
                   <Form.Field
                     control={Dropdown}
                     selection
@@ -785,6 +899,7 @@ const AdminDashboard = () => {
                     }
                   />
                 </Form.Group>
+
                 <Form.Group widths="equal">
                   <Form.Field
                     control={Dropdown}
@@ -800,6 +915,7 @@ const AdminDashboard = () => {
                       })
                     }
                   />
+
                   <Form.Field
                     control={Input}
                     label={t("admin.table")}
@@ -813,6 +929,7 @@ const AdminDashboard = () => {
                     }
                   />
                 </Form.Group>
+
                 <Form.Field
                   control={TextArea}
                   label={t("admin.notes")}
@@ -828,6 +945,7 @@ const AdminDashboard = () => {
                 />
               </Form>
             </Modal.Content>
+
             <Modal.Actions>
               <Button
                 onClick={() => {
@@ -837,6 +955,7 @@ const AdminDashboard = () => {
               >
                 {t("admin.cancel")}
               </Button>
+
               <Button color="orange" onClick={handleReservationSubmit}>
                 {editingReservation ? t("admin.update") : t("admin.create")}
               </Button>
@@ -857,6 +976,7 @@ const AdminDashboard = () => {
     e?.preventDefault?.();
     setLoginError("");
     setLoginLoading(true);
+
     try {
       await loginAdmin(loginEmail.trim(), loginPassword);
       setLoginPassword("");
@@ -869,132 +989,178 @@ const AdminDashboard = () => {
 
   if (!adminUser) {
     return (
-      <Container style={{ padding: "2.5rem 0", minHeight: "80vh", maxWidth: "480px" }}>
-        <Header as="h1" color="orange" textAlign="center">
-          <Icon name="lock" />
-          {t("admin.title")}
-        </Header>
-        <Segment raised style={{ marginTop: "2em" }}>
-          <Form onSubmit={handleLoginSubmit} error={!!loginError}>
-            {loginError && (
-              <Message error header={t("reservation.errors.header")} content={loginError} />
-            )}
-            <Message info size="small">
-              <p>{t("admin.testAccountsHint")}</p>
-            </Message>
-            <Form.Field
-              control={Input}
-              type="email"
-              label="Email"
-              value={loginEmail}
-              onChange={(e) => setLoginEmail(e.target.value)}
-              required
-            />
-            <Form.Field
-              control={Input}
-              type="password"
-              label={t("admin.password") || "Contraseña"}
-              value={loginPassword}
-              onChange={(e) => setLoginPassword(e.target.value)}
-              required
-            />
-            <Button color="orange" fluid loading={loginLoading} disabled={loginLoading}>
-              {t("admin.login") || "Entrar"}
-            </Button>
-          </Form>
-        </Segment>
+      <Container className="admin-login-page">
+        <div className="admin-login-shell">
+          <Segment raised className="admin-login-card">
+            <div className="admin-login-badge">
+              <Icon name="lock" />
+            </div>
+
+            <Header as="h1" className="admin-login-title" textAlign="center">
+              {t("admin.title")}
+              <Header.Subheader>{t("admin.subtitle")}</Header.Subheader>
+            </Header>
+
+            <Form
+              onSubmit={handleLoginSubmit}
+              error={!!loginError}
+              className="admin-form"
+            >
+              {loginError && (
+                <Message
+                  error
+                  header={t("reservation.errors.header")}
+                  content={loginError}
+                />
+              )}
+
+              <Form.Field
+                control={Input}
+                type="email"
+                label="Email"
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+                required
+              />
+
+              <Form.Field
+                control={Input}
+                type="password"
+                label={t("admin.password") || "Contraseña"}
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+                required
+              />
+
+              <Button
+                color="orange"
+                fluid
+                loading={loginLoading}
+                disabled={loginLoading}
+                className="admin-login-btn"
+              >
+                {t("admin.login") || "Entrar"}
+              </Button>
+            </Form>
+          </Segment>
+        </div>
       </Container>
     );
   }
 
   return (
-    <Container style={{ padding: "2.5rem 0", minHeight: "80vh" }}>
-      <Header as="h1" color="orange" textAlign="center">
-        <Icon name="settings" />
-        {t("admin.title")}
-        <Header.Subheader>
-          {t("admin.subtitle")}
-        </Header.Subheader>
-      </Header>
+    <Container className="admin-dashboard">
+      <div className="admin-hero">
+        <div className="admin-hero-icon-wrap">
+          <Icon name="settings" className="admin-hero-icon" />
+        </div>
 
-      {/* Información del administrador */}
-      {adminUser && (
-        <Segment
-          raised
-          className="admin-info-segment"
-          style={{
-            marginTop: "2em",
-            marginBottom: "1em",
-            background: "linear-gradient(135deg, #ff7b00 0%, #ff4500 100%)",
-            color: "white",
-          }}
-        >
-          <Grid columns={2} stackable>
-            <Grid.Column>
-              <Header as="h3" style={{ color: "white" }}>
-                <Icon name="user circle" style={{ color: "white" }} />
-                {t("admin.infoTitle")}
-              </Header>
-              <div style={{ marginTop: "1em" }}>
-                <p>
-                  <strong>
-                    <Icon name="user" /> {t("admin.name")}
-                  </strong>{" "}
-                  {adminUser.nombre} {adminUser.apellido}
-                </p>
-                <p>
-                  <strong>
-                    <Icon name="mail" /> {t("admin.email")}
-                  </strong>{" "}
-                  {adminUser.email}
-                </p>
-                {adminUser.telefono && (
-                  <p>
-                    <strong>
-                      <Icon name="phone" /> {t("admin.phone")}
-                    </strong>{" "}
-                    {adminUser.telefono}
-                  </p>
-                )}
-                <p>
-                  <strong>
-                    <Icon name="shield" /> {t("admin.role")}
-                  </strong>{" "}
-                  {adminUser.rol}
-                </p>
-                {adminUser.fechaIngreso && (
-                  <p>
-                    <strong>
-                      <Icon name="calendar" /> {t("admin.joinDate")}
-                    </strong>{" "}
-                    {new Date(adminUser.fechaIngreso).toLocaleDateString("es-CO", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                )}
+        <div className="admin-hero-text">
+          <span className="admin-eyebrow">Carnes al Barril</span>
+          <Header as="h1" className="admin-main-title">
+            {t("admin.title")}
+            <Header.Subheader>{t("admin.subtitle")}</Header.Subheader>
+          </Header>
+        </div>
+      </div>
+
+      <Grid className="admin-summary-grid" stackable>
+        {statsCards.map((item) => (
+          <Grid.Column key={item.key} computer={4} tablet={8} mobile={16}>
+            <Segment className={`admin-stat-card ${item.key}`}>
+              <div className="admin-stat-icon">
+                <Icon name={item.icon} />
               </div>
-            </Grid.Column>
-            <Grid.Column verticalAlign="middle" textAlign="right">
-              <Button
-                color="red"
-                size="large"
-                icon
-                labelPosition="left"
-                onClick={handleLogout}
-                style={{ marginTop: "1em" }}
-              >
-                <Icon name="sign out" />
-                {t("admin.logout")}
-              </Button>
-            </Grid.Column>
-          </Grid>
-        </Segment>
-      )}
+              <div className="admin-stat-content">
+                <span className="admin-stat-value">{item.value}</span>
+                <span className="admin-stat-label">{item.label}</span>
+              </div>
+            </Segment>
+          </Grid.Column>
+        ))}
+      </Grid>
 
-      <Segment raised style={{ marginTop: "2em" }}>
+      <Segment raised className="admin-profile-card">
+        <Grid stackable>
+          <Grid.Column computer={11} tablet={16} mobile={16}>
+            <div className="admin-profile-head">
+              <div className="admin-profile-avatar">
+                <Icon name="user circle" />
+              </div>
+
+              <div>
+                <span className="admin-eyebrow">{t("admin.infoTitle")}</span>
+                <Header as="h2" className="admin-profile-name">
+                  {adminUser.nombre} {adminUser.apellido}
+                </Header>
+                <Label className="admin-role-chip">{adminUser.rol}</Label>
+              </div>
+            </div>
+
+            <div className="admin-profile-grid">
+              <div className="admin-profile-item">
+                <Icon name="mail" />
+                <div>
+                  <span>{t("admin.email")}</span>
+                  <strong>{adminUser.email}</strong>
+                </div>
+              </div>
+
+              {adminUser.telefono && (
+                <div className="admin-profile-item">
+                  <Icon name="phone" />
+                  <div>
+                    <span>{t("admin.phone")}</span>
+                    <strong>{adminUser.telefono}</strong>
+                  </div>
+                </div>
+              )}
+
+              <div className="admin-profile-item">
+                <Icon name="shield" />
+                <div>
+                  <span>{t("admin.role")}</span>
+                  <strong>{adminUser.rol}</strong>
+                </div>
+              </div>
+
+              {adminUser.fechaIngreso && (
+                <div className="admin-profile-item">
+                  <Icon name="calendar" />
+                  <div>
+                    <span>{t("admin.joinDate")}</span>
+                    <strong>{formatLongDate(adminUser.fechaIngreso)}</strong>
+                  </div>
+                </div>
+              )}
+            </div>
+          </Grid.Column>
+
+          <Grid.Column
+            computer={5}
+            tablet={16}
+            mobile={16}
+            className="admin-profile-actions"
+          >
+            <Button
+              color="red"
+              size="large"
+              icon
+              labelPosition="left"
+              onClick={handleLogout}
+              className="admin-logout-btn"
+            >
+              <Icon name="sign out" />
+              {t("admin.logout")}
+            </Button>
+          </Grid.Column>
+        </Grid>
+      </Segment>
+
+      <Segment raised className="admin-main-panel">
         <Tab
+          className="admin-tabs"
+          menu={{ secondary: true, pointing: false }}
           panes={panes}
           activeIndex={panes.findIndex((p) => p.menuItem.key === activeTab)}
           onTabChange={(e, { activeIndex }) => {
