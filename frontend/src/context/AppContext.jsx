@@ -96,6 +96,24 @@ function mapWorkerRow(u) {
   };
 }
 
+function mapOrderFromApi(order) {
+  if (!order) return null;
+  const customer = order.customer || {};
+  const delivery = order.delivery || {};
+  return {
+    id: toId(order),
+    customerName: customer.name || '',
+    customerPhone: customer.phone || '',
+    customerEmail: customer.email || '',
+    deliveryAddress: delivery.address || '',
+    deliveryReference: delivery.reference || '',
+    items: order.items || [],
+    total: order.total || 0,
+    status: order.status || 'pending',
+    createdAt: order.createdAt || new Date().toISOString(),
+  };
+}
+
 export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
@@ -119,6 +137,7 @@ export const AppProvider = ({ children }) => {
   });
   const [suggestions, setSuggestions] = useState([]);
   const [reservations, setReservations] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [workers, setWorkers] = useState([]);
   const [adminUser, setAdminUser] = useState(null);
 
@@ -129,7 +148,42 @@ export const AppProvider = ({ children }) => {
       const data = await res.json();
       setReservations(data.map(mapReservationFromApi).filter(Boolean));
     } catch (e) {
-      console.error(e);
+      console.error('Error fetching reservations:', e);
+    }
+  }, []);
+
+  const fetchOrders = useCallback(async () => {
+    try {
+      const res = await apiFetch('/api/objects/orders');
+      if (!res.ok) return;
+      const data = await res.json();
+      setOrders(data.map(mapOrderFromApi).filter(Boolean));
+    } catch (e) {
+      console.error('Error fetching orders:', e);
+    }
+  }, []);
+
+  const updateOrderStatus = useCallback(async (orderId, newStatus) => {
+    try {
+      const res = await apiFetch(`/api/objects/orders/${orderId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      
+      if (!res.ok) throw new Error('Error al actualizar estado');
+      
+      // Actualizar el estado local
+      setOrders(prev => prev.map(order => 
+        order.id === orderId ? { ...order, status: newStatus } : order
+      ));
+      
+      return true;
+    } catch (e) {
+      console.error('Error updating order status:', e);
+      throw e;
     }
   }, []);
 
@@ -198,7 +252,8 @@ export const AppProvider = ({ children }) => {
     fetchReservations();
     fetchContactsAsSuggestions();
     fetchWorkers();
-  }, [adminUser, fetchReservations, fetchContactsAsSuggestions, fetchWorkers]);
+    fetchOrders();
+  }, [adminUser, fetchReservations, fetchContactsAsSuggestions, fetchWorkers, fetchOrders]);
 
   // Persistir carrito en localStorage cuando cambie
   useEffect(() => {
@@ -411,20 +466,32 @@ export const AppProvider = ({ children }) => {
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.message || 'Error al iniciar sesión');
-    if (data.role !== 'admin') throw new Error('No tienes permisos de administrador');
+    
+    // Permitir acceso a admin y workers
+    if (data.role !== 'admin' && data.role !== 'worker') {
+      throw new Error('No tienes permisos de administrador o trabajador');
+    }
+    
     setAdminUser({
       id: toId({ _id: data.id }) ?? data.id,
       nombre: data.name,
       apellido: data.lastName || '',
       email: data.email,
       telefono: data.phone || '',
-      rol: 'Administrador',
+      rol: data.role === 'admin' ? 'Administrador' : 'Trabajador',
       fechaIngreso: new Date().toISOString(),
     });
-    await fetchReservations();
-    await fetchContactsAsSuggestions();
-    await fetchWorkers();
-    await loadProducts();
+    
+    // Cargar datos según el rol
+    if (data.role === 'admin') {
+      await fetchReservations();
+      await fetchContactsAsSuggestions();
+      await fetchWorkers();
+      await loadProducts();
+    }
+    
+    // Cargar pedidos para ambos roles
+    await fetchOrders();
   };
 
   const logoutAdmin = async () => {
@@ -462,6 +529,7 @@ export const AppProvider = ({ children }) => {
     contactForm,
     suggestions,
     reservations,
+    orders,
     workers,
     adminUser,
     config: APP_CONFIG,
@@ -484,6 +552,8 @@ export const AppProvider = ({ children }) => {
     addReservation,
     updateReservation,
     deleteReservation,
+    fetchOrders,
+    updateOrderStatus,
     loginAdmin,
     logoutAdmin,
     createWorker,

@@ -298,6 +298,18 @@
     "createWorker": "Registrar trabajador",
     "workerRole": "Trabajador",
     "noWorkers": "Aún no hay trabajadores registrados.",
-    "testAccountsHint": "Cuentas de prueba: admin@carnesalbarril.com / admin123 (admin). cliente@carnesalbarril.com / cliente123 (cliente)."
+    "testAccountsHint": "Cuentas de prueba: admin@carnesalbarril.com / admin123 (admin). cliente@carnesalbarril.com / cliente123 (cliente).",
+    "orders": "Pedidos",
+    "noOrders": "No hay pedidos",
+    "noOrdersRegistered": "No hay pedidos registrados.",
+    "orderId": "ID del Pedido",
+    "deliveryAddress": "Dirección de Entrega",
+    "changeStatus": "Cambiar Estado",
+    "pending": "Pendiente",
+    "preparing": "Preparando",
+    "sent": "Enviado",
+    "delivered": "Entregado",
+    "orderDetails": "Detalles del Pedido",
+    "viewItems": "Ver Items"
   }
 }

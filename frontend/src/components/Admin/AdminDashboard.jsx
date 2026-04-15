@@ -32,6 +32,7 @@ const AdminDashboard = () => {
     products,
     suggestions,
     reservations,
+    orders,
     adminUser,
     addProduct,
     updateProduct,
@@ -40,6 +41,8 @@ const AdminDashboard = () => {
     addReservation,
     updateReservation,
     deleteReservation,
+    fetchOrders,
+    updateOrderStatus,
     logoutAdmin,
     loginAdmin,
     workers,
@@ -105,6 +108,22 @@ const AdminDashboard = () => {
     text: t(`reservation.doneness.${k}`),
     value: k,
   }));
+
+  const ORDER_STATUS_OPTIONS = [
+    { key: 'pending', text: t('admin.pending'), value: 'pending' },
+    { key: 'preparing', text: t('admin.preparing'), value: 'preparing' },
+    { key: 'sent', text: t('admin.sent'), value: 'sent' },
+    { key: 'delivered', text: t('admin.delivered'), value: 'delivered' },
+  ];
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      await updateOrderStatus(orderId, newStatus);
+      await fetchOrders(); // Recargar para asegurar sincronización
+    } catch (error) {
+      window.alert(error.message || 'Error al cambiar el estado del pedido');
+    }
+  };
 
   const formatNumber = (value) =>
     new Intl.NumberFormat(locale).format(Number(value) || 0);
@@ -293,6 +312,18 @@ const AdminDashboard = () => {
     } catch (e) {
       window.alert(e.message || t("admin.errorSave"));
     }
+  };
+
+  // Filtrar pestañas según el rol del usuario
+  const getFilteredPanes = () => {
+    if (adminUser?.rol === 'Trabajador') {
+      // Workers solo ven Pedidos y Reservas
+      return panes.filter(pane => 
+        pane.menuItem.key === 'orders' || pane.menuItem.key === 'reservations'
+      );
+    }
+    // Admins ven todas las pestañas
+    return panes;
   };
 
   const panes = [
@@ -964,6 +995,107 @@ const AdminDashboard = () => {
         </Tab.Pane>
       ),
     },
+    {
+      menuItem: {
+        key: "orders",
+        content: (
+          <span>
+            <Icon name="shopping cart" /> {t("admin.orders")} ({orders.length})
+          </span>
+        ),
+      },
+      render: () => (
+        <Tab.Pane className="admin-tab-pane">
+          {orders.length === 0 ? (
+            <Message info className="admin-message">
+              <Message.Header>{t("admin.noOrders")}</Message.Header>
+              <p>{t("admin.noOrdersRegistered")}</p>
+            </Message>
+          ) : (
+            <Table celled striped className="admin-data-table">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>{t("admin.orderId")}</Table.HeaderCell>
+                  <Table.HeaderCell>{t("admin.customer")}</Table.HeaderCell>
+                  <Table.HeaderCell>{t("admin.phone")}</Table.HeaderCell>
+                  <Table.HeaderCell>{t("admin.total")}</Table.HeaderCell>
+                  <Table.HeaderCell>{t("admin.status")}</Table.HeaderCell>
+                  <Table.HeaderCell>{t("admin.date")}</Table.HeaderCell>
+                  <Table.HeaderCell>{t("admin.actions")}</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+              <Table.Body>
+                {orders.map((order) => (
+                  <Table.Row key={order.id}>
+                    <Table.Cell className="admin-cell-title">
+                      <strong>#{order.id?.slice(-8) || order.id}</strong>
+                    </Table.Cell>
+
+                    <Table.Cell>
+                      <div>{order.customerName}</div>
+                      {order.customerEmail && (
+                        <div className="admin-secondary-text">
+                          {order.customerEmail}
+                        </div>
+                      )}
+                    </Table.Cell>
+
+                    <Table.Cell>{order.customerPhone || "N/A"}</Table.Cell>
+
+                    <Table.Cell>
+                      <strong>${formatNumber(order.total)}</strong>
+                    </Table.Cell>
+
+                    <Table.Cell>
+                      <Dropdown
+                        selection
+                        compact
+                        options={ORDER_STATUS_OPTIONS}
+                        value={order.status}
+                        onChange={(e, { value }) => 
+                          handleStatusChange(order.id, value)
+                        }
+                        className={`admin-status-dropdown ${order.status}`}
+                      />
+                    </Table.Cell>
+
+                    <Table.Cell>{formatDateTime(order.createdAt)}</Table.Cell>
+
+                    <Table.Cell className="admin-actions-cell">
+                      <Button
+                        size="small"
+                        icon
+                        className="admin-icon-btn info"
+                        onClick={() => {
+                          const itemsText = order.items.map(item => 
+                            `${item.title} x${item.quantity} ($${item.price.toLocaleString('es-CO')})`
+                          ).join('\n');
+                          const addressText = order.deliveryAddress + 
+                            (order.deliveryReference ? `\nRef: ${order.deliveryReference}` : '');
+                          window.alert(
+                            `${t("admin.orderDetails")}:\n\n` +
+                            `${t("admin.customer")}: ${order.customerName}\n` +
+                            `${t("admin.phone")}: ${order.customerPhone}\n` +
+                            `${t("admin.email")}: ${order.customerEmail}\n` +
+                            `${t("admin.deliveryAddress")}: ${addressText}\n\n` +
+                            `${t("admin.items")}:\n${itemsText}\n\n` +
+                            `${t("admin.total")}: $${formatNumber(order.total)}`
+                          );
+                        }}
+                        title={t("admin.orderDetails")}
+                      >
+                        <Icon name="eye" />
+                      </Button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          )}
+        </Tab.Pane>
+      ),
+    },
   ];
 
   const handleLogout = async () => {
@@ -1161,11 +1293,12 @@ const AdminDashboard = () => {
         <Tab
           className="admin-tabs"
           menu={{ secondary: true, pointing: false }}
-          panes={panes}
-          activeIndex={panes.findIndex((p) => p.menuItem.key === activeTab)}
+          panes={getFilteredPanes()}
+          activeIndex={getFilteredPanes().findIndex((p) => p.menuItem.key === activeTab)}
           onTabChange={(e, { activeIndex }) => {
-            if (activeIndex >= 0 && activeIndex < panes.length) {
-              setActiveTab(panes[activeIndex].menuItem.key);
+            const filteredPanes = getFilteredPanes();
+            if (activeIndex >= 0 && activeIndex < filteredPanes.length) {
+              setActiveTab(filteredPanes[activeIndex].menuItem.key);
             }
           }}
         />
