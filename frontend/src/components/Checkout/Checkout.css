@@ -1,0 +1,153 @@
+/* ===== Checkout Page (scopeado a .checkout-page) ===== */
+.checkout-page{
+  /* variables locales al componente - mismas que contacto */
+  --brand-card: #1b1c1d;
+  --brand-soft: #232427;
+  --text: #eaecef;
+  --muted: #acb2b8;
+  --accent: #ff7a1a;
+  --accent-2: #ff9d4d;
+  --radius-2xl: 16px;
+  --shadow-lg: 0 12px 28px rgba(0,0,0,.35);
+  --shadow-md: 0 8px 20px rgba(0,0,0,.25);
+
+  padding: 3rem 0 4rem;
+}
+
+.checkout-page .checkout-title{
+  color: var(--text) !important;
+  margin-bottom: 1.25rem !important;
+}
+.checkout-page .checkout-title .sub.header{
+  color: var(--muted) !important;
+}
+
+/* Tarjeta de resumen del carrito */
+.checkout-page .cart-summary-card.ui.segment{
+  background: linear-gradient(180deg, var(--brand-soft), var(--brand-card)) !important;
+  border-radius: var(--radius-2xl) !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding: 2rem !important;
+}
+
+/* Tarjeta de formulario de entrega */
+.checkout-page .delivery-form-card.ui.segment{
+  background: linear-gradient(180deg, var(--brand-soft), var(--brand-card)) !important;
+  border-radius: var(--radius-2xl) !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding: 2rem !important;
+}
+
+/* Titulares */
+.checkout-page .section-title{
+  color: var(--text) !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.checkout-page .form-section-title{
+  color: var(--accent) !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  font-size: 1.1em !important;
+}
+
+/* Layout del grid */
+.checkout-page .checkout-grid{
+  margin-top: 2em !important;
+}
+.checkout-page .checkout-grid > .column{
+  display: block !important;
+  text-align: left !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  margin: 0 !important;
+}
+
+/* Formulario: estilos consistentes con contacto */
+.checkout-page .checkout-form{
+  text-align: left !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+.checkout-page .checkout-form .field>label{
+  color: var(--muted) !important;
+  text-align: left !important;
+}
+.checkout-page .checkout-form .field,
+.checkout-page .checkout-form .ui.input,
+.checkout-page .checkout-form .ui.input>input,
+.checkout-page .checkout-form textarea{
+  width: 100% !important;
+}
+.checkout-page .checkout-form textarea{
+  min-height: 100px;
+}
+.checkout-page .checkout-form .ui.input>input,
+.checkout-page .checkout-form textarea{
+  background: #121316 !important;
+  color: var(--text) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+}
+.checkout-page .checkout-form .ui.input>input:focus,
+.checkout-page .checkout-form textarea:focus{
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 1px var(--accent) inset !important;
+}
+
+/* Checkbox */
+.checkout-page .ui.checkbox label{
+  color: var(--muted) !important;
+}
+.checkout-page .ui.checkbox input:checked~label:before{
+  background-color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+/* Botón primario */
+.checkout-page .ui.primary.button{
+  background: var(--accent) !important;
+  border: none !important;
+}
+.checkout-page .ui.primary.button:hover,
+.checkout-page .ui.primary.button:focus{
+  background: var(--accent-2) !important;
+  transform: translateY(-1px);
+}
+
+/* Título con icono */
+.checkout-page .checkout-title .title-row{
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  line-height: 1;
+}
+.checkout-page .checkout-title .title-icon{
+  color: var(--accent);
+  font-size: 1.15em;
+  translate: 0 .04em;
+}
+
+/* Lista de items del carrito */
+.checkout-page .cart-summary-card .list .item .header{
+  color: var(--text) !important;
+}
+.checkout-page .cart-summary-card .list .item .description{
+  color: var(--muted) !important;
+}
+
+/* Responsive */
+@media (max-width: 767px){
+  .checkout-page .cart-summary-card.ui.segment{ 
+    padding: 1rem !important; 
+    margin-bottom: 1rem !important;
+  }
+  .checkout-page .delivery-form-card.ui.segment{ 
+    padding: 1rem !important; 
+  }
+  .checkout-page .checkout-grid{
+    margin-top: 1em !important;
+  }
+}

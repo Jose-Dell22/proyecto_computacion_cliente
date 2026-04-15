@@ -8,6 +8,7 @@ import ContactoUbicacion from "./components/Contact/ContactoUbicacion";
 import NotFound from "./components/Notfound/Notfound";
 import AboutUs from "./components/AboutUs/About";
 import MenuComponent from "./components/MenuComponent/menuComponent";
+import Checkout from "./components/Checkout/Checkout";
 import FloatingCart from "./components/common/FloatingCart";
 import Footer from "./components/common/Footer";
 import ReservationForm from "./components/Reservations/ReservationForm";
@@ -162,6 +163,7 @@ const App = () => {
           <Route path={config.ROUTES.ABOUT} element={<AboutUs />} />
           <Route path={config.ROUTES.RESERVATION} element={<ReservationForm />} />
           <Route path={config.ROUTES.ADMIN} element={<AdminDashboard />} />
+          <Route path="/checkout" element={<Checkout />} />
 
           {/* Página 404 */}
           <Route path="*" element={<NotFound />} />

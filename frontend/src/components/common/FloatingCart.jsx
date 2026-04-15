@@ -10,8 +10,8 @@ const FloatingCart = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
 
-  const handleGoToContact = () => {
-    navigate(config.ROUTES.CONTACT);
+  const handleGoToCheckout = () => {
+    navigate('/checkout');
     setIsOpen(false);
   };
 
@@ -101,11 +101,11 @@ const FloatingCart = () => {
               <Button
                 color="orange"
                 fluid
-                onClick={handleGoToContact}
+                onClick={handleGoToCheckout}
                 style={{ marginTop: "1em" }}
               >
-                <Icon name="map marker alternate" />
-                {t("cart.goToContact")}
+                <Icon name="credit card" />
+                {t("cart.goToCheckout")}
               </Button>
 
               <Button
