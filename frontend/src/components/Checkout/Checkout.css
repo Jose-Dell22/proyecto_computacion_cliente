@@ -53,10 +53,10 @@
   font-size: 1.1em !important;
 }
 
-/* Layout del grid */
+/* Layout del grid - 60% formulario, 40% resumen */
 .checkout-page .checkout-grid{
   margin-top: 2em !important;
-  gap: 2em !important;
+  gap: 3em !important;
 }
 .checkout-page .checkout-grid > .column{
   display: block !important;
@@ -64,6 +64,22 @@
   align-items: stretch !important;
   justify-content: flex-start !important;
   margin: 0 !important;
+}
+
+/* Columna izquierda (60%) */
+.checkout-page .checkout-grid > .column:first-child {
+  flex: 6 !important;
+}
+
+/* Columna derecha (40%) */
+.checkout-page .checkout-grid > .column:last-child {
+  flex: 4 !important;
+}
+
+/* Contenedor principal centrado */
+.checkout-page {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 /* Formulario: estilos consistentes con contacto */
@@ -131,12 +147,92 @@
   translate: 0 .04em;
 }
 
-/* Lista de items del carrito */
-.checkout-page .cart-summary-card .list .item .header{
-  color: var(--text) !important;
+/* Lista de productos con imágenes */
+.checkout-page .checkout-product-list {
+  margin-top: 1em !important;
 }
-.checkout-page .cart-summary-card .list .item .description{
+
+.checkout-page .checkout-product-item {
+  display: flex !important;
+  align-items: flex-start !important;
+  padding: 1em 0 !important;
+  gap: 1em !important;
+}
+
+/* Contenedor de imagen */
+.checkout-page .product-image-container {
+  flex-shrink: 0 !important;
+  width: 60px !important;
+  height: 60px !important;
+  position: relative !important;
+}
+
+.checkout-page .product-image {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 12px !important;
+  object-fit: cover !important;
+  border: 2px solid rgba(255, 122, 26, 0.2) !important;
+}
+
+/* Fallback para sin imagen */
+.checkout-page .product-image-fallback {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 12px !important;
+  background: rgba(255, 122, 26, 0.1) !important;
+  border: 2px solid rgba(255, 122, 26, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Contenido del producto */
+.checkout-page .product-content {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 60px !important;
+}
+
+.checkout-page .product-title {
+  color: var(--text) !important;
+  font-size: 1em !important;
+  margin-bottom: 0.3em !important;
+  line-height: 1.2 !important;
+}
+
+.checkout-page .product-details {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.2em !important;
+  margin-bottom: 0.5em !important;
+}
+
+.checkout-page .price-row {
   color: var(--muted) !important;
+  font-size: 0.9em !important;
+}
+
+.checkout-page .subtotal-row {
+  color: var(--accent) !important;
+  font-weight: bold !important;
+}
+
+/* Controles de cantidad */
+.checkout-page .product-controls {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5em !important;
+  margin-top: 0.5em !important;
+}
+
+.checkout-page .quantity-display {
+  min-width: 20px !important;
+  text-align: center !important;
+  font-weight: bold !important;
+  color: var(--text) !important;
 }
 
 /* Responsive */
@@ -152,5 +248,39 @@
   .checkout-page .checkout-grid{
     margin-top: 1em !important;
     gap: 1.5em !important;
+  }
+  
+  /* En móvil, las imágenes siguen siendo 60px pero con mejor espaciado */
+  .checkout-page .checkout-product-item {
+    padding: 0.8em 0 !important;
+    gap: 0.8em !important;
+  }
+  
+  .checkout-page .product-image-container {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  
+  .checkout-page .product-title {
+    font-size: 0.9em !important;
+  }
+  
+  .checkout-page .product-controls {
+    gap: 0.3em !important;
+  }
+}
+
+@media (max-width: 992px) and (min-width: 768px){
+  /* Tablets: ajustar proporción de columnas */
+  .checkout-page .checkout-grid > .column:first-child {
+    flex: 7 !important;
+  }
+  
+  .checkout-page .checkout-grid > .column:last-child {
+    flex: 5 !important;
+  }
+  
+  .checkout-page .checkout-grid {
+    gap: 2em !important;
   }
 }
