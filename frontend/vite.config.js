@@ -9,7 +9,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: 'mongodb://localhost:27017/carnes_al_barril_db',
         changeOrigin: true,
         secure: false,
       }
