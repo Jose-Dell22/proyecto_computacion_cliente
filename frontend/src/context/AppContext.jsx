@@ -165,6 +165,7 @@ export const AppProvider = ({ children }) => {
 
   const updateOrderStatus = useCallback(async (orderId, newStatus) => {
     try {
+      console.log(`Actualizando estado del pedido ${orderId} a ${newStatus}`);
       const res = await apiFetch(`/api/objects/orders/${orderId}`, {
         method: 'PUT',
         headers: {
@@ -173,13 +174,19 @@ export const AppProvider = ({ children }) => {
         body: JSON.stringify({ status: newStatus }),
       });
       
-      if (!res.ok) throw new Error('Error al actualizar estado');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        const errorMessage = errorData.message || `Error ${res.status}: ${res.statusText}`;
+        console.error('Error del servidor:', errorData);
+        throw new Error(errorMessage);
+      }
       
-      // Actualizar el estado local
+      // Actualizar el estado local inmediatamente
       setOrders(prev => prev.map(order => 
         order.id === orderId ? { ...order, status: newStatus } : order
       ));
       
+      console.log(`Estado del pedido ${orderId} actualizado exitosamente a ${newStatus}`);
       return true;
     } catch (e) {
       console.error('Error updating order status:', e);

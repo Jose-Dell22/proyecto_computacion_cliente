@@ -27,12 +27,28 @@ app.use(
   cors({
     origin: (origin, callback) => {
       // Permite requests sin origin (herramientas de servidor/curl)
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) {
         return callback(null, true);
       }
+      
+      // En desarrollo, permite explícitamente localhost:5173
+      const isDevelopment = process.env.NODE_ENV !== 'production';
+      if (isDevelopment && (origin === 'http://localhost:5173' || origin === 'http://127.0.0.1:5173')) {
+        return callback(null, true);
+      }
+      
+      // Permite orígenes configurados en .env
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      
+      console.log("CORS bloqueado - Origen no permitido:", origin);
+      console.log("Orígenes permitidos:", allowedOrigins);
       return callback(new Error("Origen no permitido por CORS"));
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   })
 );
 

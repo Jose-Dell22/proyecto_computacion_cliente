@@ -18,6 +18,7 @@ import { useApp } from '../../context/AppContext';
 import { useForm } from '../../hooks/useForm';
 import { APP_CONFIG, MESSAGES, ICONS } from '../../config/constants';
 import { useTranslation } from 'react-i18next';
+import { apiFetch } from '../../api/client';
 import './Checkout.css';
 
 export default function Checkout() {
@@ -59,7 +60,7 @@ export default function Checkout() {
       };
 
       // Enviar pedido al backend
-      const response = await fetch('/api/objects/orders', {
+      const response = await apiFetch('/api/objects/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

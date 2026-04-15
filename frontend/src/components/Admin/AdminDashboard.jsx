@@ -119,9 +119,21 @@ const AdminDashboard = () => {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       await updateOrderStatus(orderId, newStatus);
-      await fetchOrders(); // Recargar para asegurar sincronización
+      // No es necesario recargar todos los pedidos ya que la actualización local es inmediata
     } catch (error) {
-      window.alert(error.message || 'Error al cambiar el estado del pedido');
+      let errorMessage = 'Error al cambiar el estado del pedido';
+      
+      if (error.message.includes('403')) {
+        errorMessage = '❌ Permiso denegado: No tienes autorización para modificar pedidos';
+      } else if (error.message.includes('404')) {
+        errorMessage = '❌ Pedido no encontrado: El pedido que intentas modificar no existe';
+      } else if (error.message.includes('500')) {
+        errorMessage = '❌ Error del servidor: Contacta al administrador del sistema';
+      } else if (error.message) {
+        errorMessage = `❌ ${error.message}`;
+      }
+      
+      window.alert(errorMessage);
     }
   };
 

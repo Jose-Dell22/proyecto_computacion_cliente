@@ -39,10 +39,10 @@ const Footer = () => {
           {t("footer.title")}
         </Header>
 
-        {/* 🔶 Grid principal */}
+        {/* Grid principal */}
         <Grid stackable centered columns={3}>
-          {/* 🕒 Horarios */}
-          <Grid.Column width={4.5}>
+          {/* Horarios */}
+          <Grid.Column width={4}>
             <Header as="h4" inverted style={{ color: 'white', marginBottom: '15px' }}>
               <Icon name="clock" style={{ color: '#ffdd44' }} />
               {t("footer.schedule_title")}
@@ -56,8 +56,8 @@ const Footer = () => {
             </div>
           </Grid.Column>
 
-          {/* ☎️ Contacto */}
-          <Grid.Column width={4.5}>
+          {/* Contacto */}
+          <Grid.Column width={5}>
             <Header as="h4" inverted style={{ color: 'white', marginBottom: '15px' }}>
               <Icon name="phone" style={{ color: '#ffdd44' }} />
               {t("footer.contact_title")}
@@ -78,8 +78,8 @@ const Footer = () => {
             </div>
           </Grid.Column>
 
-          {/* 🌐 Redes Sociales */}
-          <Grid.Column width={4.5}>
+          {/* Redes Sociales */}
+          <Grid.Column width={4}>
             <Header as="h4" inverted style={{ color: 'white', marginBottom: '15px' }}>
               <Icon name="share alternate" style={{ color: '#ffdd44' }} />
               {t("footer.social_title")}
