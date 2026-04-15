@@ -3,6 +3,7 @@ import Product from "../models/Product.js";
 /** Catálogo inicial (Neiva / parrilla). Solo se inserta si la colección está vacía. */
 const BASE_PRODUCTS = [
   {
+    _id: "507f1f77bcf86cd799439011",
     title: "Carnes al Barril (especialidad)",
     description:
       "Selección de cortes premium a la parrilla con guarnición y chimichurri de la casa.",
@@ -13,6 +14,7 @@ const BASE_PRODUCTS = [
     available: true,
   },
   {
+    _id: "507f1f77bcf86cd799439012",
     title: "Picanha (punta de anca)",
     description: "Corte jugoso en su punto, ideal para compartir.",
     price: 42000,
@@ -22,6 +24,7 @@ const BASE_PRODUCTS = [
     available: true,
   },
   {
+    _id: "507f1f77bcf86cd799439013",
     title: "Costillas BBQ",
     description: "Costillas glaseadas con salsa BBQ ahumada, tiernas al horno y parrilla.",
     price: 38000,
@@ -31,6 +34,7 @@ const BASE_PRODUCTS = [
     available: true,
   },
   {
+    _id: "507f1f77bcf86cd799439014",
     title: "Chorizo parrillero",
     description: "Chorizo artesanal dorado a la parrilla con arepa o papas.",
     price: 25000,
@@ -40,6 +44,7 @@ const BASE_PRODUCTS = [
     available: true,
   },
   {
+    _id: "507f1f77bcf86cd799439015",
     title: "Asado de tira",
     description: "Clásico corte con hueso, sabor intenso y cocido lento.",
     price: 45000,
@@ -49,6 +54,7 @@ const BASE_PRODUCTS = [
     available: true,
   },
   {
+    _id: "507f1f77bcf86cd799439016",
     title: "Pechuga a la parrilla",
     description: "Pechuga marinada, jugosa y con notas ahumadas.",
     price: 30000,
@@ -58,6 +64,7 @@ const BASE_PRODUCTS = [
     available: true,
   },
   {
+    _id: "507f1f77bcf86cd799439017",
     title: "Trilogía parrillera",
     description: "Tres cortes en un solo plato: mezcla de sabores de la casa.",
     price: 52000,
@@ -67,6 +74,7 @@ const BASE_PRODUCTS = [
     available: true,
   },
   {
+    _id: "507f1f77bcf86cd799439018",
     title: "Churrasco",
     description: "Lomo fino a la parrilla, acompañado de ensalada y papa.",
     price: 39000,

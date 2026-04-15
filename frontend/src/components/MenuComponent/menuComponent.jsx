@@ -12,42 +12,42 @@ const MenuComponent = () => {
 
   const menuData = [
     {
-      id: 1,
+      id: "507f1f77bcf86cd799439011",
       title: t("menu.items.beef_barrel.title"),
       description: t("menu.items.beef_barrel.description"),
       price: 35000,
       image: "/img/carnesAlBarril.jpg",
     },
     {
-      id: 2,
+      id: "507f1f77bcf86cd799439012",
       title: t("menu.items.ribs_bbq.title"),
       description: t("menu.items.ribs_bbq.description"),
       price: 38000,
       image: "/img/costillasBBQ.jpg",
     },
     {
-      id: 3,
+      id: "507f1f77bcf86cd799439013",
       title: t("menu.items.sausage.title"),
       description: t("menu.items.sausage.description"),
       price: 25000,
       image: "/img/chorizoParrillero.jpeg",
     },
     {
-      id: 4,
+      id: "507f1f77bcf86cd799439014",
       title: t("menu.items.picanha.title"),
       description: t("menu.items.picanha.description"),
       price: 42000,
       image: "/img/puntadeAnca.jpg",
     },
     {
-      id: 5,
+      id: "507f1f77bcf86cd799439015",
       title: t("menu.items.chicken_breast.title"),
       description: t("menu.items.chicken_breast.description"),
       price: 30000,
       image: "/img/PechugaParrilla.jpg",
     },
     {
-      id: 6,
+      id: "507f1f77bcf86cd799439016",
       title: t("menu.items.grill_trilogy.title"),
       description: t("menu.items.grill_trilogy.description"),
       price: 52000,
