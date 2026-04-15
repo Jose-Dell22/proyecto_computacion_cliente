@@ -68,7 +68,8 @@ export default function Checkout() {
       });
 
       if (!response.ok) {
-        throw new Error('Error al procesar el pedido');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Error al procesar el pedido');
       }
 
       const savedOrder = await response.json();
@@ -79,7 +80,8 @@ export default function Checkout() {
 
     } catch (error) {
       console.error('Error submitting order:', error);
-      // Aquí podrías mostrar un mensaje de error
+      // El error se mostrará automáticamente a través del estado del formulario
+      throw error;
     }
   };
 
