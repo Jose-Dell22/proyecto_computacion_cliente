@@ -23,6 +23,39 @@ Abre **`http://localhost:5173`**. Para el panel admin usa las [cuentas de prueba
 
 ---
 
+## Módulo de Pedidos y Checkout
+
+El sistema ahora incluye un flujo completo de pedidos con persistencia local y gestión administrativa.
+
+### Carrito de Compras
+
+- **Persistencia:** El carrito utiliza `localStorage` del navegador para mantener los productos seleccionados incluso si el usuario recarga la página o cierra y vuelve a abrir el sitio.
+- **Funcionalidad:** Los usuarios pueden agregar productos desde cualquier sección del sitio, ver el resumen del carrito flotante y proceder al checkout.
+
+### Página de Checkout
+
+- **Ruta:** `/checkout` - Accesible desde el carrito flotante
+- **Diseño:** Interfaz consistente con el resto del sitio usando Semantic UI React
+- **Proceso:** Los usuarios completan sus datos de contacto y dirección de entrega, confirman los productos del carrito y envían el pedido.
+- **Persistencia:** El pedido se guarda en MongoDB y está disponible para gestión inmediata en el panel administrativo.
+
+### Gestión de Pedidos
+
+- **Panel Administrativo:** Nueva pestaña "Pedidos" en el Dashboard (`/admin`)
+- **Permisos:** Tanto administradores como trabajadores pueden ver y gestionar pedidos
+- **Estados:** Los pedidos pueden cambiar de estado (pending, preparing, sent, delivered)
+- **Información:** Cada pedido incluye datos del cliente, productos solicitados, total y dirección de entrega
+
+### Flujo Completo
+
+1. **Usuario** navega y agrega productos al carrito (persistencia en localStorage)
+2. **Usuario** procede a `/checkout` y completa formulario de contacto y entrega
+3. **Sistema** guarda pedido en MongoDB con estado "pending"
+4. **Trabajador/Admin** recibe notificación en Dashboard y puede cambiar estado del pedido
+5. **Usuario** puede contactar para seguimiento del pedido
+
+---
+
 ## Tabla de contenidos
 
 1. [Qué hace la aplicación](#qué-hace-la-aplicación)
@@ -241,6 +274,17 @@ Archivo: `backend/src/seed/seedProducts.js`.
 
 Si **`Product.countDocuments()` === 0**, se insertan **8** productos de ejemplo (parrilla, COP, imágenes externas). Si ya hay datos, **no** duplica.
 
+### Integridad de datos
+
+El sistema ha sido estandarizado para usar **ObjectIds de MongoDB** en todos los productos. Esto asegura:
+
+- **Compatibilidad total** con el módulo de pedidos y checkout
+- **Referencias consistentes** entre carrito local y base de datos
+- **Identificadores únicos** que persisten entre sesiones
+- **Integridad relacional** cuando los pedidos referencian productos específicos
+
+> **Importante:** No modifiques manualmente los `_id` de los productos en la base de datos, ya que esto podría romper las referencias en pedidos existentes.
+
 ---
 
 ## Usuarios de prueba y roles
@@ -251,14 +295,17 @@ Archivo: `backend/src/seed/seedUsers.js`. Por cada fila, si el **email** no exis
 |--------|------------|-----|
 | `admin@carnesalbarril.com` | `admin123` | `admin` |
 | `cliente@carnesalbarril.com` | `cliente123` | `customer` |
+| `trabajador@carnesalbarril.com` | `trabajador123` | `worker` |
 
 **Resumen de roles**
 
-| Rol | Panel `/admin` | CRUD `/api/objects/...` (protegido) | Cómo se crea |
-|-----|----------------|--------------------------------------|--------------|
-| `admin` | Sí | Sí | Seed o manual en BD |
-| `customer` | No | No | Registro público o seed cliente |
-| `worker` | No | No | `POST /api/workers` o pestaña *Trabajadores* |
+| Rol | Panel `/admin` | CRUD `/api/objects/...` (protegido) | Gestión de pedidos | Cómo se crea |
+|-----|----------------|--------------------------------------|-------------------|--------------|
+| `admin` | Sí (completo) | Sí | Sí | Seed o manual en BD |
+| `customer` | No | No | No | Registro público o seed cliente |
+| `worker` | Sí (limitado) | No | Sí | `POST /api/workers` o pestaña *Trabajadores* |
+
+> **Nota importante:** El rol `worker` ahora tiene acceso limitado al panel de administración. Puede ver y gestionar únicamente las pestañas de **Pedidos** y **Reservas**, pero no tiene acceso a productos, trabajadores ni configuraciones generales.
 
 ---
 
@@ -307,7 +354,10 @@ PORT=4000
 FRONTEND_URL=http://localhost:5173
 ```
 
-- **`FRONTEND_URL`:** orígenes para CORS (varios separados por coma). También define el mensaje “Abre la aplicación en…”.
+- **`PORT`:** Puerto fijo del backend (importante: el proxy de Vite está configurado para redirigir a `http://localhost:4000`).
+- **`FRONTEND_URL`:** orígenes para CORS (varios separados por coma). También define el mensaje "Abre la aplicación en...".
+
+> **Importante:** El backend debe correr en el puerto 4000 para que el proxy de Vite funcione correctamente. Si cambias este puerto, también debes actualizar `frontend/vite.config.js`.
 
 ### `frontend/.env`
 

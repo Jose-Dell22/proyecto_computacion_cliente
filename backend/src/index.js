@@ -67,14 +67,16 @@ app.get("/", (req, res) => {
 });
 
 // Puerto
-const PORT = Number(process.env.PORT) || 4000;
+const PORT = 4000;
 
 async function start() {
   await connectDB();
   await seedProductsIfEmpty();
   await seedTestUsersIfMissing();
   app.listen(PORT, () => {
-    console.log(`Abre la aplicación en: ${FRONTEND_APP_URL}`);
+    console.log(`🚀 Backend corriendo en puerto: ${PORT}`);
+    console.log(`🌐 Frontend corre en puerto separado: http://localhost:5173`);
+    console.log(`🔍 API disponible en: http://localhost:${PORT}/api`);
   });
 }
 

@@ -157,6 +157,7 @@ export const AppProvider = ({ children }) => {
       const res = await apiFetch('/api/objects/orders');
       if (!res.ok) return;
       const data = await res.json();
+      console.log("Pedidos recibidos en el Contexto:", data);
       setOrders(data.map(mapOrderFromApi).filter(Boolean));
     } catch (e) {
       console.error('Error fetching orders:', e);

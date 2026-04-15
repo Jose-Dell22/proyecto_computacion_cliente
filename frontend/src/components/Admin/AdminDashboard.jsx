@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   Container,
   Header,
@@ -48,6 +48,13 @@ const AdminDashboard = () => {
     workers,
     createWorker,
   } = useApp();
+
+  // Cargar pedidos cuando el componente se monta
+  useEffect(() => {
+    if (fetchOrders) {
+      fetchOrders();
+    }
+  }, [fetchOrders]);
 
   const locale =
     i18n.language === "en"
@@ -1013,6 +1020,13 @@ const AdminDashboard = () => {
         content: (
           <span>
             <Icon name="shopping cart" /> {t("admin.orders")} ({orders.length})
+            <Button 
+              size="mini" 
+              icon="refresh" 
+              onClick={fetchOrders}
+              style={{ marginLeft: '10px' }}
+              title="Refrescar pedidos"
+            />
           </span>
         ),
       },

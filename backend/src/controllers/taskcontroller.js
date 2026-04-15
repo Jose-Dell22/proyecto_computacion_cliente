@@ -11,8 +11,9 @@ const modelRegistry = {
 
 // Función de normalización para manejar desajustes entre "orders" y "Order"
 const normalizeResourceName = (name) => {
-  console.log("Normalizando recurso:", name);
-  return name === 'orders' ? 'orders' : name;
+  const resource = name || "";
+  console.log("Normalizando recurso:", resource);
+  return resource === 'orders' ? 'orders' : resource;
 };
 
 const resolveModel = (resource) => {
@@ -30,7 +31,9 @@ export const getResources = async (req, res) => {
     console.log("=== GET RESOURCES DEBUG ===");
     console.log("req.params.resource:", req.params.resource);
     
-    const Model = resolveModel(req.params.resource);
+    // Normalización del nombre del recurso
+    const modelName = req.params.resource === 'orders' ? 'orders' : req.params.resource;
+    const Model = resolveModel(modelName);
     if (!Model) return res.status(404).json({ message: "Resource not found" });
 
     const items = await queryFor(Model);

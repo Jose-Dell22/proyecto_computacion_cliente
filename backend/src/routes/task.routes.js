@@ -57,25 +57,25 @@ router.post("/objects/orders", (req, res, next) => {
 router.put("/objects/orders/:id", (req, res, next) => {
   console.log("--- PETICIÓN RECIBIDA ---", req.method, req.url, "ROL:", req.user?.role || 'No auth');
   next();
-}, authRequired, orderAccessRequired, updateResource);
+}, withResource("orders"), authRequired, orderAccessRequired, updateResource);
 
 // Rutas de lectura: admin y worker pueden ver
 router.get("/objects/orders", (req, res, next) => {
   console.log("--- PETICIÓN RECIBIDA ---", req.method, req.url, "ROL:", req.user?.role || 'No auth');
   next();
-}, authRequired, orderAccessRequired, getResources);
+}, withResource("orders"), authRequired, orderAccessRequired, getResources);
 router.get("/objects/reservations", (req, res, next) => {
   console.log("--- PETICIÓN RECIBIDA ---", req.method, req.url, "ROL:", req.user?.role || 'No auth');
   next();
-}, authRequired, orderAccessRequired, getResources);
+}, withResource("reservations"), authRequired, orderAccessRequired, getResources);
 router.get("/objects/orders/:id", (req, res, next) => {
   console.log("--- PETICIÓN RECIBIDA ---", req.method, req.url, "ROL:", req.user?.role || 'No auth');
   next();
-}, authRequired, orderAccessRequired, getResource);
+}, withResource("orders"), authRequired, orderAccessRequired, getResource);
 router.get("/objects/reservations/:id", (req, res, next) => {
   console.log("--- PETICIÓN RECIBIDA ---", req.method, req.url, "ROL:", req.user?.role || 'No auth');
   next();
-}, authRequired, orderAccessRequired, getResource);
+}, withResource("reservations"), authRequired, orderAccessRequired, getResource);
 
 // CRUD de recursos: solo administrador (cliente/trabajador autenticado no pueden usar estas rutas)
 router.get("/objects/:resource", authRequired, adminRequired, getResources);
