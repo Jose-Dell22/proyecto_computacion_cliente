@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authRequired } from "../middlewares/validateToken.js";
 import { adminRequired } from "../middlewares/adminRequired.js";
+import { orderAccessRequired } from "../middlewares/orderAccessRequired.js";
 import {
   getResource,
   getResources,
@@ -30,6 +31,9 @@ router.get("/objects/contacts", withResource("contacts"), getResources);
 router.get("/objects/contacts/:id", withResource("contacts"), getResource);
 router.post("/objects/reservations", withResource("reservations"), createResource);
 router.post("/objects/orders", withResource("orders"), createResource);
+
+// Actualización de pedidos: admin y worker pueden modificar
+router.put("/objects/orders/:id", authRequired, orderAccessRequired, updateResource);
 
 // CRUD de recursos: solo administrador (cliente/trabajador autenticado no pueden usar estas rutas)
 router.get("/objects/:resource", authRequired, adminRequired, getResources);

@@ -18,6 +18,14 @@ const TEST_ACCOUNTS = [
     phone: "+57 300 0000002",
     role: "customer",
   },
+  {
+    email: "trabajador@carnesalbarril.com",
+    plainPassword: "trabajador123",
+    name: "Trabajador",
+    lastName: "Prueba",
+    phone: "+57 300 0000003",
+    role: "worker",
+  },
 ];
 
 export async function seedTestUsersIfMissing() {

@@ -1051,6 +1051,7 @@ const AdminDashboard = () => {
                       <Dropdown
                         selection
                         compact
+                        upward
                         options={ORDER_STATUS_OPTIONS}
                         value={order.status}
                         onChange={(e, { value }) => 

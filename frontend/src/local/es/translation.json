@@ -303,6 +303,9 @@
     "noOrders": "No hay pedidos",
     "noOrdersRegistered": "No hay pedidos registrados.",
     "orderId": "ID del Pedido",
+    "customer": "Cliente",
+    "total": "Total",
+    "viewDetails": "Ver Detalles",
     "deliveryAddress": "Dirección de Entrega",
     "changeStatus": "Cambiar Estado",
     "pending": "Pendiente",
@@ -310,6 +313,7 @@
     "sent": "Enviado",
     "delivered": "Entregado",
     "orderDetails": "Detalles del Pedido",
-    "viewItems": "Ver Items"
+    "items": "Ítems",
+    "viewItems": "Ver Ítems"
   }
 }
