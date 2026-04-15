@@ -100,7 +100,17 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(true);
-  const [cart, setCart] = useState([]);
+  
+  // Inicializar carrito desde localStorage
+  const [cart, setCart] = useState(() => {
+    try {
+      const savedCart = localStorage.getItem('cart');
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
+      return [];
+    }
+  });
   const [contactForm, setContactForm] = useState({
     data: { nombre: '', email: '', mensaje: '' },
     errors: {},
@@ -189,6 +199,15 @@ export const AppProvider = ({ children }) => {
     fetchContactsAsSuggestions();
     fetchWorkers();
   }, [adminUser, fetchReservations, fetchContactsAsSuggestions, fetchWorkers]);
+
+  // Persistir carrito en localStorage cuando cambie
+  useEffect(() => {
+    try {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
+    }
+  }, [cart]);
 
   const addToCart = (item) => {
     const pid = item.id ?? item._id;
