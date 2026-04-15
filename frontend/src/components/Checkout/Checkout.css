@@ -56,6 +56,7 @@
 /* Layout del grid */
 .checkout-page .checkout-grid{
   margin-top: 2em !important;
+  gap: 2em !important;
 }
 .checkout-page .checkout-grid > .column{
   display: block !important;
@@ -142,12 +143,14 @@
 @media (max-width: 767px){
   .checkout-page .cart-summary-card.ui.segment{ 
     padding: 1rem !important; 
-    margin-bottom: 1rem !important;
+    margin-bottom: 1.5rem !important;
   }
   .checkout-page .delivery-form-card.ui.segment{ 
     padding: 1rem !important; 
+    margin-bottom: 1rem !important;
   }
   .checkout-page .checkout-grid{
     margin-top: 1em !important;
+    gap: 1.5em !important;
   }
 }

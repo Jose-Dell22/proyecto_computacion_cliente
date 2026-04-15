@@ -146,6 +146,19 @@ export default function Checkout() {
               {t('checkout.cart_summary')} ({cartItemsCount} {t('checkout.items')})
             </Header>
 
+            <div style={{ textAlign: 'right', marginBottom: '1em' }}>
+              <Button
+                as="a"
+                href={config.ROUTES.PRODUCTS}
+                basic
+                size="small"
+                style={{ color: 'var(--accent)', borderColor: 'var(--accent)' }}
+              >
+                <Icon name="arrow left" />
+                {t('checkout.continue_shopping')}
+              </Button>
+            </div>
+
             <List divided relaxed>
               {cart.map((item, index) => (
                 <List.Item key={`${item.id}-${index}`}>
@@ -191,7 +204,7 @@ export default function Checkout() {
 
             <Divider />
 
-            <Header as="h4" textAlign="center" color="orange">
+            <Header as="h3" textAlign="center" color="orange" style={{ fontSize: '1.3em', fontWeight: 'bold' }}>
               {t('checkout.total')}: ${cartTotal.toLocaleString('es-CO')}
             </Header>
 
