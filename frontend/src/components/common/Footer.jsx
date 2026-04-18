@@ -1,12 +1,34 @@
 import React from 'react';
 import { Container, Grid, Header, Icon, Segment, Divider } from 'semantic-ui-react';
 import { useApp } from '../../context/AppContext';
-import { APP_CONFIG } from '../../config/constants';
 import { useTranslation } from "react-i18next";
+import { FaInstagram, FaFacebookF, FaWhatsapp } from 'react-icons/fa';
 
 const Footer = () => {
   const { config } = useApp();
   const { t } = useTranslation();
+
+  const sectionTitleStyle = {
+    color: 'white',
+    marginBottom: '12px',
+    fontSize: '1.15rem',
+  };
+
+  const rowStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    marginBottom: '10px',
+    color: 'white',
+    fontSize: '1rem',
+    lineHeight: '1.5',
+  };
+
+  const iconStyle = {
+    color: '#ffdd44',
+    margin: 0,
+    minWidth: '18px',
+  };
 
   return (
     <Segment
@@ -14,110 +36,188 @@ const Footer = () => {
       color="orange"
       style={{
         background: 'linear-gradient(135deg, #ff7b00 0%, #ff4500 50%, #d35400 100%)',
-        boxShadow: '0 -5px 20px rgba(255, 136, 0, 0.3)',
+        boxShadow: '0 -5px 20px rgba(255, 136, 0, 0.25)',
         border: 'none',
         borderRadius: '0',
-        padding: '50px 0',
-        marginTop: '2em', 
+        padding: '32px 0 18px',
+        marginTop: '1.25em',
       }}
     >
-      <Container textAlign="center">
-        {/* 🔥 Título principal del footer */}
+      <Container>
+        {/* Título principal */}
         <Header
           as="h2"
           inverted
+          textAlign="center"
           style={{
             fontFamily: "'Playfair Display', serif",
             fontWeight: '700',
             color: '#fff',
             textTransform: 'uppercase',
-            letterSpacing: '2px',
-            marginBottom: '3em',
-            textShadow: '2px 2px 6px rgba(0,0,0,0.4)',
+            letterSpacing: '1.5px',
+            marginBottom: '1.8em',
+            fontSize: '2.1rem',
+            textShadow: '2px 2px 6px rgba(0,0,0,0.35)',
           }}
         >
           {t("footer.title")}
         </Header>
 
         {/* Grid principal */}
-        <Grid stackable centered columns={3}>
+        <Grid stackable columns={3} verticalAlign="top" style={{ margin: 0 }}>
           {/* Horarios */}
-          <Grid.Column width={4}>
-            <Header as="h4" inverted style={{ color: 'white', marginBottom: '15px' }}>
+          <Grid.Column computer={5} tablet={16} mobile={16}>
+            <Header as="h4" inverted style={sectionTitleStyle}>
               <Icon name="clock" style={{ color: '#ffdd44' }} />
               {t("footer.schedule_title")}
             </Header>
-            <div style={{ color: 'white', lineHeight: '1.8' }}>
+
+            <div>
               {config.RESTAURANT.schedules.map((schedule, index) => (
-                <p key={index}>
-                  <strong>{schedule.day}:</strong> {schedule.hours}
-                </p>
+                <div key={index} style={{ ...rowStyle, marginBottom: '8px' }}>
+                  <span>
+                    <strong>{schedule.day}:</strong> {schedule.hours}
+                  </span>
+                </div>
               ))}
             </div>
           </Grid.Column>
 
           {/* Contacto */}
-          <Grid.Column width={5}>
-            <Header as="h4" inverted style={{ color: 'white', marginBottom: '15px' }}>
+          <Grid.Column computer={6} tablet={16} mobile={16}>
+            <Header as="h4" inverted style={sectionTitleStyle}>
               <Icon name="phone" style={{ color: '#ffdd44' }} />
               {t("footer.contact_title")}
             </Header>
-            <div style={{ color: 'white', lineHeight: '1.8' }}>
-              <p>
-                <Icon name="phone" style={{ color: '#ffdd44' }} />
-                {config.RESTAURANT.phone}
-              </p>
-              <p>
-                <Icon name="mail" style={{ color: '#ffdd44' }} />
-                {config.RESTAURANT.email}
-              </p>
-              <p>
-                <Icon name="map marker" style={{ color: '#ffdd44' }} />
-                {config.RESTAURANT.address}
-              </p>
+
+            <div style={rowStyle}>
+              <Icon name="phone" style={iconStyle} />
+              <span>{config.RESTAURANT.phone}</span>
+            </div>
+
+            <div style={rowStyle}>
+              <Icon name="mail" style={iconStyle} />
+              <span>{config.RESTAURANT.email}</span>
+            </div>
+
+            <div style={{ ...rowStyle, alignItems: 'flex-start' }}>
+              <Icon name="map marker alternate" style={{ ...iconStyle, marginTop: '3px' }} />
+              <span>
+                {config.RESTAURANT.address}, {config.RESTAURANT.location}
+              </span>
             </div>
           </Grid.Column>
 
           {/* Redes Sociales */}
-          <Grid.Column width={4}>
-            <Header as="h4" inverted style={{ color: 'white', marginBottom: '15px' }}>
+          <Grid.Column computer={5} tablet={16} mobile={16}>
+            <Header as="h4" inverted style={sectionTitleStyle}>
               <Icon name="share alternate" style={{ color: '#ffdd44' }} />
               {t("footer.social_title")}
             </Header>
-            <div style={{ marginBottom: '15px' }}>
-              <Icon
-                name="facebook"
-                size="large"
-                style={{ color: '#ffdd44', marginRight: '10px', cursor: 'pointer' }}
-                title="Facebook"
-                onClick={() => window.open(config.RESTAURANT.social.facebook, '_blank')}
-              />
-              <Icon
-                name="instagram"
-                size="large"
-                style={{ color: '#ffdd44', marginRight: '10px', cursor: 'pointer' }}
-                title="Instagram"
-                onClick={() => window.open(config.RESTAURANT.social.instagram, '_blank')}
-              />
-              <Icon
-                name="whatsapp"
-                size="large"
-                style={{ color: '#ffdd44', marginRight: '10px', cursor: 'pointer' }}
-                title="WhatsApp"
-                onClick={() => window.open(config.RESTAURANT.social.whatsapp, '_blank')}
-              />
+
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                marginBottom: '14px',
+                flexWrap: 'wrap',
+              }}
+            >
+              <a
+                href={config.RESTAURANT.social.facebook}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Facebook"
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '12px',
+                  background: 'rgba(0,0,0,0.18)',
+                  color: '#ffdd44',
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
+                }}
+              >
+                <FaFacebookF size={20} />
+              </a>
+
+              <a
+                href={config.RESTAURANT.social.instagram}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Instagram"
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '12px',
+                  background: 'rgba(0,0,0,0.18)',
+                  color: '#ffdd44',
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
+                }}
+              >
+                <FaInstagram size={20} />
+              </a>
+
+              <a
+                href={config.RESTAURANT.social.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="WhatsApp"
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '12px',
+                  background: 'rgba(0,0,0,0.18)',
+                  color: '#ffdd44',
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
+                }}
+              >
+                <FaWhatsapp size={20} />
+              </a>
             </div>
-            <p style={{ color: 'white', fontSize: '0.9em' }}>
+
+            <p
+              style={{
+                color: 'white',
+                fontSize: '0.92em',
+                margin: 0,
+                lineHeight: '1.5',
+              }}
+            >
               © 2024 {config.RESTAURANT.name}. {t("footer.rights")}
             </p>
           </Grid.Column>
         </Grid>
 
-        <Divider style={{ borderColor: 'rgba(255, 255, 255, 0.3)', marginTop: '40px' }} />
+        <Divider
+          style={{
+            borderColor: 'rgba(255, 255, 255, 0.28)',
+            marginTop: '22px',
+            marginBottom: '10px',
+          }}
+        />
 
-        {/* 📍 Mensaje Final */}
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.9em', margin: '10px 0 0 0' }}>
+        {/* Mensaje final */}
+        <div style={{ textAlign: 'center', marginTop: '4px' }}>
+          <p
+            style={{
+              color: 'rgba(255, 255, 255, 0.85)',
+              fontSize: '0.92em',
+              margin: 0,
+            }}
+          >
             {config.RESTAURANT.neighborhood} • {config.RESTAURANT.location}
           </p>
         </div>

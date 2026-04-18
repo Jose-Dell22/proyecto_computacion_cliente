@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import './ContactoUbicacion.css'
+import { Link } from 'react-router-dom'
+import { FaInstagram, FaFacebookF, FaWhatsapp } from 'react-icons/fa'
 import {
   Container,
   Header,
@@ -17,7 +19,7 @@ import {
 } from 'semantic-ui-react'
 import { useApp } from '../../context/AppContext'
 import { useForm } from '../../hooks/useForm'
-import { APP_CONFIG, MESSAGES, ICONS } from '../../config/constants'
+import { ICONS } from '../../config/constants'
 import { useTranslation } from 'react-i18next'
 
 export default function ContactoUbicacion() {
@@ -26,7 +28,6 @@ export default function ContactoUbicacion() {
     contactForm,
     suggestions,
     updateContactForm,
-    resetContactForm,
     cart,
     getCartTotal,
     removeFromCart,
@@ -40,17 +41,22 @@ export default function ContactoUbicacion() {
   const { values, errors, isSubmitting, handleChange, handleSubmit, reset } = useForm()
   const { t } = useTranslation()
 
+  const reservationPath = config?.ROUTES?.RESERVATION || '/reservar'
+
   const onSubmit = async (formValues) => {
     await submitContactMessage({
       nombre: formValues.nombre,
       email: formValues.email,
       mensaje: formValues.mensaje,
     })
+
     await loadSuggestions()
+
     updateContactForm({
       successMessage: t('contact.success'),
       data: { nombre: '', email: '', mensaje: '' },
     })
+
     reset()
   }
 
@@ -60,7 +66,7 @@ export default function ContactoUbicacion() {
 
   return (
     <Container className="contact-page">
-      {/* Título con icono a la derecha */}
+      {/* Título */}
       <Header as="h1" textAlign="center" className="contact-title">
         <span className="title-row">
           {t('contact.title')}
@@ -69,13 +75,14 @@ export default function ContactoUbicacion() {
         <Header.Subheader>{t('contact.subtitle')}</Header.Subheader>
       </Header>
 
-      {/* Carrito (si hay) */}
+      {/* Carrito */}
       {cart.length > 0 && (
         <Segment color="orange" style={{ marginBottom: '2em' }}>
           <Header as="h3" color="orange">
             <Icon name="shopping cart" />
             {t('contact.cart_title')}
           </Header>
+
           <List divided relaxed>
             {cart.map((item, index) => (
               <List.Item key={`${item.id}-${index}`}>
@@ -108,6 +115,7 @@ export default function ContactoUbicacion() {
                     />
                   </div>
                 </List.Content>
+
                 <List.Content>
                   <List.Header>{item.title}</List.Header>
                   <List.Description>
@@ -118,10 +126,13 @@ export default function ContactoUbicacion() {
               </List.Item>
             ))}
           </List>
+
           <Divider />
+
           <Header as="h4" textAlign="center">
             {t('contact.total')}: ${getCartTotal().toLocaleString('es-CO')}
           </Header>
+
           <div style={{ textAlign: 'center', marginTop: '1em' }}>
             <Button color="red" basic onClick={() => clearCart()} size="small">
               <Icon name="trash" />
@@ -134,7 +145,7 @@ export default function ContactoUbicacion() {
       {/* Tarjeta principal */}
       <Segment raised className="contact-card">
         <Grid stackable columns={2} className="contact-grid" style={{ alignItems: 'flex-start' }}>
-          {/* Columna izquierda: Formulario */}
+          {/* Columna izquierda */}
           <Grid.Column computer={8} tablet={16} mobile={16} className="form-col" textAlign="left" verticalAlign="top">
             <Header as="h3" className="section-title">
               {t('contact.write_us')}
@@ -216,6 +227,7 @@ export default function ContactoUbicacion() {
             <Header as="h4" className="section-subtitle">
               {t('contact.also_here')}
             </Header>
+
             <div className="contact-actions">
               <Button
                 as="a"
@@ -226,27 +238,44 @@ export default function ContactoUbicacion() {
               >
                 <Icon name={ICONS.phone} /> {config.RESTAURANT.phone}
               </Button>
+
               <Button as="a" href={`mailto:${config.RESTAURANT.email}`} basic icon labelPosition="left">
                 <Icon name={ICONS.email} /> {config.RESTAURANT.email}
               </Button>
             </div>
 
+            {/* BOTÓN CENTRADO */}
+            <div className="reserve-cta-wrap">
+              <Button
+                as={Link}
+                to={reservationPath}
+                size="large"
+                color="black"
+                inverted
+                className="reserve-cta-button"
+              >
+                <Icon name="calendar check" />
+                Reservar mesa
+              </Button>
+            </div>
+
             <Divider hidden />
 
+            {/* ICONOS CENTRADOS Y FORZADOS */}
             <div className="social-icons">
-              <a href={config.RESTAURANT.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
-                <Icon name={ICONS.instagram} size="big" />
-              </a>
-              <a href={config.RESTAURANT.social.facebook} target="_blank" rel="noreferrer" aria-label="Facebook">
-                <Icon name={ICONS.facebook} size="big" />
-              </a>
-              <a href={config.RESTAURANT.social.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp">
-                <Icon name={ICONS.whatsapp} size="big" />
-              </a>
-            </div>
+            <a href={config.RESTAURANT.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
+              <FaInstagram />
+            </a>
+            <a href={config.RESTAURANT.social.facebook} target="_blank" rel="noreferrer" aria-label="Facebook">
+              <FaFacebookF />
+            </a>
+            <a href={config.RESTAURANT.social.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp">
+              <FaWhatsapp />
+            </a>
+          </div>
           </Grid.Column>
 
-          {/* Columna derecha: Info + mapa */}
+          {/* Columna derecha */}
           <Grid.Column computer={8} tablet={16} mobile={16} className="info-col" textAlign="left" verticalAlign="top">
             <Header as="h3" className="section-title">
               {t('contact.visit_us')}
@@ -293,7 +322,7 @@ export default function ContactoUbicacion() {
               </List>
             </Segment>
 
-            {/* Buzón de sugerencias */}
+            {/* Sugerencias */}
             <Segment secondary className="suggestions-card" style={{ marginTop: '1em' }}>
               <Header as="h4" className="section-subtitle">
                 {t('contact.suggestions_title')}
@@ -316,7 +345,9 @@ export default function ContactoUbicacion() {
                             </span>
                           ) : null}
                         </List.Header>
+
                         <List.Description>{s.mensaje}</List.Description>
+
                         {s.fecha ? (
                           <div style={{ fontSize: '0.85em', color: '#666', marginTop: '0.35em' }}>
                             {new Date(s.fecha).toLocaleString('es-CO')}

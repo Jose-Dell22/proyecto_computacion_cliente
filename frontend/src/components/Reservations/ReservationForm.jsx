@@ -113,16 +113,16 @@ export default function ReservationForm() {
       {/* Botón visible para salir sin reservar */}
       <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
         <Button
-          color="orange"
-          icon
-          labelPosition="left"
-          size="large"
-          onClick={() => navigate("/about")}
-          aria-label={t("reservation.actions.backToAbout")}
-        >
-          <Icon name="arrow left" />
-          {t("reservation.actions.backToAbout")}
-        </Button>
+        color="orange"
+        icon
+        labelPosition="left"
+        size="large"
+        onClick={() => navigate("/contacto")}
+        aria-label="Volver a Contacto"
+      >
+        <Icon name="arrow left" />
+        Volver a Contacto
+      </Button>
       </div>
 
       {/* Título sin icono, en naranja */}
@@ -142,8 +142,8 @@ export default function ReservationForm() {
           <Button color="green" onClick={resetForAnother}>
             <Icon name="add" /> {t("reservation.actions.reserveAnother")}
           </Button>
-          <Button basic onClick={() => navigate("/about")}>
-            <Icon name="arrow left" /> {t("reservation.actions.backToAbout")}
+          <Button basic onClick={() => navigate("/contacto")}>
+          <Icon name="arrow left" /> Volver a Contacto
           </Button>
         </Segment>
       )}
