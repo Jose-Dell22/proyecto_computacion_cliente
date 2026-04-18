@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -13,7 +13,16 @@ import {
 } from "semantic-ui-react";
 import HeroSection from "../common/HeroSection";
 import { useApp } from "../../context/AppContext";
-import { useTranslation } from "react-i18next"; //  Soporte de idiomas
+import { useTranslation } from "react-i18next";
+import { 
+  createCardEntranceAnimation, 
+  createStaggeredCardAnimation, 
+  createImageHoverEffect,
+  animateHeroImages,
+  scrollTriggerAnimations,
+  animations
+} from "../../utils/animations";
+import { ScrollTrigger } from 'gsap/ScrollTrigger'; //  Soporte de idiomas
 
 const heroImages = [
   "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=2000&q=80",
@@ -28,6 +37,81 @@ const Home = () => {
 
   const featuredProducts = products.slice(0, 6);
   const loading = productsLoading;
+
+  // Refs for animations
+  const heroSectionRef = useRef(null);
+  const navigationCardsRef = useRef([]);
+  const featuredProductsRef = useRef([]);
+  const imageRefs = useRef([]);
+
+  useEffect(() => {
+    try {
+      // Animate hero section images
+      if (heroSectionRef.current) {
+        const heroImages = heroSectionRef.current.querySelectorAll('img');
+        if (heroImages.length > 0) {
+          animateHeroImages(heroImages);
+        }
+      }
+
+      // Animate navigation cards with stagger effect
+      if (navigationCardsRef.current.length > 0) {
+        createStaggeredCardAnimation(navigationCardsRef.current);
+        navigationCardsRef.current.forEach(card => {
+          if (card) {
+            const img = card.querySelector('img');
+            if (img) {
+              createImageHoverEffect(img, { scale: 1.1 });
+            }
+          }
+        });
+      }
+
+      // Animate featured products
+      if (featuredProductsRef.current.length > 0) {
+        scrollTriggerAnimations.scaleInOnScroll(featuredProductsRef.current);
+        featuredProductsRef.current.forEach(card => {
+          if (card) {
+            const img = card.querySelector('img');
+            if (img) {
+              createImageHoverEffect(img, { scale: 1.05 });
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error in GSAP animations:', error);
+    }
+
+    // Cleanup animations on unmount
+    return () => {
+      try {
+        // Kill all ScrollTrigger instances and animations for this component
+        ScrollTrigger.getAll().forEach(trigger => {
+          if (trigger.trigger && (
+            trigger.trigger.closest('[data-home-component]') ||
+            navigationCardsRef.current.includes(trigger.trigger) ||
+            featuredProductsRef.current.includes(trigger.trigger)
+          )) {
+            trigger.kill();
+          }
+        });
+        
+        // Kill animations on refs
+        if (heroSectionRef.current) {
+          gsap.killTweensOf(heroSectionRef.current.querySelectorAll('*'));
+        }
+        navigationCardsRef.current.forEach(card => {
+          if (card) gsap.killTweensOf(card);
+        });
+        featuredProductsRef.current.forEach(card => {
+          if (card) gsap.killTweensOf(card);
+        });
+      } catch (error) {
+        console.error('Error cleaning up animations:', error);
+      }
+    };
+  }, [products, loading]);
 
   // 🔹 Botón de WhatsApp
   const handleWhatsAppClick = () => {
@@ -50,12 +134,14 @@ const Home = () => {
   return (
     <>
       {/* Sección principal */}
-      <HeroSection
-        title={config.RESTAURANT.name}
-        subtitle={t("home.subtitle")}
-        buttonText={t("home.explore_menu")}
-        onButtonClick={() => navigate(config.ROUTES.PRODUCTS)}
-      />
+      <div ref={heroSectionRef}>
+        <HeroSection
+          title={config.RESTAURANT.name}
+          subtitle={t("home.subtitle")}
+          buttonText={t("home.explore_menu")}
+          onButtonClick={() => navigate(config.ROUTES.PRODUCTS)}
+        />
+      </div>
 
       {/* Sección de navegación llamativa */}
       <Segment
@@ -115,16 +201,9 @@ const Home = () => {
             {/* 🔥 Nuestro Menú */}
             <Grid.Column>
               <div
+                ref={el => navigationCardsRef.current[0] = el}
                 style={{
-                  transform: "translateY(0)",
-                  transition: "all 0.3s ease",
                   cursor: "pointer",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-10px) scale(1.05)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0) scale(1)";
                 }}
                 onClick={() => navigate(config.ROUTES.PRODUCTS)}
               >
@@ -132,6 +211,7 @@ const Home = () => {
                   color="black"
                   inverted
                   raised
+                  className="card-hover"
                   style={{
                     background: "#000",
                     border: "2px solid #ff7b00",
@@ -140,6 +220,7 @@ const Home = () => {
                   }}
                 >
                   <Image
+                    className="image-enhanced"
                     src="https://img.freepik.com/vector-premium/formato-horizontal-menu-restaurante-digital_23-2148655475.jpg"
                     alt={t("home.menu_title")}
                     style={{ borderRadius: "8px", height: "160px", objectFit: "cover" }}
@@ -166,6 +247,7 @@ const Home = () => {
                       {t("home.menu_description")}
                     </Card.Description>
                     <Button
+                      className="pulse-btn"
                       color="orange"
                       size="large"
                       onClick={() => navigate(config.ROUTES.PRODUCTS)}
@@ -184,17 +266,20 @@ const Home = () => {
 
             {/* 📍 Ubicación */}
             <Grid.Column>
-              <Card
-                raised
+              <div
+                ref={el => navigationCardsRef.current[1] = el}
+                style={{ cursor: "pointer" }}
                 onClick={() => navigate(config.ROUTES.CONTACT)}
-                style={{
-                  background: "#000",
-                  border: "2px solid #ff7b00",
-                  boxShadow: "0 10px 30px rgba(255, 123, 0, 0.3)",
-                  cursor: "pointer",
-                  minHeight: "350px",
-                }}
               >
+                <Card
+                  raised
+                  style={{
+                    background: "#000",
+                    border: "2px solid #ff7b00",
+                    boxShadow: "0 10px 30px rgba(255, 123, 0, 0.3)",
+                    minHeight: "350px",
+                  }}
+                >
                 <Image
                   src="data:image/webp;base64,UklGRpojAABXRUJQVlA4II4jAACwkwCdASoQAbQAPp1Cm0qlo6InKPNtOOATiUAYIs5rY+vXkIkB5L8TgN3WT4nqN/tG8i83/mW6ehS+ssHjz/C8L/MH9glUnJfdFItzf+aeou+r8+Zl9/XiP9stjQ9a9UH+5f+f1mdHH7T6jfSj/df2cf2kPfTopikfmRkuMH5n6XI+Gof3rpM8mSTkM0yO/bowlsAbVFlsnfmGXqb/n2Fv2VNck1lQ7PaDrbwGwFaawY2Qz9z6E8J+oQsSus4XpoYssurYE0q6FTuh8kA355nGOUWx+eElv1T7rMz8jRoVMCVXCYfHKND0+EY3nuwryjw2p2wnHVIiuEl8RLrZUVxHmIIcvKghx5Z1Hkk93ljBwj4THN7vzJmjbSVRt+Wo95nKWzvWKUd/kqfV1NErYaqpJ7NiXFc2GGxX7646J6oDosLXL+wFKBs+oSl/EYP5iY/7ebj/BAI0VWZTCbCJmZjptohEn9/unUavtgDvb7D58Y3oF3cVasGDUYx3/fLdf5e50wizI5b1BEnHeqgsKEwSjmdHdwGOD5TzMG+LQ/K/a9+gRHda38vA1JQwfhteXSZzuPLFEotim2oZXwBuUhGL+7cxIymUUpWNF6xo+O4jAUNyhwJimQeqAR3QXTWnEx5y2flmOJvEsN6Rq0rOE1qvOrKkZbeNNSu1jjGB7JUCUbb9uGv1U6/hDCRSXqYHgpbmiGJgW4dnSm5iEn+mTVCFEVRZWb51ti/uv/s8vmcvVPREex9y/KGr/0DUuGx/dDtp9Jf/InOVQJ5dnfV8kcHfVukcrztsPjMNzZ8mXC+73Ycupo95XtngeXIR76bhqfKTLJylNp7kxWboDd5N7plcFamAnLmECiLtueY65QNkIVrlCy+3L8DRr1SoLbc9on3sw4hPtIU9UlDjDXElf26s8pm9gxPRabs1qHdBlKMQ6qpaZCDcdV9uUrHyyHcGXgmYW8NQWOS54ftH1wkaU3vdzNhxbib3/x63oGjNki/uNX4YQN2JrLe1VRtuBvo4zzQXCOL6tITinkbw/sWcD8Kxzs8GJJHdnH8ZmkcjdQKr+aFgsYssmDSEY5N67cMbK3VI6YMnim69JoMkVJzcuEXkFDmZ3FxeIZ5asAL/a7c3d+9L39jgIIUODjLXNCpTHp40MW0/Yu/Hpscm/X4J2pii6tnn6BsmNSCSZouVZpqw/8zESNwf3uv8AXvWwfBIoc9OIb8onvq9gutJ1cwaAwFSYZt94xdyg7FzfUxFOSXhF5ABN38XrohA3QwPMPM/qp/oAC19jRDDAhgtl3WzdFkDReR+uYU5d+YT3K2VOv0hmplTHcy67cu4A/u91+kiU91k4/c7zSRgibLopbEjHg9S37sn+RGAsnsDDVmAKEaUlIGRw7NC2jB0vh9T3v56NsVzucHMslXH67tZhtfnhAULuMOQjD0moF315KHCmQ+JuR13fjhB6Zw/6X3rursmepDJKfFBPmd4ldnC56GEEbDyJK8jee/eHEr6gANtIGVkJwXk2XSu38JVna0O3HgHbWAvwVIDV2S1XXPk0TAn5CPnmUeS5zErmpFGCKz3wRCVnMXLQkeKYAD+/RYeMdser3vmoAatlEMeMWa07iQfxFD1eNft9+pw98WuMCei4az75/bIg4VTU7Z1ue/2obBYMi1yc4aNtA252A00IFnp36gNKP1pQQElofHQfN9r8Jm+p1kL0gEa8go03YDEB7uppndJIPxZKaKZb/aZwOmNz5nXVrDcC7nvvYtovlTdzG9YqvSF7WBOdm+u418njVua9Tl/2+yT90pflBZtgp7Vs1veLzBglQUB50jYhvOPGv0AjEYbTLoZR8RxJU+ggHZGaCFcvG+wyDKkUZa5SfjFBI57mcuTJaC35Kg84ZhU17Grwzymw3aeqQ8LDqvE06sP6VibbBDjEUUbuNWtgmcKdFaWwDht4HR+MzZtmI1QRN09DQZpcA62CAZOoVd0nfwH7DIbZ0l2b5TrsnvmffAYuQMXSiS/3L3kDm8dDg5tS195X+4mZdB7ppmvZI6bjAl0W4YmKgO4jOEBzBYtpy1VUxLVJzFoALcMDGcQe0h5rAnb61hpXDm3kFm02b0+TYe/cK8bzIIUm2XevOPhryEWHHUfOa2XOZmr49bc26iSMHlniYqERuM4kH3E0TVgTbEmY6YXwQvTW2oixcM+WYM6m2EAdxUQjq7ur57eZj80Lfiu/H+oqNPjWCsvA/yrnMMxDx2jJ2W+stXEtTVbsWm1wqZpX+3sv7syH+r7P7BYLfeX0QP1mxY66zVdC4suISYX8PIgvfWp1Zuu6ovoP7S/F9WALTIh65VT6BSDhVWfnonpCKAFAzZU3wtXXtMV2q/PD5H79ZWHOHouZolddiNubzk4hbQskJPEvudPCAfs8ewvmqder+AZFMuSG9pFSJkKJ70cHHaF/NGZ/Hp0mfdND3ZkMP4vk1AZPNylaoSPUFj5oKU4f0NlCtQOEyH6eVoFUjZ70Udrp8z/0raB95dHc7iYIs8lWVPQ4I+zos7oAU8WkwnbyhlmlItKg2cqQIB81yHNxvZvZ2A7lY62UCP3UsLm2ju/Hl7HwKjeKfKj6bTlsNHFr8gErth4JupCcp6Ly/k49RXqqloNOUrX8ymtg8fWbMx1an/F7ysS45msIJJeBBbynxl400Bny8t3ybI0BHEftbAFyVvn0BbNKhIGVpP4cyt1ReniUM5OXHZrNt0m8iUDanJTp4UfF2z+mmG/e8Rygzy+AeGUqRwTIdiW2wGKDKxMBSM7qbAVp9hCSMP7+kF1TNd7zbPWbIhzVONsuYROuW09uGAAOqpWIEEk3Ax3wmQCdPkjVMpR6kib7uiRVLmI26MBzKgykcnGFcuby1j3RouWslYlZjQ3UnG1gm9TfbHvFh3oDT2qrAFtaMcsY6g+W2/IK6+UHajlR5iVp0ZDuSBe2oQCTBpsiEeeP1vKHkKZNe78OsxEHqXAHlRWlZ70g1aTes5gQXTQKBAVswzpxqlW5qWJXVAFHM5hPfJXJo0k8RRVb1LXClJ96otwJf5/LT3mTwlHK2TRVN6suS51VHrLtLB9Uh+Pjd/VCej+FlayHLFd+RWhKdKcdqumZdmv4n3WD3uHFI2ScEF4/+X1tzSe5jGM914jjrmr5vU8gxbLU409FwgFxz12jrna01UOHTkI2ib6G0Ewmkp7ZbzP5k9bXSNICGUBUi4o7zQHkX/c/doXIWCV+TDh8kVfpVjI+8OjgL6KX47KUzNZHX4JivEECq4J6JlPdhvdEcP5lSor7TwyD3lrJMvJUMfQWGdVS64HoHPlmcriz6duDvpqtD6PRrQB0A+2kYn0AGwbxDJ+W0B/7dlYhLdIbDZHY68MeUL9/BX/SUd3SoRRjge6QGRr8RsxX9gnS5SpqFOnj06Le9Y+i8W+drW6tK6WnDdm0AM+oPDSmCzdIL1eUsLke4II6Jp2yAUccxNqGW+pSVGYcl1AMvfS2VqBsrmTox7TtZz0gELSrKunXAowQ0llHETLEvegNSWmV/gx74x67XzDauXU3wbx4cict/jYN6fzC/LdaDixmfrQdettKV1JbZawl+7Coukb2sY0m3D8hZ6DIimycG4DIa4rikNYXeMQslJRXW0kuwFpvncPJDT1JwQ3I0+nIlFsBhRcuTnuNtF9V2uYdaUFgt3Xf8Qj1sxZxsT+UQ/k+NqE1q4IYIxP6u6Uj8IwxHMVIiFL/H1JlD9hoQp8rvghHpH2mVkK3IawLIR0vNEIGkjYFTaqX4Fy+BntGWJXckUDPD8JKOX77pQGDAls04VXQcsxpqG9sRxXaQpmPhBLcwiTYk2GJXmrxufKszmiYu1mUbCboDw+IDYRtV1dVuAmny7tJYOiemsHbMJYMw6dNgKCPxWu5psadqWLdGSqE7xpOMVLvbuDRYvmJ+UHkHvlstDCULxNhxZc0MPsoOE0p4AVKsGA5oMLrf9xci1tnWmn4wQYA/gO8qUxQqtnoFjL9T8GJbCju/7TSD3D7pYU9vXzspbbMFiOHbf5VMlj84acNPwcNEyE06aLzlTOGiLdMxNx39CHeJZH78wASKGZzfsa8AyvM1VCvP2a5KPQUQkPtEspLJYjBM3E0t2A+kNvb2YNchVtvQ1BX/Je/19bs8afwfJJNLyVdQ3rCgTydGFyVXCAN+AvXTK9OsmRu612TqZKZ1ZmP/O1jxYyABqPLie7h316HXE4LhlI1T/NIzLfYC3WuSFuZw/O4vLAY5agyv29SlJ4TZ7w7TUXO6lGrIXoYape3Rv6B45nER2ZqN/kIHOwJ3tDEzs0hQVzsJYODmm11H1dXFcng8zQ++MROIzhW3QQ2oa6YzOADaCkFdeVM5lN6uGrXvqUnLu3rv4/VfoI+D8iTq5DRnZ6g5w/TVOv+3lpDeoBeyI6Bs8aaD39XhyefWzii49yatbeyNFKmD//Sum2RAf9Jawder1ZH8wFNjmsj3i3vzq9Z49loSUZCDBQrxG1web9IM5oM0eXUhgz9yrvtWWPaoCwQauLfGwNaQ7tSlRcFPLjZfusC/9bb4IiT2arQYYkud8ujmaUW2pymZXt3p7ajnwRkdY/bco5kvsSIw4tX8zCGjSMDK1JcuvSyVGCNPyE8qAATEt3nfyGjP22nub6vK3MslEwl2LjNu5kOYlI2gfcomcFU+YIVHnq6nevfiAj8a9k7SqHcFosHVQqf6Xgxe0Jy7GIy9o2Gkkx7d8grNVcO6fowOWsr/2VElLpHUrEnhOgoWanLGUvQe16yq0nV8ktwEv4UMcJQosEHcsYE4ErFH8SDwS70qpbUGbnZAclDG9CFjzk/DXgI08878WDiaRlS3gC3TZage8uMgkKuOXI+byYRjoWVujZ+upCI2A3m7jbg3kJGOkWHhAbHmMw6jGVISJtV94st31eQAXMN8BPga+lXq68xdoKNjiBJ6xXDV77GoHhl2gKYG0wvgD9BiGpCjTbYahoiOVmUIdTdZgk4kfR+RT0MQAUmIkbZ0CQa0Bw7l9Umj6BeaG32NWx0jo2Z7Op2qOaQGxD7ZoUWteesFj8HDciDiN60MaGI4/M6jynNlZzE4dLp/8SKaXUFWUGLSokb01PefyT8VCkgJaYL+5RSNeaSB3p7qsWvHccbXFVnjYfkTE7EpzQh6grGH7UriCuqxRCLNeEX4rnt4KpGGtLWWR8vA7Z6Ao+++5VZMlrss3mRkYN+QmqEqLMeLAAC0PJjSakYCmuN/CuE4UfZ/4TYEm0DGgsmE+/9hlQ4BXhO88b0c3Xat6dny+IhWb16C4I4f+HgaRrnekykBf2M2bgAOSq8p3D5rwtv+8fbTySqIUg/6OO02vXwD667qLmXyLAS5DLi2pt4XT/iBQVzdR1PlcEZC2yk5u1JExmoKjIpzTQJ385sv22YgYZYzv/aVpsyEXWoJBXSpuxA9FVnZCaUn+utxSUVp+JmWlxwbYoamgar3rpbkQ5zCJGJGUGThngmC+9WDkpTrNTpKoQgClzbiyRX3u/++qgbXfQD4bnGcmDCH7LGEaYiGobHGBE92ozcQ5CU+watJlAHGhzow7WzR7pmx802E1bsVgYB78cKtLAWf65gri+Sbclfm/9DnWTCYzvpxae+JJ3hRL1+9JWBflqGUSZkR9wCOMX90Y9Kp8JedqcHBG8Mr48dPIvYn1ubJW1pSQIDmCVQu/hRD+FUy7AxBrCQSTwVMK5CRwJWcOPBDWsHv3Dal5pGIeq8uhxfkF3tub6kNOyAO8yJFWCcgSg+H52o1WHzbMNpHOuguhipoqhdQYqidA+CIOWHJD63YzuA417jMTUVu4mpDPPUa2iJ3UWIyhoAvLgepjxNrr23rf4aNmemO1rOVsmKthlv1WTTzYRdKO1ICP+TIUhrQBC4ZtWdeNWXyHtWyH04D+4opOCGb3ulQ/7JL/nC9wo+4pBkKi5rSZsusjDn62DaZC2/4ExfAzybICMkHVP8bM1e6pJewEw3UVqkY6JoyhYF8EZ7Jt4vdD222vWv2eXg5E0T4C31sLCVG5mwUyyHQhU+eM6Q01B9LlfYscGhrvvTpwewrRIIafZouM/wEFSf+eOqQd5wMiuGFUgpuLLKbJXL5/CLou4uuYtrZRlrkYWq4g9pYfhfUd5mDfa5kgrYTAg3+7yXThpw8EjZqtONfx/p5mpQKZFAY3Za326QRjUhrGkgdBv42wza+ZF0pnETfidGagxoR1fRPN2eH2sY0ybVXnhTvvVRGfAtCpJQE6p7gaPUm6yJQQg0afYln7Has7e2NVtNlU0i2Id/4AaRTajaREE7uWtv0PdK/X7BUtQ/sTZwv2I2r1d+bhDlYdEdUfzj3aIDcJ1niTfvWl9SlycTAEZrcd7JtzAuuRFOf7T1A0yH6nFTvJLLSXYRi3BGaErpwc03uSNIXfCi4h95I05FmznwEZt8W5rQVLBch3B9oY1Wo6CUSpIzct/UWA1zXq+bC6wHUWBB60oMn2AdGZqAhPUzaf/OyeDg9/cUyPK5yvlZN4bMJ9FSBFnbny7oj4tQuJ5+T7C8jBlofDNynD3LZ/LOHZlZ7cio3zkEHUWV4ZDTlNti2wMqe+zFF+L1kg1Zl1YJ+y4rXhK83DDIqb5uAWzssnYXbruA0zT6fstPW1Fn0oFMcj6UM/aaC7UI0kIggR3S4x/Sznw5ZTVMRvXnW5sEOjgTDG+dhWkgJ8As8zzXzqGtQPSr0DOqwdrUQyvIFc+rE/jfe51aKwYhu52lRLZNBAI9tznDwcnkF9U+wXZWTjPD4r/g9gpd/QUOt1/F4cVuHSbCPTG88u2tlBuE2fCyBaJ7cGeXD3vmlW3GCO9wk0T2erwvJ2OI4XeaAHuuzqf3I0OAUh1MpxIoHn3QqsqfjYFsa5V9RBDpsxM8QaZSm5kVpo/y7FE06o/sUIAt+VmTnIrDFMr2aNHKI0WdgJQp4B/p7BPQQIKC0DFQbtNXKpmdcZhIrRqE5v0nzyWiC7EjJxuRWFVIJcO8RwWAE2WnSRsNu03LBpTI9X6r5+LV+eCq0RoKn6B9OFwEleAqlW4Po9195mRPnrAijkv7QI6hvZyVX1w7XeGbbUguhXAxev2uyOrWdKqMuSLHv4mtPaLH4Xa4w3Y/u8XLxVd+DrL/WVKNXFS1KyfimKR2TQaujxQd41Hb6XG3u9+lw+dp2ZBIezgcMmFcGod2Ibh7KnKnv91S8Xh/YxbU/iIcZmdwAeHUfXMWqueky/b5zf4CIUugOOdsuTOb/4Y6i8fRu6VaJD2dOt7+lL7+BYizmUfb9y2UXdhb6PjpG51yhK41YQAR1VyJubk4zS36jWDoOYtCoWgWb2zFIVhEOXv8GS1lHY9Q6PL5ZSzQIUZ5P5VexnLUcewoE86G6Vai/BRlBIUDVrZyErKppsAtdsvIQbLHPH7KymyK4NsVBHgi9WDV/oaVtFK2IOxZInPQCfmu9snyApi97jLhT+YqlmnvutTiSU2Odt5YF+GoEqdrfmRS4nAzvH6jb+4Bz3SOgx/yU2Eer7zV7FR7SgPXMPtWaSh356pPBTLr0VhOym6HJ4fXCohH0WjEn2LfC8y+kkf0nFtXFmUEdtQRmmGU0EeC+ghg1DzpY+5HF3jv/yvtHRn7ULlCcVegEigTgSbGtMowcXOVh1JwZvxQNU4w+tjuGx8cVyDQyiaTYMbaSk6kKR6tpRrf7gQf+DL6h3m62EDraiO8Xjv3Igv0kX7/aqrpwL1NO25L3Z13E6S8S4QGhT2fe/LLanYjH8jJ4Kar6fX0Um54gOaeSx1Ri1tKZ3kTYY4BwqqKWL0MFZexcvD2POPg7B4sES4WwD84d9TyKWktPljjSkVjF8JlendeS8Pdhn+Oc+7fPE9PSDnoMNKKLpbprE+39cxLhmm4hasYSk7qBtmghsK/47+yfEZWt3r+ZOpw+WuvuDb+QqStvohSAja1Gc0nahFwSLmTYIPyYBWXVQ6zBJGCrcjXsYhgLNYhe1bAKHx5wHUGHIQZN9BVf5sAI9TC4LXixYMeoiwz/3QbXTwT250OnSKsT+a0i0oDEoiwoO6XrOLTXFUeuBVVyfObCcgrh/gET0gydtGZ5+XYbQIG1h9cka4ruedMeZi2mIpXbcCygQumNa4Z2o2H0hGEgN7HjjPhWZ8GJicPpipP04QiNCxA8UV7qy2H7/Dl9CczmtAqz6JFGPZ+PbwwfOb2Hlr7jDF2cFGvBUT+LTYWXmfA7p06ldJQeVp0RvDkwJ4nooiav5CybDnwXMHtEh0CP1OqiOl7iHd0Z48vsYyVKQpzxGDBS0dZFpqMo2YcgD+/MgPQajnh28IGCvRq1mdwCd04LRO20CaMErbhJjFkSebPLGbiPdA9QVqlxlu8yda2S10TDvYL03Hp1kuFAg20ES/8L8K2Z29CNSo7AmKWS8V5cGtMLJCoqXARd8dY5f2R+vhjUIfDwXX7FrFK3V9a+PDRfsgWB14/94+Hobz3UrYb6kDM0ffYKsM1zj14N+buo8YHqu71PwL4zSBN3znboP7JfPBSEwmx22IFf0rBWVewNAioUzki0h/W0Bx+GDLHQHGDgGkB98Rq6BzxCEyQfD6mD3uIIzz+K3/snfOro8k0FVqOS0FMuN0XZxtnLcuKgZB4rAKCF8YhiikEwn2GZ6ipW6UrZP+kEh4hJ2MybPMWZuyI6UP4tmWb+Suths0FLm6MSR+HHmAWyZAkydEoVwbV6Ac/cIJjoeCJKPBfLYdgDRPcTTfLV6PPMqBG31nx9qsodVtibQ43alYiCE4lTraokDVoDYQ/4vhdCRXQitIFB2G8DTDbI4gd+73fk2qgjZyLdA8ymCFzHApe4HoPMDtXGe+mAcsJ8sp+X4SZg0BKLQM9xdItn34xXD1IQd1+NsGTiiK5MFYeb13vQ4Zqj/K9VsUemr3t/Squ6mT3FhjVBcDKrQVXarwCvvP06GqWhzzT5qT7qNss9QRd2YsGEay/md6v9/HqDYKs+aihyGjaVP5oEQvaB9I3a2EwfQGhPisIpeD6pgkKEahgk1g+oDUp83H8fjRTqaVJjU5m5D4su/kNzzChOeHESoMYdQK99xAzBrhV+HOn1ZbrwiGGkl0iroDH3mUk4hOBnAXgFgro7aULm3xY69IyIGcNIYKciBGLHojh/huYG1Px/KvEtxPEfVLHjD/MOruzl1Zxv4Iq39bflr981BM+vkOpOyyog5RYLkBf+sHFFBJhUnZxDZaQENzNVSQ3SpwlVH+6mVhw5sR2EHHjw6uarzgPBiu0VF0qqR6AZJPm2gORFU2Yq/x5sFv//gYnxi8r1yDZ8VwDAXtiCsp8u4a7u/AA7wpm9AULOi9ko2LLGx25yydVl63CgDrT2fVMu7lcU7l4tToyXAMcEa4SHlVNq517ICLnU3uk9StgCtjzxNdsNVP2Kt6+cXEzKTRwlf1lwOp4EAtxpaL4Jx5NqBA/N/qMyU+rwKtoR28OS5x4TvK2+WWlxxBos/ba5k86jRKpK7OU1DViQ7kdCvjSGnwZIFBZ/SabwkqlLZpbXducxCqjwaV+VyinR/5Fc4Nc35bPzzh5WrKdqa8LHS607+MpGJfZ2igE2dJA11gJncYTpadGy9bhycMlK6OttMxnoyjlRqyDAXuChjBC/r8msP0IYPVZt+laN6c2N2XbtvojWSTIP/AoGfeVWKU110KHpq1RotnH+SWH9Z5zhhTs3mUkNOQGsSGDYl7bExBkDTrU2C3zHyE+EU8hZer/cnvp1+1F5lWaMJMWtFALEYooDezF/1l2YLbtgSonwRmCKVDsDB60wiIRwxGMCBnmRK0VAu18nCp9y8FMoUHBJzQsKF6On8RYJvkpUT78hWMsc3+pAeotXODV+h6TCzpLfRxhtfNWZvwdFLGxz9PIxvvHomT5i4Gazz+m334hJxSbnKUdThcjdBwx7Svu61oFroWFSk8rqDO9uWbWHbSy2a61sDfOO3veraohJQFSxTGWbG0MaWRxfvY6Mo9k+DlaF4eAz6tk04s74G86Yq1CRaHtA8AkY8lxLXs3y6Rg0mcTboiOTdG5P5TkgMb5B/lJ9UacC7Ai05AFj0mu1KOV4UyPDBol9YMgffd5xnGjlB1gCbq/1tGP4Q8+T86mhYEzzzXLIe21KAB10Ozy110sGKz6xlJFYbCxb9cmbM2tUv33rQFDDv/ZWiyZ7xxJ/n1cHeE+C9L9mEYliCb4yxR3S13FJVvaR6svRL1/zsHlpIIN/UC+aqQzSCaOjdbguuow3MYa43zqfTP1TfDUgUS+A+Ix6oGzWj5BEZzfMIVFCoKrjKpul3c2POuVr6DQSgn1NbiqQa0rpFKO76NCLCJcMm55Y/p0LzOvFdUIks0webMtaDRFbcRzKP4qF+M8rjQCfPfoNAVCR6QAcUWgwhk/Dw4BxQLTklSC7hh1NONJ1znEIU4Vz9Bm0YogI32zuJ/FoHySApKQFGVidWQXinTOsdLeWsjW5kf0DZOjRYP/YxS3Nh83g7c9doU5ZsLNaLZpc2UX6weIWHg1UNN0+jYmjSE+oxuSNvYQYEWkKirY4mctr4gdf03Eg/gVCJrXbefCRxO5yjVk79Vygdk4bH/OBXbGfJC11T6yOaFID/DnOqpSd9WBtByTnHJesiPF0y47soMQl6h/p14cMJqmv/krsfpDoCKZl3LbPZKob7Q0Ws4YbLhuUCQAINlJzZdnWV4bNcDJLBTFOS+N0kEsdOSlEM6jJqRaQs/vb0AGP2CGawDBrlWCaqyXAP4kAYxPLJga6DTQa59fU25kLSbyvENUxO5gOcPuctLSPKLRO+tLaCiMf/nxVg6Q7ZmCiJp2Ra0hWwC7EdcCJxTW3WGYxJgQN6OY1sJ8MUPqC+d07itEHd6PLC7aru+FnePKYcWeWmmFU95VIYHFjm0UC/w8N3cqlksWnlzYtz1f/0kB7l0YxGxVvIPAfZwfHSv4mM07AeqiYEHpDVw/NudZsOeJbra60xvwzbPRmHFXi2hb8BosytWmIbWgrKJGu7SvtEvcEGoD2XKtQ0cv4R2Jq+AKrrJWJ3snPeKKqRq9WfxJFttt/+kItt2icIIyuhwzXRu/WCXIx+AtMBRLr1ONHynNy/TKDuKROukMXwk0hHkwaUuH2BjvYRxOIOtW5vjN1uKsNE8faEG7fQ/mMVMH5HOal8wlotE4UJPijAKrnSknnXoB/QTxAbvocdKysbO1BOFoUMlQcC7hJM8PGdoKIxaIxTMNalEZ1nUK6/TeGnkTk4aqrDgoZPhV1PAoYftZJuvJyKv6kJZy1hd+9h/p8i7sG+HD3WaN6MZgA/+XRypcEQ9g89D643uoF650uxMDkSSjmui4vIkfP3o1CcJGWC1lb6QEm5iuoG6zirAdkirS3GG/XJ4RTtkhqKHQ/AmkEhUBakVlxyW4hTHMl8Ha2O4/gr8pkAZPkOOU5QddhD7CHHGnhUCBwbmpudR145QyneXaDvhoJhqLKakLGwIuL7sO7nCXHcuH+xmlNSqhL3qW3UDJpeZW2pVGiIJeCagfLPZmxQoZqcH+4tNdImpx3Pk4Dic5Vvxx9R6RZsHcHyH0qLT/BFPPC9k6wmjGdnLCggr8BX61/nnZstaGGIlyv5IgTxqrxG0p3OrfdB/cp/9vWLHTXdTIjnGT+LIHkXzb5lhEmTD7d7ZV6ffBWVjf24IsLmUmps6VzkcJ+js6PLzHyWFL3knitCdVFD/t7+nqIOX16MIo2wQtJXjUMWNklBl7zBHkp8FFByD8cOIwuOJNWHrgKL1EguDfZ1waSSCkxLwAzcEL+DnoBLwAV7qKq177NzS6kvbzktjtjvZxunDUiM8yDH4k5Fym0YgsNrTTOSDtKwDadaMvgSzHc3gBKwJF7uvwO/afmv5nRYKw6yzexf+zqra1GscNrQ9ugAD3QnS9kTYm1RPxunG7mRyKVnyxGAeZzJkh1z+WCVMmyp6nEAAojLjfIJAxYmx67AV8vEvudX/MXT80Tx/P+tQFq0ksLsfzMWOpkEjafuYvffgNnAKzuyF1fGiKjfhcgM9lltw3/AzQBpQpEf4ubiTKOoEe8t1D60TotAMwAU+9YLdSNn2uuY919jGkB4HFEDhXb0Rg3jcz9fmhC0OKPSy3p+YAAA="
                   alt="Ubicación"
@@ -233,22 +318,26 @@ const Home = () => {
                     {t("home.location_button")}
                   </Button>
                 </Card.Content>
-              </Card>
+                </Card>
+              </div>
             </Grid.Column>
 
             {/* 🧠 Sobre Nosotros */}
             <Grid.Column>
-              <Card
-                raised
+              <div
+                ref={el => navigationCardsRef.current[2] = el}
+                style={{ cursor: "pointer" }}
                 onClick={() => navigate(config.ROUTES.ABOUT)}
-                style={{
-                  background: "#000",
-                  border: "2px solid #ff7b00",
-                  boxShadow: "0 10px 30px rgba(255, 123, 0, 0.3)",
-                  cursor: "pointer",
-                  minHeight: "350px",
-                }}
               >
+                <Card
+                  raised
+                  style={{
+                    background: "#000",
+                    border: "2px solid #ff7b00",
+                    boxShadow: "0 10px 30px rgba(255, 123, 0, 0.3)",
+                    minHeight: "350px",
+                  }}
+                >
                 <Image
                   src="https://img.freepik.com/foto-gratis/cocinero-cocina-preparando-plato_53876-109787.jpg"
                   alt="Sobre Nosotros"
@@ -287,21 +376,13 @@ const Home = () => {
                     {t("home.about_button")}
                   </Button>
                 </Card.Content>
-              </Card>
+                </Card>
+              </div>
             </Grid.Column>
              <Grid.Column>
   <div
-    style={{
-      transform: "translateY(0)",
-      transition: "all 0.3s ease",
-      cursor: "pointer",
-    }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.transform = "translateY(-10px) scale(1.05)";
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.transform = "translateY(0) scale(1)";
-    }}
+    ref={el => navigationCardsRef.current[3] = el}
+    style={{ cursor: "pointer" }}
     onClick={() => navigate(config.ROUTES.MENU_COMPONENT)}
   >
     <Card
@@ -400,9 +481,10 @@ const Home = () => {
             </div>
           ) : (
             <Card.Group centered itemsPerRow={3} stackable style={{ marginTop: "2em" }}>
-              {featuredProducts.map((product) => (
+              {featuredProducts.map((product, index) => (
                 <Card
                   key={product.id ?? product._id}
+                  ref={el => featuredProductsRef.current[index] = el}
                   className="transition-normal"
                   style={{
                     borderRadius: "18px",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Card,
   Image,
@@ -12,6 +12,13 @@ import {
 import { useApp } from "../../context/AppContext";
 import { ICONS } from "../../config/constants";
 import { useTranslation } from "react-i18next";
+import { 
+  createStaggeredCardAnimation, 
+  createImageHoverEffect,
+  scrollTriggerAnimations,
+  animations
+} from "../../utils/animations";
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import "./Products.css";
 
 const Products = () => {
@@ -25,6 +32,60 @@ const Products = () => {
   const { t } = useTranslation();
 
   const loading = productsLoading;
+
+  // Refs for animations
+  const productCardsRef = useRef([]);
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    try {
+      // Animate header
+      if (headerRef.current) {
+        animations.slideInLeft(headerRef.current, { duration: 1, opacity: 0, x: -50 });
+      }
+
+      // Animate product cards with stagger effect
+      if (productCardsRef.current.length > 0) {
+        createStaggeredCardAnimation(productCardsRef.current);
+        productCardsRef.current.forEach(card => {
+          if (card) {
+            const img = card.querySelector('img');
+            if (img) {
+              createImageHoverEffect(img, { scale: 1.05 });
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error in GSAP animations:', error);
+    }
+
+    // Cleanup animations on unmount
+    return () => {
+      try {
+        // Kill all ScrollTrigger instances and animations for this component
+        ScrollTrigger.getAll().forEach(trigger => {
+          if (trigger.trigger && (
+            trigger.trigger.closest('[data-products-component]') ||
+            productCardsRef.current.includes(trigger.trigger) ||
+            trigger.trigger === headerRef.current
+          )) {
+            trigger.kill();
+          }
+        });
+        
+        // Kill animations on refs
+        if (headerRef.current) {
+          gsap.killTweensOf(headerRef.current);
+        }
+        productCardsRef.current.forEach(card => {
+          if (card) gsap.killTweensOf(card);
+        });
+      } catch (error) {
+        console.error('Error cleaning up animations:', error);
+      }
+    };
+  }, [products, searchTerm, visibleCount]);
 
   // FILTRO DE BÚSQUEDA
   const filteredProducts = products.filter((item) =>
@@ -80,6 +141,7 @@ const Products = () => {
       >
         {/* TÍTULO */}
         <Header
+          ref={headerRef}
           as="h1"
           className="products-header"
           style={{
@@ -93,10 +155,7 @@ const Products = () => {
             boxShadow: "0 4px 15px rgba(255,123,0,0.4)",
             fontSize: "1.8em",
             fontWeight: "800",
-            transition: "transform 0.3s ease",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
           {config.RESTAURANT.name}
         </Header>
@@ -144,26 +203,17 @@ const Products = () => {
           stackable
           style={{ marginTop: "2em", marginBottom: "3em" }}
         >
-          {visibleProducts.map((item) => (
+          {visibleProducts.map((item, index) => (
             <Card
               key={item.id ?? item._id}
+              ref={el => productCardsRef.current[index] = el}
+              className="card-hover"
               style={{
                 background: "#fff",
                 borderRadius: "16px",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                 overflow: "hidden",
                 border: "none",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-6px)";
-                e.currentTarget.style.boxShadow =
-                  "0 8px 20px rgba(0,0,0,0.25)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 12px rgba(0,0,0,0.15)";
               }}
             >
               <Image

@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+
+  backend:
+    build: .
+    container_name: node_backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://localhost:27017/carnes_al_barril_db
+      - PORT=3000
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

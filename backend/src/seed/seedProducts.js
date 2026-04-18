@@ -45,12 +45,12 @@ const BASE_PRODUCTS = [
   },
   {
     _id: "507f1f77bcf86cd799439015",
-    title: "Asado de tira",
-    description: "Clásico corte con hueso, sabor intenso y cocido lento.",
+    title: "Hamburguesa a la parrilla",
+    description: "Jugosa hamburguesa de carne premium a la parrilla, servida con lechuga, tomate, queso y nuestra salsa especial.",
     price: 45000,
     category: "parrilla",
     image:
-      "https://images.unsplash.com/photo-1558030135-a4962a581511?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
     available: true,
   },
   {

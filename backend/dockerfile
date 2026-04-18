@@ -1,0 +1,20 @@
+# Imagen oficial de Node
+FROM node:20-alpine
+
+# Directorio de trabajo
+WORKDIR /app
+
+# Copiar package files
+COPY package*.json ./
+
+# Instalar dependencias
+RUN npm install --production
+
+# Copiar el resto del proyecto
+COPY . .
+
+# Puerto del backend
+EXPOSE 3000
+
+# Comando de inicio
+CMD ["node", "src/index.js"]
