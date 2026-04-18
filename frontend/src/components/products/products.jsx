@@ -16,7 +16,8 @@ import {
   createStaggeredCardAnimation, 
   createImageHoverEffect,
   scrollTriggerAnimations,
-  animations
+  animations,
+  refreshScrollTrigger
 } from "../../utils/animations";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import "./Products.css";
@@ -59,6 +60,9 @@ const Products = () => {
     } catch (error) {
       console.error('Error in GSAP animations:', error);
     }
+
+    // Refresh ScrollTrigger after animations are set up
+    refreshScrollTrigger();
 
     // Cleanup animations on unmount
     return () => {

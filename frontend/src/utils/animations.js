@@ -2,7 +2,13 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CSSPlugin } from 'gsap/CSSPlugin';
 
-gsap.registerPlugin(ScrollTrigger, CSSPlugin);
+// Register plugins with error handling
+try {
+  gsap.registerPlugin(ScrollTrigger, CSSPlugin);
+  console.log('GSAP plugins registered successfully');
+} catch (error) {
+  console.error('Error registering GSAP plugins:', error);
+}
 
 export const animations = {
   fadeIn: (element, options = {}) => {
@@ -390,8 +396,22 @@ export const createStaggeredCardAnimation = (cardElements, options = {}) => {
 };
 
 export const killAllAnimations = () => {
-  gsap.killTweensOf('*');
-  ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+  try {
+    gsap.killTweensOf('*');
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    ScrollTrigger.refresh(); // Refresh ScrollTrigger after cleanup
+  } catch (error) {
+    console.error('Error killing animations:', error);
+  }
+};
+
+// Helper function to refresh ScrollTrigger safely
+export const refreshScrollTrigger = () => {
+  try {
+    ScrollTrigger.refresh();
+  } catch (error) {
+    console.error('Error refreshing ScrollTrigger:', error);
+  }
 };
 
 export default animations;

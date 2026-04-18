@@ -20,9 +20,10 @@ import {
   createImageHoverEffect,
   animateHeroImages,
   scrollTriggerAnimations,
-  animations
+  animations,
+  refreshScrollTrigger
 } from "../../utils/animations";
-import { ScrollTrigger } from 'gsap/ScrollTrigger'; //  Soporte de idiomas
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const heroImages = [
   "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=2000&q=80",
@@ -82,6 +83,9 @@ const Home = () => {
     } catch (error) {
       console.error('Error in GSAP animations:', error);
     }
+
+    // Refresh ScrollTrigger after animations are set up
+    refreshScrollTrigger();
 
     // Cleanup animations on unmount
     return () => {

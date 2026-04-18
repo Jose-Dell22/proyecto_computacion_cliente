@@ -207,31 +207,16 @@ export default function AboutUs() {
           </Grid>
         </Segment>
 
-        {/* CTA Section */}
-        <Segment vertical color="orange" textAlign="center">
-          <Header as="h2" inverted>
-            <Icon name="calendar" />
-            {t("about.cta_title")}
-          </Header>
-          <p style={{ fontSize: "1.2em", lineHeight: "1.8em", margin: "2em 0" }}>
-            {t("about.cta_description")}
-          </p>
-
-          {/* 👉 Redirige al formulario de reservas */}
-          <Button
-            as={Link}
-            to={ (config?.ROUTES?.RESERVATION) || "/reservar" }
-            size="large"
-            color="black"
-            inverted
-            aria-label="Ir al formulario de reservas"
-          >
-            <Icon name="calendar check" />
-            {t("about.cta_button")}
-
-
-          </Button>
-        </Segment>
+              {/* CTA Section */}
+      <Segment vertical color="orange" textAlign="center">
+        <Header as="h2" inverted>
+          <Icon name="calendar" />
+          {t("about.cta_title")}
+        </Header>
+        <p style={{ fontSize: "1.2em", lineHeight: "1.8em", margin: "2em 0" }}>
+          {t("about.cta_description")}
+        </p>
+      </Segment>
       </Container>
     </>
   );

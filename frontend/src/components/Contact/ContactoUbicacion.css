@@ -1,6 +1,5 @@
 /* ===== Contacto / Ubicación (scopeado a .contact-page) ===== */
 .contact-page{
-  /* variables locales al componente */
   --brand-card: #1b1c1d;
   --brand-soft: #232427;
   --text: #eaecef;
@@ -18,6 +17,7 @@
   color: var(--text) !important;
   margin-bottom: 1.25rem !important;
 }
+
 .contact-page .contact-title .sub.header{
   color: var(--muted) !important;
 }
@@ -43,12 +43,13 @@
 .contact-page .section-title{
   color: var(--text) !important;
 }
+
 .contact-page .section-subtitle{
   color: var(--muted) !important;
   margin-top: .75rem !important;
 }
 
-/* ===== Layout: evitar centrados y estirar el formulario ===== */
+/* Layout */
 .contact-page .contact-card .contact-grid{
   justify-content: flex-start !important;
   align-items: flex-start !important;
@@ -62,32 +63,37 @@
   margin: 0 !important;
 }
 
-/* Formulario: ocupar 100% y sin centrado */
+/* Formulario */
 .contact-page .contact-form{
   text-align: left !important;
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
 }
+
 .contact-page .contact-form .field>label{
   color: var(--muted) !important;
   text-align: left !important;
 }
+
 .contact-page .contact-form .field,
 .contact-page .contact-form .ui.input,
 .contact-page .contact-form .ui.input>input,
 .contact-page .contact-form textarea{
   width: 100% !important;
 }
+
 .contact-page .contact-form textarea{
   min-height: 160px;
 }
+
 .contact-page .contact-form .ui.input>input,
 .contact-page .contact-form textarea{
   background: #121316 !important;
   color: var(--text) !important;
   border: 1px solid rgba(255,255,255,.08) !important;
 }
+
 .contact-page .contact-form .ui.input>input:focus,
 .contact-page .contact-form textarea:focus{
   border-color: var(--accent) !important;
@@ -99,41 +105,118 @@
   background: var(--accent) !important;
   border: none !important;
 }
+
 .contact-page .ui.primary.button:hover,
 .contact-page .ui.primary.button:focus{
   background: var(--accent-2) !important;
   transform: translateY(-1px);
 }
 
-/* Íconos sociales */
+/* Info card */
+.contact-page .info-card .item .header{
+  color: var(--text) !important;
+}
+
+.contact-page .info-card .description{
+  color: var(--muted) !important;
+}
+
+.contact-page .info-card .list .item{
+  color: var(--text) !important;
+}
+
+.contact-page .info-card .list .item strong{
+  color: var(--text) !important;
+}
+
+/* Contact actions */
+.contact-page .contact-actions{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.contact-page .contact-actions .ui.button,
+.contact-page .contact-actions .ui.button .icon{
+  color: var(--accent) !important;
+}
+
+.contact-page .contact-actions .ui.button{
+  border-color: var(--accent) !important;
+  background: transparent !important;
+}
+
+.contact-page .contact-actions .ui.button:hover{
+  background: rgba(255,122,26,.1) !important;
+}
+
+.contact-page .contact-actions .button + .button{
+  margin-left: 0 !important;
+}
+
+/* BOTÓN RESERVAR CENTRADO */
+.contact-page .reserve-cta-wrap{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.2rem 0 1rem;
+  width: 100%;
+}
+
+.contact-page .reserve-cta-button.ui.button{
+  min-width: 230px;
+  border-radius: 14px !important;
+  font-weight: 700 !important;
+}
+
+/* ICONOS SOCIALES CENTRADOS */
+.contact-page .social-icons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: .5rem;
+  width: 100%;
+}
+
 .contact-page .social-icons a{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px; height: 44px;
-  margin-right: 10px;
-  border-radius: 10px;
+  width: 52px;
+  height: 52px;
+  margin-right: 0;
+  border-radius: 12px;
   background: #131417;
   border: 1px solid rgba(255,255,255,.06);
   box-shadow: 0 4px 14px rgba(0,0,0,.25);
   transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
 }
+
 .contact-page .social-icons a:hover{
   transform: translateY(-2px) scale(1.03);
   box-shadow: 0 10px 22px rgba(0,0,0,.35);
   border-color: var(--accent);
 }
-.contact-page .social-icons .icon{
+
+.contact-page .social-icons .icon,
+.contact-page .social-icons svg{
   color: var(--text) !important;
-  opacity: .9;
+  opacity: 1 !important;
+  margin: 0 !important;
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
-/* Mapa responsivo */
+/* Mapa */
 .contact-page .map-wrap{
   border-radius: 14px;
   overflow: hidden;
   box-shadow: var(--shadow-md);
 }
+
 .contact-page .map-wrap iframe{
   display: block;
   width: 100%;
@@ -141,51 +224,20 @@
   border: 0;
 }
 
-/* Lista de info */
-.contact-page .info-card .item .header{
-  color: var(--text) !important;
-}
-.contact-page .info-card .description{
-  color: var(--muted) !important;
-}
-
-/* Horarios en blanco (título + items) */
-.contact-page .info-card .list .item { 
-  color: var(--text) !important; 
-}
-.contact-page .info-card .list .item strong { 
-  color: var(--text) !important; 
-}
-
-/* Teléfono/Correo en naranja (bloque 'También por aquí') */
-.contact-page .contact-actions .ui.button,
-.contact-page .contact-actions .ui.button .icon{
-  color: var(--accent) !important;
-}
-.contact-page .contact-actions .ui.button{
-  border-color: var(--accent) !important;
-  background: transparent !important;
-}
-.contact-page .contact-actions .ui.button:hover{
-  background: rgba(255,122,26,.1) !important;
-}
-.contact-page .contact-actions .button + .button{ 
-  margin-left: 8px; 
-}
-
-/* ===== Nuevo: Título con icono a la derecha y ocultar ícono hero grande ===== */
+/* Título con icono */
 .contact-page .contact-title .title-row{
   display: inline-flex;
   align-items: center;
   gap: .5rem;
   line-height: 1;
 }
+
 .contact-page .contact-title .title-icon{
   color: var(--accent);
   font-size: 1.15em;
   translate: 0 .04em;
 }
-/* si existía un icono gigante tipo “hero” en la parte superior, se oculta */
+
 .contact-page .page-hero-icon,
 .contact-page .hero-icon,
 .contact-page .contact-hero-icon{
@@ -194,6 +246,20 @@
 
 /* Responsive */
 @media (max-width: 767px){
-  .contact-page .contact-card.ui.segment{ padding: 1rem !important; }
-  .contact-page .social-icons a{ width: 40px; height: 40px; margin-right: 8px; }
+  .contact-page .contact-card.ui.segment{
+    padding: 1rem !important;
+  }
+
+  .contact-page .social-icons a{
+    width: 46px;
+    height: 46px;
+  }
+
+  .contact-page .contact-actions{
+    justify-content: center;
+  }
+
+  .contact-page .reserve-cta-wrap{
+    justify-content: center;
+  }
 }
