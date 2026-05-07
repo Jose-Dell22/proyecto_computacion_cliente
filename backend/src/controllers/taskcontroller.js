@@ -53,6 +53,36 @@ export const createResource = async (req, res) => {
     if (!Model) return res.status(404).json({ message: "Resource not found" });
 
     const payload = { ...req.body };
+    
+    // Validación específica para reservas
+    if (Model === Reservation) {
+      const { date, time } = payload;
+      
+      // Validación de fecha futura
+      if (date) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Inicio del día actual
+        const reservationDate = new Date(date);
+        reservationDate.setHours(0, 0, 0, 0);
+        
+        if (reservationDate < today) {
+          return res.status(400).json({ 
+            message: "No se pueden hacer reservas para fechas pasadas" 
+          });
+        }
+      }
+      
+      // Validación de horario entre 12:00 y 22:00
+      if (time) {
+        const [hours] = time.split(':').map(Number);
+        if (hours < 12 || hours >= 22) {
+          return res.status(400).json({ 
+            message: "El horario permitido para reservas es de 12:00 a 22:00" 
+          });
+        }
+      }
+    }
+    
     if (Model === User && payload.password) {
       payload.password = await bcrypt.hash(payload.password, 10);
     }
