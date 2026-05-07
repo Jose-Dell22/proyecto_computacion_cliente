@@ -166,35 +166,49 @@ const AdminDashboard = () => {
     return text.length > max ? `${text.substring(0, max)}...` : text;
   };
 
-  const statsCards = useMemo(
-    () => [
-      {
-        key: "products",
-        icon: "box",
-        value: products.length,
-        label: t("admin.products"),
-      },
-      {
-        key: "workers",
-        icon: "users",
-        value: workers.length,
-        label: t("admin.workers"),
-      },
-      {
-        key: "suggestions",
-        icon: "mail",
-        value: suggestions.length,
-        label: t("admin.suggestions"),
-      },
-      {
-        key: "reservations",
-        icon: "calendar check",
-        value: reservations.length,
-        label: t("admin.reservations"),
-      },
-    ],
-    [products.length, workers.length, suggestions.length, reservations.length, t]
-  );
+  const allStatsCards = [
+    {
+      key: "products",
+      icon: "box",
+      value: products.length,
+      label: t("admin.products"),
+    },
+    {
+      key: "workers",
+      icon: "users",
+      value: workers.length,
+      label: t("admin.workers"),
+    },
+    {
+      key: "suggestions",
+      icon: "mail",
+      value: suggestions.length,
+      label: t("admin.suggestions"),
+    },
+    {
+      key: "reservations",
+      icon: "calendar check",
+      value: reservations.length,
+      label: t("admin.reservations"),
+    },
+    {
+      key: "orders",
+      icon: "shopping cart",
+      value: orders.length,
+      label: t("admin.orders"),
+    },
+  ];
+
+  const statsCards = useMemo(() => {
+    if (adminUser?.rol === 'Trabajador') {
+      // Trabajadores solo ven Reservas y Pedidos
+      return allStatsCards.filter(card => 
+        card.key === 'reservations' || card.key === 'orders'
+      );
+    }
+    // Administradores ven todas las tarjetas
+    return allStatsCards;
+  }, [products.length, workers.length, suggestions.length, reservations.length, orders.length, t, adminUser?.rol]);
 
   const handleProductSubmit = async () => {
     if (!productForm.title || !productForm.price || !productForm.image) return;
@@ -1217,8 +1231,8 @@ const AdminDashboard = () => {
         <div className="admin-hero-text">
           <span className="admin-eyebrow">Carnes al Barril</span>
           <Header as="h1" className="admin-main-title">
-            {t("admin.title")}
-            <Header.Subheader>{t("admin.subtitle")}</Header.Subheader>
+            {adminUser?.rol === 'Trabajador' ? 'Dashboard de Trabajador' : t("admin.title")}
+            <Header.Subheader>{adminUser?.rol === 'Trabajador' ? 'Gestión de Reservas y Pedidos' : t("admin.subtitle")}</Header.Subheader>
           </Header>
         </div>
       </div>
