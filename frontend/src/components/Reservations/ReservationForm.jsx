@@ -350,7 +350,14 @@ export default function ReservationForm() {
             />
 
             {/* Botón RESERVAR en naranja */}
-            <Button color="orange" size="large" fluid>
+            <Button 
+              color="orange" 
+              size="large" 
+              fluid
+              type="submit"
+              loading={status === "loading"}
+              disabled={status === "loading"}
+            >
               <Icon name="calendar plus" /> {t("reservation.actions.reserve")}
             </Button>
           </Form>
