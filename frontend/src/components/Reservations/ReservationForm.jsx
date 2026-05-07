@@ -28,6 +28,15 @@ const INITIAL = {
   cortesDetalle: [{ corte: "", qty: 1 }],
 };
 
+// Obtener fecha actual en formato YYYY-MM-DD para el atributo min
+const getTodayDate = () => {
+  const today = new Date();
+  // Usar zona horaria local para evitar bloqueos prematuros
+  const offset = today.getTimezoneOffset();
+  const localDate = new Date(today.getTime() - (offset * 60 * 1000));
+  return localDate.toISOString().split('T')[0];
+};
+
 export default function ReservationForm() {
   // 👇 Igual que About.jsx: namespace por defecto "translation"
   const { t } = useTranslation();
@@ -75,6 +84,21 @@ export default function ReservationForm() {
     if (!values.telefono) return t("reservation.errors.phoneRequired");
     if (!values.fecha || !values.hora) return t("reservation.errors.datetimeRequired");
     if (!values.personas) return t("reservation.errors.peopleRequired");
+    
+    // Validación de fecha futura
+    const today = getTodayDate();
+    if (values.fecha < today) {
+      return t("reservation.errors.pastDate");
+    }
+    
+    // Validación de horario entre 12:00 y 22:00
+    if (values.hora) {
+      const [hours] = values.hora.split(':').map(Number);
+      if (hours < 12 || hours >= 22) {
+        return t("reservation.errors.invalidTimeRange", { open: "12:00", close: "22:00" });
+      }
+    }
+    
     if (totalQty > values.personas)
       return t("reservation.errors.qtyExceedsPeople", { totalQty, personas: values.personas });
     return "";
@@ -211,6 +235,7 @@ export default function ReservationForm() {
                 name="fecha"
                 value={values.fecha}
                 onChange={handleChange}
+                min={getTodayDate()}
                 required
               />
               <Form.Field
@@ -220,6 +245,8 @@ export default function ReservationForm() {
                 name="hora"
                 value={values.hora}
                 onChange={handleChange}
+                min="12:00"
+                max="22:00"
                 required
               />
               <Form.Field
