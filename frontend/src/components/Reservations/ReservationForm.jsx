@@ -14,6 +14,30 @@ const PEOPLE = Array.from({ length: 12 }, (_, i) => ({
   key: i + 1, text: `${i + 1}`, value: i + 1
 }));
 
+// Generar opciones de hora en formato PM (12:00 - 22:00)
+const TIME_OPTIONS = [
+  { key: '12:00', text: '12:00 PM', value: '12:00' },
+  { key: '12:30', text: '12:30 PM', value: '12:30' },
+  { key: '13:00', text: '1:00 PM', value: '13:00' },
+  { key: '13:30', text: '1:30 PM', value: '13:30' },
+  { key: '14:00', text: '2:00 PM', value: '14:00' },
+  { key: '14:30', text: '2:30 PM', value: '14:30' },
+  { key: '15:00', text: '3:00 PM', value: '15:00' },
+  { key: '15:30', text: '3:30 PM', value: '15:30' },
+  { key: '16:00', text: '4:00 PM', value: '16:00' },
+  { key: '16:30', text: '4:30 PM', value: '16:30' },
+  { key: '17:00', text: '5:00 PM', value: '17:00' },
+  { key: '17:30', text: '5:30 PM', value: '17:30' },
+  { key: '18:00', text: '6:00 PM', value: '18:00' },
+  { key: '18:30', text: '6:30 PM', value: '18:30' },
+  { key: '19:00', text: '7:00 PM', value: '19:00' },
+  { key: '19:30', text: '7:30 PM', value: '19:30' },
+  { key: '20:00', text: '8:00 PM', value: '20:00' },
+  { key: '20:30', text: '8:30 PM', value: '20:30' },
+  { key: '21:00', text: '9:00 PM', value: '21:00' },
+  { key: '21:30', text: '9:30 PM', value: '21:30' },
+];
+
 const INITIAL = {
   nombre: "",
   apellido: "",
@@ -239,14 +263,14 @@ export default function ReservationForm() {
                 required
               />
               <Form.Field
-                control={Input}
-                type="time"
+                control={Dropdown}
+                selection
+                options={TIME_OPTIONS}
                 label={t("reservation.fields.time.label")}
                 name="hora"
                 value={values.hora}
                 onChange={handleChange}
-                min="12:00"
-                max="22:00"
+                placeholder="Seleccionar hora"
                 required
               />
               <Form.Field
