@@ -260,6 +260,16 @@ export default function ReservationForm() {
               />
             </Form.Group>
 
+            {/* Información de horarios de atención */}
+            <Message info icon>
+              <Icon name="clock" />
+              <Message.Content>
+                <Message.Header>Horarios de Atención</Message.Header>
+                <p>Nuestro horario de atención para reservas es de <strong>12:00 PM a 10:00 PM</strong>.</p>
+                <p>Por favor selecciona una hora dentro de este rango para confirmar tu reserva.</p>
+              </Message.Content>
+            </Message>
+
             {/* Repetidor de Cortes preferidos */}
             <Header as="h4" style={{ color: "#ff7a1a" }}>
               {t("reservation.sections.cuts")}
