@@ -17,10 +17,10 @@ import {
   Message,
   Embed,
 } from 'semantic-ui-react'
-import { useApp } from '../../context/AppContext'
 import { useForm } from '../../hooks/useForm'
 import { ICONS } from '../../config/constants'
 import { useTranslation } from 'react-i18next'
+import { useApp } from '../../context/AppContext'
 
 export default function ContactoUbicacion() {
   const {
@@ -28,12 +28,6 @@ export default function ContactoUbicacion() {
     contactForm,
     suggestions,
     updateContactForm,
-    cart,
-    getCartTotal,
-    removeFromCart,
-    decreaseQuantity,
-    increaseQuantity,
-    clearCart,
     submitContactMessage,
     loadSuggestions,
   } = useApp()
@@ -74,73 +68,6 @@ export default function ContactoUbicacion() {
         </span>
         <Header.Subheader>{t('contact.subtitle')}</Header.Subheader>
       </Header>
-
-      {/* Carrito */}
-      {cart.length > 0 && (
-        <Segment color="orange" style={{ marginBottom: '2em' }}>
-          <Header as="h3" color="orange">
-            <Icon name="shopping cart" />
-            {t('contact.cart_title')}
-          </Header>
-
-          <List divided relaxed>
-            {cart.map((item, index) => (
-              <List.Item key={`${item.id}-${index}`}>
-                <List.Content floated="right">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    <Button
-                      icon="minus"
-                      size="mini"
-                      color="orange"
-                      onClick={() => decreaseQuantity(index)}
-                      title={t('contact.decrease')}
-                      disabled={item.quantity <= 1}
-                    />
-                    <span style={{ minWidth: 20, textAlign: 'center', fontWeight: 'bold' }}>
-                      {item.quantity || 1}
-                    </span>
-                    <Button
-                      icon="plus"
-                      size="mini"
-                      color="orange"
-                      onClick={() => increaseQuantity(index)}
-                      title={t('contact.increase')}
-                    />
-                    <Button
-                      icon="trash"
-                      size="mini"
-                      color="red"
-                      onClick={() => removeFromCart(index)}
-                      title={t('contact.remove')}
-                    />
-                  </div>
-                </List.Content>
-
-                <List.Content>
-                  <List.Header>{item.title}</List.Header>
-                  <List.Description>
-                    {t('contact.price')}: ${item.price.toLocaleString('es-CO')} × {item.quantity || 1} = $
-                    {((item.price || 0) * (item.quantity || 1)).toLocaleString('es-CO')}
-                  </List.Description>
-                </List.Content>
-              </List.Item>
-            ))}
-          </List>
-
-          <Divider />
-
-          <Header as="h4" textAlign="center">
-            {t('contact.total')}: ${getCartTotal().toLocaleString('es-CO')}
-          </Header>
-
-          <div style={{ textAlign: 'center', marginTop: '1em' }}>
-            <Button color="red" basic onClick={() => clearCart()} size="small">
-              <Icon name="trash" />
-              {t('contact.clear_cart')}
-            </Button>
-          </div>
-        </Segment>
-      )}
 
       {/* Tarjeta principal */}
       <Segment raised className="contact-card">
