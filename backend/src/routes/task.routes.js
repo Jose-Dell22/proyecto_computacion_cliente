@@ -116,7 +116,7 @@ router.put("/objects/orders/:id", (req, res, next) => {
 
   next();
 
-}, authRequired, orderAccessRequired, updateResource);
+}, authRequired, orderAccessRequired, withResource("orders"), updateResource);
 
 
 
@@ -145,6 +145,8 @@ router.get("/objects/reservations", (req, res, next) => {
 router.get("/objects/orders/:id", (req, res, next) => {
 
   console.log("--- PETICIÓN RECIBIDA ---", req.method, req.url, "ROL:", req.user?.role || 'No auth');
+
+  req.params.resource = 'orders';
 
   next();
 

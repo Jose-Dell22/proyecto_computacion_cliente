@@ -1033,7 +1033,7 @@ const AdminDashboard = () => {
                   <Table.HeaderCell>{t("admin.customer")}</Table.HeaderCell>
                   <Table.HeaderCell>{t("admin.phone")}</Table.HeaderCell>
                   <Table.HeaderCell>{t("admin.total")}</Table.HeaderCell>
-                  <Table.HeaderCell>{t("admin.status")}</Table.HeaderCell>
+                  <Table.HeaderCell>Estado</Table.HeaderCell>
                   <Table.HeaderCell>{t("admin.date")}</Table.HeaderCell>
                   <Table.HeaderCell>{t("admin.actions")}</Table.HeaderCell>
                 </Table.Row>
@@ -1065,7 +1065,6 @@ const AdminDashboard = () => {
                       <Dropdown
                         selection
                         compact
-                        upward
                         options={ORDER_STATUS_OPTIONS}
                         value={order.status}
                         onChange={(e, { value }) => 
