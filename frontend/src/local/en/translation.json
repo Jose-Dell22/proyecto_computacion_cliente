@@ -187,6 +187,8 @@
       "datetimeRequired": "Please select date and time.",
       "peopleRequired": "Please specify the number of people.",
       "qtyExceedsPeople": "Total portions ({{totalQty}}) cannot exceed the number of people ({{personas}}).",
+      "pastDate": "The date must be today or later.",
+      "invalidTimeRange": "The time must be between {{open}} and {{close}}.",
       "submitFailed": "Reservation could not be submitted. Please try again."
     },
     "success": {

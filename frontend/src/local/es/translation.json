@@ -187,6 +187,8 @@
       "datetimeRequired": "Selecciona fecha y hora.",
       "peopleRequired": "Indica el número de personas.",
       "qtyExceedsPeople": "El total de porciones ({{totalQty}}) no puede superar el número de personas ({{personas}}).",
+      "pastDate": "La fecha debe ser igual o posterior a hoy.",
+      "invalidTimeRange": "La hora debe estar entre las {{open}} y las {{close}}.",
       "submitFailed": "No se pudo enviar la reserva, inténtalo nuevamente."
     },
     "success": {

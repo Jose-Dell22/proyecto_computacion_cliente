@@ -186,6 +186,8 @@
       "datetimeRequired": "请选择日期和时间。",
       "peopleRequired": "请填写人数。",
       "qtyExceedsPeople": "份数总和（{{totalQty}}）不能超过人数（{{personas}}）。",
+      "pastDate": "日期必须是今天或之后。",
+      "invalidTimeRange": "时间必须在{{open}}至{{close}}之间。",
       "submitFailed": "未能提交预订，请重试。"
     },
     "success": {
