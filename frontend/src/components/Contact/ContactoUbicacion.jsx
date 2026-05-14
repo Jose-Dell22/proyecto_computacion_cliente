@@ -306,7 +306,7 @@ export default function ContactoUbicacion() {
       <Divider hidden />
 
       <Segment basic textAlign="center">
-        <Header as="h5" disabled>
+        <Header as="h5" disabled style={{ color: 'white' }}>
           <Icon name={ICONS.shield} />
           {t('contact.privacy')}
         </Header>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Grid, Header, Icon, Segment, Divider } from 'semantic-ui-react';
 import { useApp } from '../../context/AppContext';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { FaInstagram, FaFacebookF, FaWhatsapp } from 'react-icons/fa';
 
 const Footer = () => {
@@ -30,12 +30,26 @@ const Footer = () => {
     minWidth: '18px',
   };
 
+  const socialButtonStyle = {
+    width: '42px',
+    height: '42px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '12px',
+    background: 'rgba(0,0,0,0.18)',
+    color: '#ffdd44',
+    textDecoration: 'none',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
+  };
+
   return (
     <Segment
       inverted
       color="orange"
       style={{
-        background: 'linear-gradient(135deg, #ff7b00 0%, #ff4500 50%, #d35400 100%)',
+        background:
+          'linear-gradient(135deg, #ff7b00 0%, #ff4500 50%, #d35400 100%)',
         boxShadow: '0 -5px 20px rgba(255, 136, 0, 0.25)',
         border: 'none',
         borderRadius: '0',
@@ -60,7 +74,7 @@ const Footer = () => {
             textShadow: '2px 2px 6px rgba(0,0,0,0.35)',
           }}
         >
-          {t("footer.title")}
+          {t('footer.title')}
         </Header>
 
         {/* Grid principal */}
@@ -69,7 +83,7 @@ const Footer = () => {
           <Grid.Column computer={5} tablet={16} mobile={16}>
             <Header as="h4" inverted style={sectionTitleStyle}>
               <Icon name="clock" style={{ color: '#ffdd44' }} />
-              {t("footer.schedule_title")}
+              {t('footer.schedule_title')}
             </Header>
 
             <div>
@@ -87,7 +101,7 @@ const Footer = () => {
           <Grid.Column computer={6} tablet={16} mobile={16}>
             <Header as="h4" inverted style={sectionTitleStyle}>
               <Icon name="phone" style={{ color: '#ffdd44' }} />
-              {t("footer.contact_title")}
+              {t('footer.contact_title')}
             </Header>
 
             <div style={rowStyle}>
@@ -101,7 +115,10 @@ const Footer = () => {
             </div>
 
             <div style={{ ...rowStyle, alignItems: 'flex-start' }}>
-              <Icon name="map marker alternate" style={{ ...iconStyle, marginTop: '3px' }} />
+              <Icon
+                name="map marker alternate"
+                style={{ ...iconStyle, marginTop: '3px' }}
+              />
               <span>
                 {config.RESTAURANT.address}, {config.RESTAURANT.location}
               </span>
@@ -112,7 +129,7 @@ const Footer = () => {
           <Grid.Column computer={5} tablet={16} mobile={16}>
             <Header as="h4" inverted style={sectionTitleStyle}>
               <Icon name="share alternate" style={{ color: '#ffdd44' }} />
-              {t("footer.social_title")}
+              {t('footer.social_title')}
             </Header>
 
             <div
@@ -129,18 +146,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Facebook"
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '12px',
-                  background: 'rgba(0,0,0,0.18)',
-                  color: '#ffdd44',
-                  textDecoration: 'none',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
-                }}
+                style={socialButtonStyle}
               >
                 <FaFacebookF size={20} />
               </a>
@@ -150,18 +156,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram"
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '12px',
-                  background: 'rgba(0,0,0,0.18)',
-                  color: '#ffdd44',
-                  textDecoration: 'none',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
-                }}
+                style={socialButtonStyle}
               >
                 <FaInstagram size={20} />
               </a>
@@ -171,23 +166,13 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="WhatsApp"
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '12px',
-                  background: 'rgba(0,0,0,0.18)',
-                  color: '#ffdd44',
-                  textDecoration: 'none',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
-                }}
+                style={socialButtonStyle}
               >
                 <FaWhatsapp size={20} />
               </a>
             </div>
 
+            {/* Barrio y ubicación */}
             <p
               style={{
                 color: 'white',
@@ -196,7 +181,8 @@ const Footer = () => {
                 lineHeight: '1.5',
               }}
             >
-              © 2024 {config.RESTAURANT.name}. {t("footer.rights")}
+              {config.RESTAURANT.neighborhood} •{' '}
+              {config.RESTAURANT.location}
             </p>
           </Grid.Column>
         </Grid>
@@ -209,7 +195,7 @@ const Footer = () => {
           }}
         />
 
-        {/* Mensaje final */}
+        {/* Derechos reservados */}
         <div style={{ textAlign: 'center', marginTop: '4px' }}>
           <p
             style={{
@@ -218,7 +204,7 @@ const Footer = () => {
               margin: 0,
             }}
           >
-            {config.RESTAURANT.neighborhood} • {config.RESTAURANT.location}
+            © 2024 {config.RESTAURANT.name}. {t('footer.rights')}
           </p>
         </div>
       </Container>
