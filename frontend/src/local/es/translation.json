@@ -154,13 +154,18 @@
       "qty": { "label": "Porciones", "placeholder": "Ej: 2" },
       "doneness": { "label": "Cocción", "placeholder": "Selecciona el punto" },
       "table": { "label": "Mesa (opcional)", "placeholder": "Ej: Terraza 4" },
-      "notes": { "label": "Notas", "placeholder": "Alergias, ocasión especial, niños, etc." }
+      "notes": { "label": "Notas", "placeholder": "Alergias, ocasión especial, niños, etc." },
+      "tableDecoration": { "label": "Decoración de mesa" },
+      "portions": { "label": "Porciones", "placeholder": "Cantidad de porciones" }
     },
-    "sections": { "cuts": "Preferencias de cortes (puedes añadir varias líneas)" },
+    "sections": { "cuts": "Selecciona tus cortes" },
     "placeholders": { "selectCut": "Selecciona un corte" },
     "labels": {
       "totalPortions": "Total de porciones: {{totalQty}}",
-      "people": "Personas: {{personas}}"
+      "people": "Personas: {{personas}}",
+      "totalPrice": "Total estimado: ${{total}}",
+      "selectCutFirst": "Selecciona un corte para habilitar las porciones",
+      "pricePerCut": "${{price}}/porción"
     },
     "actions": {
       "reserve": "Reservar",
@@ -172,7 +177,13 @@
     "errors": {
       "header": "Revisa el formulario",
       "nameRequired": "El nombre y apellido son obligatorios.",
+      "nameInvalid": "El nombre solo debe contener letras y espacios.",
+      "nameTooShort": "El nombre debe tener al menos 2 caracteres.",
+      "lastNameInvalid": "El apellido solo debe contener letras y espacios.",
+      "lastNameTooShort": "El apellido debe tener al menos 2 caracteres.",
       "phoneRequired": "Ingresa un número de teléfono.",
+      "phoneInvalid": "Ingresa un número de teléfono válido (ej: 3001234567).",
+      "emailInvalid": "Ingresa un correo electrónico válido.",
       "datetimeRequired": "Selecciona fecha y hora.",
       "peopleRequired": "Indica el número de personas.",
       "qtyExceedsPeople": "El total de porciones ({{totalQty}}) no puede superar el número de personas ({{personas}}).",

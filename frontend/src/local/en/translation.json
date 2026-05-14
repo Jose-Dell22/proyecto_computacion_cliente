@@ -154,13 +154,18 @@
       "qty": { "label": "Portions", "placeholder": "e.g. 2" },
       "doneness": { "label": "Doneness", "placeholder": "Select doneness" },
       "table": { "label": "Table (optional)", "placeholder": "e.g. Terrace 4" },
-      "notes": { "label": "Notes", "placeholder": "Allergies, special occasions, kids, etc." }
+      "notes": { "label": "Notes", "placeholder": "Allergies, special occasions, kids, etc." },
+      "tableDecoration": { "label": "Table decoration" },
+      "portions": { "label": "Portions", "placeholder": "Number of portions" }
     },
-    "sections": { "cuts": "Preferred Cuts (you can add multiple lines)" },
+    "sections": { "cuts": "Select your cuts" },
     "placeholders": { "selectCut": "Select a cut" },
     "labels": {
       "totalPortions": "Total Portions: {{totalQty}}",
-      "people": "People: {{personas}}"
+      "people": "People: {{personas}}",
+      "totalPrice": "Estimated total: ${{total}}",
+      "selectCutFirst": "Select a cut to enable portions",
+      "pricePerCut": "${{price}}/portion"
     },
     "actions": {
       "reserve": "Reserve",
@@ -172,7 +177,13 @@
     "errors": {
       "header": "Please check the form",
       "nameRequired": "First and last name are required.",
+      "nameInvalid": "Name must only contain letters and spaces.",
+      "nameTooShort": "Name must be at least 2 characters.",
+      "lastNameInvalid": "Last name must only contain letters and spaces.",
+      "lastNameTooShort": "Last name must be at least 2 characters.",
       "phoneRequired": "Please enter a phone number.",
+      "phoneInvalid": "Please enter a valid phone number (e.g. 3001234567).",
+      "emailInvalid": "Please enter a valid email address.",
       "datetimeRequired": "Please select date and time.",
       "peopleRequired": "Please specify the number of people.",
       "qtyExceedsPeople": "Total portions ({{totalQty}}) cannot exceed the number of people ({{personas}}).",

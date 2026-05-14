@@ -39,6 +39,8 @@ function mapProfileToAdmin(u) {
 function mapReservationFromApi(r) {
   if (!r) return null;
   const c = r.customer || {};
+  const note = r.note || '';
+  const hasDecoracion = note.toLowerCase().includes('decoraci');
   return {
     id: toId(r),
     nombre: c.name || '',
@@ -48,13 +50,19 @@ function mapReservationFromApi(r) {
     fecha: r.date || '',
     hora: r.time || '',
     personas: r.people ?? 2,
-    mesa: '',
+    mesa: r.table || '',
     termino: r.preferences?.cooking || '',
-    notas: r.note || '',
+    notas: note,
+    corteSeleccionado: r.preferences?.cut || '',
+    porciones: r.preferences?.portions || 1,
+    decoracionMesa: hasDecoracion,
   };
 }
 
 function reservationFlatToApiBody(f) {
+  const extraNotes = [];
+  if (f.decoracionMesa) extraNotes.push("Decoración de mesa");
+
   return {
     customer: {
       name: f.nombre,
@@ -65,12 +73,13 @@ function reservationFlatToApiBody(f) {
     date: f.fecha,
     time: f.hora,
     people: f.personas,
+    table: f.mesa || '',
     preferences: {
-      cut: '',
+      cut: f.corteSeleccionado || '',
       cooking: f.termino || '',
-      portions: f.personas,
+      portions: parseInt(f.porciones, 10) || f.personas,
     },
-    note: [f.mesa && `Mesa: ${f.mesa}`, f.notas].filter(Boolean).join('\n') || undefined,
+    note: [...extraNotes, f.notas].filter(Boolean).join('\n') || undefined,
   };
 }
 
@@ -362,10 +371,36 @@ export const AppProvider = ({ children }) => {
   };
 
   const addReservation = async (reservation) => {
-    const totalQty = reservation.cortesDetalle?.reduce(
-      (s, r) => s + (parseInt(r.qty, 10) || 0),
-      0
-    ) ?? 0;
+    let cutStr = "";
+    let portions = 0;
+    let cooking = "";
+    let extraNotes = [];
+
+    if (reservation.cortesSeleccionados) {
+      const entries = Object.entries(reservation.cortesSeleccionados).filter(
+        ([_, qty]) => parseInt(qty, 10) > 0
+      );
+      cutStr = entries.map(([cut]) => cut).join(", ");
+      portions = entries.reduce((s, [_, q]) => s + (parseInt(q, 10) || 0), 0);
+      if (reservation.decoracionMesa) extraNotes.push("Decoración de mesa");
+    } else if (reservation.corteSeleccionado) {
+      cutStr = reservation.corteSeleccionado;
+      portions = parseInt(reservation.porciones, 10) || 0;
+      if (reservation.decoracionMesa) extraNotes.push("Decoración de mesa");
+    } else {
+      cutStr = (reservation.cortesDetalle || []).map((r) => r.corte).filter(Boolean).join(", ");
+      portions = reservation.cortesDetalle?.reduce(
+        (s, r) => s + (parseInt(r.qty, 10) || 0),
+        0
+      ) ?? 0;
+      cooking = reservation.termino || "";
+    }
+
+    const notes = [
+      ...extraNotes,
+      reservation.notas,
+    ].filter(Boolean).join('\n') || undefined;
+
     const body = {
       customer: {
         name: reservation.nombre,
@@ -376,16 +411,14 @@ export const AppProvider = ({ children }) => {
       date: reservation.fecha,
       time: reservation.hora,
       people: reservation.personas,
+      table: reservation.mesa || '',
       preferences: {
-        cut: (reservation.cortesDetalle || []).map((r) => r.corte).filter(Boolean).join(', '),
-        cooking: reservation.termino || '',
-        portions: totalQty,
+        cut: cutStr,
+        cooking: cooking,
+        portions: portions,
       },
       vip: false,
-      note:
-        [reservation.mesa && `Mesa: ${reservation.mesa}`, reservation.notas]
-          .filter(Boolean)
-          .join('\n') || undefined,
+      note: notes,
     };
     const res = await apiFetch('/api/objects/reservations', {
       method: 'POST',

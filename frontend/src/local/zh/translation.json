@@ -153,13 +153,18 @@
       "qty": { "label": "份数", "placeholder": "例如：2" },
       "doneness": { "label": "熟度", "placeholder": "选择熟度" },
       "table": { "label": "餐桌（可选）", "placeholder": "例如：露台 4" },
-      "notes": { "label": "备注", "placeholder": "过敏信息、特殊场合、儿童座椅等" }
+      "notes": { "label": "备注", "placeholder": "过敏信息、特殊场合、儿童座椅等" },
+      "tableDecoration": { "label": "餐桌装饰" },
+      "portions": { "label": "份数", "placeholder": "份数" }
     },
-    "sections": { "cuts": "偏好部位（可多行并设置份数）" },
-    "placeholders": { "selectCut": "选择一个部位" },
+    "sections": { "cuts": "选择您的肉类" },
+    "placeholders": { "selectCut": "选择肉类" },
     "labels": {
       "totalPortions": "总份数：{{totalQty}}",
-      "people": "人数：{{personas}}"
+      "people": "人数：{{personas}}",
+      "totalPrice": "预估总价：${{total}}",
+      "selectCutFirst": "请先选择肉类以启用份数",
+      "pricePerCut": "${{price}}/份"
     },
     "actions": {
       "reserve": "预订",
@@ -171,7 +176,13 @@
     "errors": {
       "header": "请检查表单",
       "nameRequired": "名字和姓氏为必填项。",
+      "nameInvalid": "名字只能包含字母和空格。",
+      "nameTooShort": "名字至少需要2个字符。",
+      "lastNameInvalid": "姓氏只能包含字母和空格。",
+      "lastNameTooShort": "姓氏至少需要2个字符。",
       "phoneRequired": "请填写联系电话。",
+      "phoneInvalid": "请输入有效的电话号码（如 3001234567）。",
+      "emailInvalid": "请输入有效的电子邮件地址。",
       "datetimeRequired": "请选择日期和时间。",
       "peopleRequired": "请填写人数。",
       "qtyExceedsPeople": "份数总和（{{totalQty}}）不能超过人数（{{personas}}）。",

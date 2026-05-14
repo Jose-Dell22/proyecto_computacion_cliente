@@ -1,14 +1,21 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container, Header, Segment, Form, Input, TextArea, Dropdown,
-  Button, Icon, Message
+  Button, Icon, Message, Checkbox
 } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useApp } from "../../context/AppContext";
+import "./ReservationForm.css";
 
 const CUT_KEYS = ["picanha", "asado", "entrania", "churrasco"];
-const DONENESS_KEYS = ["blue", "rare", "medium", "threeQuarters", "well"];
+
+const CUT_PRICES = {
+  picanha: 42000,
+  asado: 45000,
+  entrania: 35000,
+  churrasco: 39000,
+};
 
 const PEOPLE = Array.from({ length: 12 }, (_, i) => ({
   key: i + 1, text: `${i + 1}`, value: i + 1
@@ -47,9 +54,9 @@ const INITIAL = {
   hora: "",
   personas: 2,
   mesa: "",
-  termino: "",
+  decoracionMesa: false,
   notas: "",
-  cortesDetalle: [{ corte: "", qty: 1 }],
+  cortesSeleccionados: {},
 };
 
 // Obtener fecha actual en formato YYYY-MM-DD para el atributo min
@@ -62,50 +69,72 @@ const getTodayDate = () => {
 };
 
 export default function ReservationForm() {
-  // 👇 Igual que About.jsx: namespace por defecto "translation"
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { addReservation } = useApp();
   const [values, setValues] = useState(INITIAL);
-  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Opciones traducidas (recalculan si cambia el idioma)
-  const CUTS = useMemo(
-    () => CUT_KEYS.map(k => ({ key: k, text: t(`reservation.cuts.${k}`), value: k })),
-    [t]
-  );
-  const DONENESS = useMemo(
-    () => DONENESS_KEYS.map(k => ({ key: k, text: t(`reservation.doneness.${k}`), value: k })),
-    [t]
-  );
-
-  const handleChange = (_e, { name, value }) =>
+  const handleChange = (_e, { name, value }) => {
+    if (name === "nombre" || name === "apellido") {
+      value = value.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]/g, '');
+    } else if (name === "telefono") {
+      value = value.replace(/[^\d\s\-()+]/g, '');
+    }
     setValues(v => ({ ...v, [name]: value }));
+  };
 
-  const addCutRow = () =>
-    setValues(v => ({ ...v, cortesDetalle: [...v.cortesDetalle, { corte: "", qty: 1 }] }));
+  const handleCheckbox = (_e, { name, checked }) =>
+    setValues(v => ({ ...v, [name]: checked }));
 
-  const updateCutRow = (idx, field, value) =>
+  const toggleCut = (cutKey) => {
+    setValues(v => {
+      const current = { ...v.cortesSeleccionados };
+      if (current[cutKey]) {
+        delete current[cutKey];
+      } else {
+        current[cutKey] = 1;
+      }
+      return { ...v, cortesSeleccionados: current };
+    });
+  };
+
+  const updateCutPortions = (cutKey, rawQty) => {
+    const qty = parseInt(rawQty, 10);
+    if (isNaN(qty) || qty < 1) return;
     setValues(v => ({
       ...v,
-      cortesDetalle: v.cortesDetalle.map((r, i) => (i === idx ? { ...r, [field]: value } : r)),
+      cortesSeleccionados: { ...v.cortesSeleccionados, [cutKey]: qty },
     }));
+  };
 
-  const removeCutRow = (idx) =>
-    setValues(v => ({
-      ...v,
-      cortesDetalle: v.cortesDetalle.filter((_, i) => i !== idx),
-    }));
+  const totalQty = Object.values(values.cortesSeleccionados).reduce(
+    (s, q) => s + (parseInt(q, 10) || 0), 0
+  );
 
-  const totalQty = values.cortesDetalle.reduce(
-    (s, r) => s + (parseInt(r.qty, 10) || 0),
-    0
+  const totalPrice = Object.entries(values.cortesSeleccionados).reduce(
+    (sum, [cut, qty]) => sum + (CUT_PRICES[cut] || 0) * (parseInt(qty, 10) || 0), 0
   );
 
   const validate = () => {
-    if (!values.nombre || !values.apellido) return t("reservation.errors.nameRequired");
-    if (!values.telefono) return t("reservation.errors.phoneRequired");
+    const nameRegex = /^[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]+$/;
+    const phoneRegex = /^[+\d][\d\s\-()]{6,14}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!values.nombre?.trim()) return t("reservation.errors.nameRequired");
+    if (values.nombre.trim().length < 2) return t("reservation.errors.nameTooShort");
+    if (!nameRegex.test(values.nombre.trim())) return t("reservation.errors.nameInvalid");
+
+    if (!values.apellido?.trim()) return t("reservation.errors.nameRequired");
+    if (values.apellido.trim().length < 2) return t("reservation.errors.lastNameTooShort");
+    if (!nameRegex.test(values.apellido.trim())) return t("reservation.errors.lastNameInvalid");
+
+    if (!values.telefono?.trim()) return t("reservation.errors.phoneRequired");
+    if (!phoneRegex.test(values.telefono.trim())) return t("reservation.errors.phoneInvalid");
+
+    if (values.email?.trim() && !emailRegex.test(values.email.trim())) return t("reservation.errors.emailInvalid");
+
     if (!values.fecha || !values.hora) return t("reservation.errors.datetimeRequired");
     if (!values.personas) return t("reservation.errors.peopleRequired");
     
@@ -123,6 +152,7 @@ export default function ReservationForm() {
       }
     }
     
+    if (Object.keys(values.cortesSeleccionados).length === 0) return "Selecciona al menos un corte";
     if (totalQty > values.personas)
       return t("reservation.errors.qtyExceedsPeople", { totalQty, personas: values.personas });
     return "";
@@ -158,7 +188,6 @@ export default function ReservationForm() {
 
   return (
     <Container style={{ padding: "2.5rem 0" }}>
-      {/* Botón visible para salir sin reservar */}
       <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
         <Button
         color="orange"
@@ -173,7 +202,6 @@ export default function ReservationForm() {
       </Button>
       </div>
 
-      {/* Título sin icono, en naranja */}
       <Header as="h1" color="orange" textAlign="center">
         {t("reservation.title")}
         <Header.Subheader style={{ color: "#c9cdd3" }}>
@@ -181,7 +209,6 @@ export default function ReservationForm() {
         </Header.Subheader>
       </Header>
 
-      {/* Éxito */}
       {status === "success" && (
         <Segment placeholder raised textAlign="center" color="green">
           <Icon name="check circle" size="huge" color="green" />
@@ -294,83 +321,70 @@ export default function ReservationForm() {
               </Message.Content>
             </Message>
 
-            {/* Repetidor de Cortes preferidos */}
             <Header as="h4" style={{ color: "#ff7a1a" }}>
               {t("reservation.sections.cuts")}
             </Header>
 
-            {values.cortesDetalle.map((row, idx) => (
-              <Form.Group widths="equal" key={`cut-${idx}`}>
-                <Form.Field
-                  control={Dropdown}
-                  selection
-                  placeholder={t("reservation.placeholders.selectCut")}
-                  options={CUTS}
-                  label={t("reservation.fields.cut.label")}
-                  value={row.corte}
-                  onChange={(_e, { value }) => updateCutRow(idx, "corte", value)}
-                />
-                <Form.Field
-                  control={Input}
-                  type="number"
-                  min={1}
-                  step={1}
-                  label={t("reservation.fields.qty.label")}
-                  placeholder={t("reservation.fields.qty.placeholder")}
-                  value={row.qty}
-                  onChange={(_e, { value }) => updateCutRow(idx, "qty", value)}
-                />
-                <Form.Field width={3} style={{ display: "flex", alignItems: "flex-end" }}>
-                  <Button
-                    type="button"
-                    icon
-                    color="red"
-                    basic
-                    onClick={() => removeCutRow(idx)}
-                    aria-label={t("reservation.actions.removeLine")}
+            <div className="cut-list">
+              {CUT_KEYS.map(key => {
+                const price = CUT_PRICES[key];
+                const selected = !!values.cortesSeleccionados[key];
+                return (
+                  <div
+                    key={key}
+                    className={`cut-item ${selected ? "cut-item-selected" : ""}`}
                   >
-                    <Icon name="trash" />
-                  </Button>
-                </Form.Field>
-              </Form.Group>
-            ))}
-
-            <div style={{ marginBottom: "1rem" }}>
-              <Button
-                type="button"
-                basic
-                color="orange"
-                icon
-                labelPosition="left"
-                onClick={addCutRow}
-              >
-                <Icon name="plus" />
-                {t("reservation.actions.addCut")}
-              </Button>
-              <span style={{ marginLeft: 12, opacity: 0.7 }}>
-                {t("reservation.labels.totalPortions", { totalQty })} / {t("reservation.labels.people", { personas: values.personas })}
-              </span>
+                    <Checkbox
+                      checked={selected}
+                      onChange={() => toggleCut(key)}
+                    />
+                    <div className="cut-item-content">
+                      <span className="cut-item-name">{t(`reservation.cuts.${key}`)}</span>
+                      <span className="cut-item-price">${price.toLocaleString("es-CO")}/und</span>
+                    </div>
+                    <Input
+                      type="number"
+                      min={1}
+                      step={1}
+                      className="cut-portion-input"
+                      value={values.cortesSeleccionados[key] || ""}
+                      disabled={!selected}
+                      onChange={(_e, { value }) => updateCutPortions(key, value)}
+                      placeholder="0"
+                    />
+                  </div>
+                );
+              })}
             </div>
 
+            <Form.Field>
+              <div className="total-price-row">
+                <span className="total-qty-label">{t("reservation.labels.totalPortions", { totalQty })} / {t("reservation.labels.people", { personas: values.personas })}</span>
+                <div>
+                  <span className="total-price-label">{t("reservation.labels.totalPrice", { total: "" }).replace("{{total}}", "").trim()}</span>
+                  <span className="total-price-display">${totalPrice.toLocaleString("es-CO")}</span>
+                </div>
+              </div>
+            </Form.Field>
+
             <Form.Group widths="equal">
-              <Form.Field
-                control={Dropdown}
-                selection
-                options={DONENESS}
-                label={t("reservation.fields.doneness.label")}
-                name="termino"
-                value={values.termino}
-                onChange={handleChange}
-                placeholder={t("reservation.fields.doneness.placeholder")}
-              />
               <Form.Field
                 control={Input}
                 label={t("reservation.fields.table.label")}
                 placeholder={t("reservation.fields.table.placeholder")}
                 name="mesa"
+                maxLength={30}
                 value={values.mesa}
                 onChange={handleChange}
               />
+              <Form.Field style={{ paddingTop: "1.6rem" }}>
+                <Checkbox
+                  label={t("reservation.fields.tableDecoration.label")}
+                  name="decoracionMesa"
+                  checked={values.decoracionMesa}
+                  onChange={handleCheckbox}
+                />
+              </Form.Field>
             </Form.Group>
 
             <Form.Field
@@ -392,6 +406,7 @@ export default function ReservationForm() {
               loading={status === "loading"}
               disabled={status === "loading"}
             >
+            <Button color="orange" size="large" fluid>
               <Icon name="calendar plus" /> {t("reservation.actions.reserve")}
             </Button>
           </Form>

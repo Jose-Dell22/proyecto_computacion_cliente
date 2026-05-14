@@ -16,6 +16,7 @@ const reservationSchema = new mongoose.Schema({
     portions: Number
   },
   vip: Boolean,
+  table: String,
   note: String,
   status: {
     type: String,

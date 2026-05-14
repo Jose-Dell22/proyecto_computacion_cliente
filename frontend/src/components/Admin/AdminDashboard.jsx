@@ -91,7 +91,6 @@ const AdminDashboard = () => {
     hora: "",
     personas: 2,
     mesa: "",
-    termino: "",
     notas: "",
   });
 
@@ -103,17 +102,10 @@ const AdminDashboard = () => {
     phone: "",
   });
 
-  const DONENESS_KEYS = ["blue", "rare", "medium", "threeQuarters", "well"];
   const PEOPLE = Array.from({ length: 12 }, (_, i) => ({
     key: i + 1,
     text: `${i + 1}`,
     value: i + 1,
-  }));
-
-  const DONENESS = DONENESS_KEYS.map((k) => ({
-    key: k,
-    text: t(`reservation.doneness.${k}`),
-    value: k,
   }));
 
   const ORDER_STATUS_OPTIONS = [
@@ -307,7 +299,6 @@ const AdminDashboard = () => {
       hora: reservation.hora || "",
       personas: reservation.personas || 2,
       mesa: reservation.mesa || "",
-      termino: reservation.termino || "",
       notas: reservation.notas || "",
     });
     setReservationModalOpen(true);
@@ -332,7 +323,6 @@ const AdminDashboard = () => {
       hora: "",
       personas: 2,
       mesa: "",
-      termino: "",
       notas: "",
     });
     setEditingReservation(null);
@@ -964,35 +954,19 @@ const AdminDashboard = () => {
                   />
                 </Form.Group>
 
-                <Form.Group widths="equal">
-                  <Form.Field
-                    control={Dropdown}
-                    selection
-                    options={DONENESS}
-                    label={t("reservation.fields.doneness.label")}
-                    placeholder={t("admin.selectTerm")}
-                    value={reservationForm.termino}
-                    onChange={(e, { value }) =>
-                      setReservationForm({
-                        ...reservationForm,
-                        termino: value,
-                      })
-                    }
-                  />
-
-                  <Form.Field
-                    control={Input}
-                    label={t("admin.table")}
-                    placeholder={t("admin.tableNumber")}
-                    value={reservationForm.mesa}
-                    onChange={(e) =>
-                      setReservationForm({
-                        ...reservationForm,
-                        mesa: e.target.value,
-                      })
-                    }
-                  />
-                </Form.Group>
+                <Form.Field
+                  control={Input}
+                  label={t("admin.table")}
+                  placeholder={t("admin.tableNumber")}
+                  maxLength={30}
+                  value={reservationForm.mesa}
+                  onChange={(e) =>
+                    setReservationForm({
+                      ...reservationForm,
+                      mesa: e.target.value,
+                    })
+                  }
+                />
 
                 <Form.Field
                   control={TextArea}
