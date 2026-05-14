@@ -193,7 +193,8 @@
     },
     "success": {
       "title": "Reservation Received!",
-      "body": "We’ll contact you by WhatsApp or email. Redirecting shortly…"
+      "body": "We’ll contact you by WhatsApp or email."
+
     }
   },
   "cart": {

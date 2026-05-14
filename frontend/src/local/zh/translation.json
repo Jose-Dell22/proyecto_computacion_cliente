@@ -192,7 +192,7 @@
     },
     "success": {
       "title": "预订已收到！",
-      "body": "我们将通过 WhatsApp 或邮箱与您确认。稍后将自动跳转…"
+      "body": "我们将通过 WhatsApp 或邮箱与您确认。"
     }
   },
   "cart": {

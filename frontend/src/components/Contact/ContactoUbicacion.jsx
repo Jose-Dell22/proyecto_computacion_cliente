@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import './ContactoUbicacion.css'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { FaInstagram, FaFacebookF, FaWhatsapp } from 'react-icons/fa'
 import {
   Container,
@@ -23,6 +23,9 @@ import { useTranslation } from 'react-i18next'
 import { useApp } from '../../context/AppContext'
 
 export default function ContactoUbicacion() {
+  const location = useLocation()
+  const reservationSuccess = location.state?.reservationSuccess
+
   const {
     config,
     contactForm,
@@ -68,6 +71,16 @@ export default function ContactoUbicacion() {
         </span>
         <Header.Subheader>{t('contact.subtitle')}</Header.Subheader>
       </Header>
+
+      {reservationSuccess && (
+        <Message icon className="reservation-success-banner">
+          <Icon name="check circle" />
+          <Message.Content>
+            <Message.Header>{t('reservation.success.title')}</Message.Header>
+            {t('reservation.success.body')}
+          </Message.Content>
+        </Message>
+      )}
 
       {/* Tarjeta principal */}
       <Segment raised className="contact-card">

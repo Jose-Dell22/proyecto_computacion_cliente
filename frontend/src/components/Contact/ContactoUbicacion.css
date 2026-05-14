@@ -244,6 +244,23 @@
   display: none !important;
 }
 
+/* Mensaje de reserva exitosa */
+.contact-page .reservation-success-banner.ui.message{
+  background: linear-gradient(180deg, var(--brand-soft), var(--brand-card)) !important;
+  border: 1px solid var(--accent) !important;
+  border-left: 1px solid var(--accent) !important;
+  box-shadow: var(--shadow-md) !important;
+  color: var(--text) !important;
+}
+
+.contact-page .reservation-success-banner.ui.message .header{
+  color: var(--accent) !important;
+}
+
+.contact-page .reservation-success-banner.ui.message .icon{
+  color: var(--accent) !important;
+}
+
 /* Responsive */
 @media (max-width: 767px){
   .contact-page .contact-card.ui.segment{

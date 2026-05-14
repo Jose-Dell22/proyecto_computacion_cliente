@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Container, Header, Segment, Form, Input, TextArea, Dropdown,
   Button, Icon, Message, Checkbox
@@ -167,23 +167,11 @@ export default function ReservationForm() {
 
     try {
       await addReservation(values);
-      setStatus("success");
+      navigate("/contacto", { state: { reservationSuccess: true } });
     } catch (_e) {
       setErrorMsg(t("reservation.errors.submitFailed"));
       setStatus("error");
     }
-  };
-
-  useEffect(() => {
-    if (status === "success") {
-      const tmo = setTimeout(() => navigate("/contacto"), 2500);
-      return () => clearTimeout(tmo);
-    }
-  }, [status, navigate]);
-
-  const resetForAnother = () => {
-    setValues(INITIAL);
-    setStatus("idle");
   };
 
   return (
@@ -209,22 +197,7 @@ export default function ReservationForm() {
         </Header.Subheader>
       </Header>
 
-      {status === "success" && (
-        <Segment placeholder raised textAlign="center" color="green">
-          <Icon name="check circle" size="huge" color="green" />
-          <Header as="h2" content={t("reservation.success.title")} />
-          <p>{t("reservation.success.body")}</p>
-          <Button color="green" onClick={resetForAnother}>
-            <Icon name="add" /> {t("reservation.actions.reserveAnother")}
-          </Button>
-          <Button basic onClick={() => navigate("/contacto")}>
-          <Icon name="arrow left" /> Volver a Contacto
-          </Button>
-        </Segment>
-      )}
-
-      {status !== "success" && (
-        <Segment raised>
+      <Segment raised>
           <Form onSubmit={onSubmit} loading={status === "loading"}>
             {status === "error" && (
               <Message error icon>
@@ -410,7 +383,6 @@ export default function ReservationForm() {
             </Button>
           </Form>
         </Segment>
-      )}
     </Container>
   );
 }
