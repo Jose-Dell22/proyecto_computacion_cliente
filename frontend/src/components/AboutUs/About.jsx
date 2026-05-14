@@ -213,7 +213,11 @@ export default function AboutUs() {
           <Icon name="calendar" />
           {t("about.cta_title")}
         </Header>
-        <p style={{ fontSize: "1.2em", lineHeight: "1.8em", margin: "2em 0", color: 'white' }}>
+        <Button as={Link} to="/contacto" color="orange" size="large" icon labelPosition="left" style={{ marginBottom: "0.5rem" }}>
+          <Icon name="mail" />
+          {t("contact.title")}
+        </Button>
+        <p style={{ fontSize: "1.2em", lineHeight: "1.8em", margin: "0.5rem 0 0 0", color: 'white' }}>
           {t("about.cta_description")}
         </p>
       </Segment>

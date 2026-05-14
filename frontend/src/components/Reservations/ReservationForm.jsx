@@ -176,7 +176,7 @@ export default function ReservationForm() {
 
   useEffect(() => {
     if (status === "success") {
-      const tmo = setTimeout(() => navigate("/about"), 2500);
+      const tmo = setTimeout(() => navigate("/contacto"), 2500);
       return () => clearTimeout(tmo);
     }
   }, [status, navigate]);
