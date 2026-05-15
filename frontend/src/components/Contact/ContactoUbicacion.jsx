@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import './ContactoUbicacion.css'
 import { Link, useLocation } from 'react-router-dom'
 import { FaInstagram, FaFacebookF, FaWhatsapp } from 'react-icons/fa'
@@ -18,6 +18,7 @@ import {
   Embed,
 } from 'semantic-ui-react'
 import { useForm } from '../../hooks/useForm'
+import { PATTERNS, sanitizeNameInput } from '../../utils/formValidation'
 import { ICONS } from '../../config/constants'
 import { useTranslation } from 'react-i18next'
 import { useApp } from '../../context/AppContext'
@@ -35,8 +36,37 @@ export default function ContactoUbicacion() {
     loadSuggestions,
   } = useApp()
 
-  const { values, errors, isSubmitting, handleChange, handleSubmit, reset } = useForm()
   const { t } = useTranslation()
+
+  const contactRules = useMemo(
+    () => ({
+      nombre: {
+        required: true,
+        minLength: 2,
+        pattern: PATTERNS.name,
+        sanitize: sanitizeNameInput,
+        requiredMessage: t('validation.nameRequired'),
+        minLengthMessage: t('validation.nameMin'),
+        patternMessage: t('validation.nameInvalid'),
+      },
+      email: {
+        required: true,
+        pattern: PATTERNS.email,
+        requiredMessage: t('validation.emailRequired'),
+        patternMessage: t('validation.emailInvalid'),
+      },
+      mensaje: {
+        required: true,
+        minLength: 10,
+        requiredMessage: t('validation.messageRequired'),
+        minLengthMessage: t('validation.messageMin'),
+      },
+    }),
+    [t]
+  )
+
+  const { values, errors, isSubmitting, handleChange, handleSubmit, reset } =
+    useForm({}, contactRules)
 
   const reservationPath = config?.ROUTES?.RESERVATION || '/reservar'
 

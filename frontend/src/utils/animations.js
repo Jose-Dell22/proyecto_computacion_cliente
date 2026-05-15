@@ -1,13 +1,50 @@
-import { gsap } from 'gsap';
+import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CSSPlugin } from 'gsap/CSSPlugin';
 
-// Register plugins with error handling
-try {
-  gsap.registerPlugin(ScrollTrigger, CSSPlugin);
-  console.log('GSAP plugins registered successfully');
-} catch (error) {
-  console.error('Error registering GSAP plugins:', error);
+gsap.registerPlugin(ScrollTrigger);
+
+function resolveDomElement(el) {
+  if (!el) return null;
+  if (el instanceof Element) return el;
+  return null;
+}
+
+const filterElements = (elements) =>
+  (Array.isArray(elements) ? elements : [elements])
+    .map(resolveDomElement)
+    .filter(Boolean);
+
+/** Restaura visibilidad si el scroll ya no disparó la animación */
+export function showElementsIfNeeded(elements) {
+  const valid = filterElements(elements);
+  valid.forEach((el) => {
+    const opacity = Number(gsap.getProperty(el, 'opacity'));
+    if (opacity < 0.99) {
+      gsap.set(el, { opacity: 1, x: 0, y: 0, scale: 1 });
+    }
+  });
+}
+
+function isInViewport(el, threshold = 0.92) {
+  const node = resolveDomElement(el);
+  if (!node) return false;
+  const rect = node.getBoundingClientRect();
+  return rect.top < window.innerHeight * threshold && rect.bottom > 0;
+}
+
+function revealVisibleNow(elements, vars) {
+  const valid = filterElements(elements);
+  if (!valid.length) return;
+  gsap.to(valid, {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    scale: 1,
+    duration: vars.duration ?? 0.6,
+    stagger: vars.stagger ?? 0.08,
+    ease: vars.ease ?? 'power2.out',
+    overwrite: true,
+  });
 }
 
 export const animations = {
@@ -166,101 +203,33 @@ export const animations = {
 };
 
 export const scrollTriggerAnimations = {
-  fadeInOnScroll: (elements, options = {}) => {
-    if (!elements || elements.length === 0) return;
-    
-    try {
-      gsap.set(elements, { opacity: 0, y: 30 });
-      
-      const animation = gsap.to(elements, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        stagger: 0.1,
-        ease: 'power2.out',
-        delay: 0.3,
-        scrollTrigger: {
-          trigger: elements[0],
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse'
-        }
-      });
-      
-      return animation;
-    } catch (error) {
-      console.error('Error in fadeInOnScroll:', error);
-      try {
-        gsap.set(elements, { opacity: 1, y: 0 });
-      } catch (fallbackError) {
-        console.error('Fallback failed:', fallbackError);
-      }
-    }
-  },
+  fadeInOnScroll: (elements, options = {}) =>
+    staggerCardsOnScroll(elements, { y: 30, scale: 1, ...options }),
 
   slideInOnScroll: (elements, options = {}) => {
-    if (!elements || elements.length === 0) return;
-    
-    try {
-      gsap.set(elements, { opacity: 0, x: -50 });
-      
-      const animation = gsap.to(elements, {
-        opacity: 1,
-        x: 0,
-        duration: 1,
-        stagger: 0.1,
-        ease: 'power3.out',
-        delay: 0.3,
-        scrollTrigger: {
-          trigger: elements[0],
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse'
-        }
-      });
-      
-      return animation;
-    } catch (error) {
-      console.error('Error in slideInOnScroll:', error);
-      try {
-        gsap.set(elements, { opacity: 1, x: 0 });
-      } catch (fallbackError) {
-        console.error('Fallback failed:', fallbackError);
-      }
-    }
+    const valid = filterElements(elements);
+    if (!valid.length) return;
+    gsap.set(valid, { opacity: 0, x: -50 });
+    return gsap.to(valid, {
+      opacity: 1,
+      x: 0,
+      duration: 0.9,
+      stagger: 0.1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: options.trigger || valid[0],
+        start: options.start || 'top 85%',
+        once: true,
+      },
+    });
   },
 
-  scaleInOnScroll: (elements, options = {}) => {
-    if (!elements || elements.length === 0) return;
-    
-    try {
-      gsap.set(elements, { opacity: 0, scale: 0.9 });
-      
-      const animation = gsap.to(elements, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'back.out(1.7)',
-        delay: 0.3,
-        scrollTrigger: {
-          trigger: elements[0],
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse'
-        }
-      });
-      
-      return animation;
-    } catch (error) {
-      console.error('Error in scaleInOnScroll:', error);
-      try {
-        gsap.set(elements, { opacity: 1, scale: 1 });
-      } catch (fallbackError) {
-        console.error('Fallback failed:', fallbackError);
-      }
-    }
-  }
+  scaleInOnScroll: (elements, options = {}) =>
+    staggerCardsOnScroll(elements, {
+      scale: 0.88,
+      ease: 'back.out(1.4)',
+      ...options,
+    }),
 };
 
 export const createImageHoverEffect = (imageElement, options = {}) => {
@@ -340,59 +309,154 @@ export const animateHeroImages = (imageElements, options = {}) => {
   }
 };
 
-export const createStaggeredCardAnimation = (cardElements, options = {}) => {
-  if (!cardElements || cardElements.length === 0) return;
-  
-  try {
-    // Set initial state immediately
-    gsap.set(cardElements, { opacity: 0, y: 20, scale: 0.98 });
-    
-    // Animate them in with immediate visibility
-    const animation = gsap.to(cardElements, {
-      opacity: 1,
+/** Revela un bloque al entrar en viewport */
+export const revealOnScroll = (element, options = {}) => {
+  const el = filterElements(element)[0];
+  if (!el) return;
+
+  const {
+    trigger,
+    start = 'top 88%',
+    y = 40,
+    x = 0,
+    duration = 0.85,
+    delay = 0,
+    ease = 'power3.out',
+  } = options;
+
+  const scrollTriggerEl = resolveDomElement(trigger) || el;
+  if (!scrollTriggerEl) {
+    revealVisibleNow([el], { duration });
+    return;
+  }
+
+  const tween = gsap.from(el, {
+    opacity: 0,
+    x,
+    y,
+    duration,
+    delay,
+    ease,
+    scrollTrigger: {
+      trigger: scrollTriggerEl,
+      start,
+      once: true,
+      toggleActions: 'play none none none',
+    },
+  });
+
+  if (isInViewport(el) || isInViewport(scrollTriggerEl)) {
+    revealVisibleNow([el], { duration: duration * 0.7 });
+  }
+
+  return tween;
+};
+
+/** Tarjetas en cascada al hacer scroll */
+export const staggerCardsOnScroll = (cards, options = {}) => {
+  const valid = filterElements(cards);
+  if (valid.length === 0) return;
+
+  const {
+    trigger,
+    start = 'top 88%',
+    stagger = 0.12,
+    y = 50,
+    scale = 0.9,
+    duration = 0.75,
+    ease = 'power3.out',
+  } = options;
+
+  const scrollTriggerEl =
+    resolveDomElement(trigger) ||
+    resolveDomElement(valid[0]?.parentElement) ||
+    valid[0];
+
+  if (!scrollTriggerEl) {
+    revealVisibleNow(valid, { duration, stagger });
+    return;
+  }
+
+  const tween = gsap.from(valid, {
+    opacity: 0,
+    y,
+    scale,
+    duration,
+    stagger,
+    ease,
+    scrollTrigger: {
+      trigger: scrollTriggerEl,
+      start,
+      once: true,
+      toggleActions: 'play none none none',
+    },
+  });
+
+  if (isInViewport(scrollTriggerEl)) {
+    revealVisibleNow(valid, { duration: duration * 0.7, stagger });
+  }
+
+  return tween;
+};
+
+/** Alias retrocompatible */
+export const createStaggeredCardAnimation = staggerCardsOnScroll;
+
+/** Hover + zoom de imagen usando un contenedor DOM (no ref de Semantic UI Card) */
+export function bindCardInteractions(wrapper, options = {}) {
+  const node = resolveDomElement(wrapper);
+  if (!node) return;
+
+  const cardEl = node.querySelector('.ui.card') || node;
+  if (cardEl instanceof Element) {
+    setupCardLiftHover(cardEl, options.lift);
+  }
+
+  const img = node.querySelector('img');
+  if (img) {
+    createImageHoverEffect(img, { scale: options.imageScale ?? 1.06 });
+  }
+}
+
+/** Elevación de tarjeta completa al hover */
+export const setupCardLiftHover = (card, options = {}) => {
+  const el = filterElements(card)[0];
+  if (!el) return;
+
+  const {
+    liftY = -12,
+    scale = 1.03,
+    shadow = '0 18px 36px rgba(255, 123, 0, 0.35)',
+  } = options;
+
+  const onEnter = () => {
+    gsap.to(el, {
+      y: liftY,
+      scale,
+      duration: 0.35,
+      ease: 'power2.out',
+      boxShadow: shadow,
+    });
+  };
+
+  const onLeave = () => {
+    gsap.to(el, {
       y: 0,
       scale: 1,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'back.out(1.2)',
-      delay: 0.2, // Very short delay
-      scrollTrigger: {
-        trigger: cardElements[0],
-        start: 'top 90%', // Trigger later
-        end: 'bottom 10%',
-        toggleActions: 'play none none reverse',
-        onEnter: () => {
-          // Force visibility when scrolling into view
-          gsap.to(cardElements, { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.1 });
-        },
-        onLeaveBack: () => {
-          // Hide when scrolling up past
-          gsap.to(cardElements, { opacity: 0, y: 20, scale: 0.98, duration: 0.3 });
-        }
-      }
+      duration: 0.35,
+      ease: 'power2.out',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+      clearProps: 'transform',
     });
-    
-    // Fallback: make visible immediately if ScrollTrigger doesn't work
-    setTimeout(() => {
-      const firstCard = cardElements[0];
-      if (firstCard) {
-        const rect = firstCard.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          gsap.to(cardElements, { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.1 });
-        }
-      }
-    }, 500);
-    
-    return animation;
-  } catch (error) {
-    console.error('Error in staggered card animation:', error);
-    // Fallback: make elements visible immediately
-    try {
-      gsap.set(cardElements, { opacity: 1, y: 0, scale: 1 });
-    } catch (fallbackError) {
-      console.error('Fallback animation failed:', fallbackError);
-    }
-  }
+  };
+
+  el.addEventListener('mouseenter', onEnter);
+  el.addEventListener('mouseleave', onLeave);
+
+  return () => {
+    el.removeEventListener('mouseenter', onEnter);
+    el.removeEventListener('mouseleave', onLeave);
+  };
 };
 
 export const killAllAnimations = () => {

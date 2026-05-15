@@ -60,6 +60,22 @@ router.get("/objects/products/:id", (req, res, next) => {
 
 }, withResource("products"), getResource);
 
+router.get("/objects/specialties", (req, res, next) => {
+
+  console.log("--- PETICIÓN RECIBIDA ---", req.method, req.url, "ROL:", req.user?.role || 'No auth');
+
+  next();
+
+}, withResource("specialties"), getResources);
+
+router.get("/objects/specialties/:id", (req, res, next) => {
+
+  console.log("--- PETICIÓN RECIBIDA ---", req.method, req.url, "ROL:", req.user?.role || 'No auth');
+
+  next();
+
+}, withResource("specialties"), getResource);
+
 
 
 // Formularios y pedidos desde el sitio (sin token)

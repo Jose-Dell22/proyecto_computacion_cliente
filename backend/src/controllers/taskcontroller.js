@@ -1,9 +1,10 @@
-import { User, Product, Order, Contact, Reservation } from "../models/index.js";
+import { User, Product, Specialty, Order, Contact, Reservation } from "../models/index.js";
 import bcrypt from "bcryptjs";
 
 const modelRegistry = {
   users: User,
   products: Product,
+  specialties: Specialty,
   orders: Order,
   contacts: Contact,
   reservations: Reservation

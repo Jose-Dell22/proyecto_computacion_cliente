@@ -22,6 +22,13 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { useTranslation } from "react-i18next";
+import {
+  PATTERNS,
+  sanitizeNameInput,
+  sanitizePhoneInput,
+  sanitizePriceInput,
+  validateForm,
+} from "../../utils/formValidation";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
@@ -73,6 +80,9 @@ const AdminDashboard = () => {
   const [reservationModalOpen, setReservationModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [editingReservation, setEditingReservation] = useState(null);
+  const [productErrors, setProductErrors] = useState({});
+  const [reservationErrors, setReservationErrors] = useState({});
+  const [workerErrors, setWorkerErrors] = useState({});
 
   const [productForm, setProductForm] = useState({
     title: "",
@@ -203,7 +213,36 @@ const AdminDashboard = () => {
   }, [products.length, workers.length, suggestions.length, reservations.length, orders.length, t, adminUser?.rol]);
 
   const handleProductSubmit = async () => {
-    if (!productForm.title || !productForm.price || !productForm.image) return;
+    const errors = validateForm(productForm, {
+      title: {
+        required: true,
+        minLength: 2,
+        requiredMessage: t("validation.productTitleMin"),
+        minLengthMessage: t("validation.productTitleMin"),
+      },
+      price: {
+        required: true,
+        custom: (value) => {
+          const price = parseFloat(sanitizePriceInput(value));
+          if (!value || Number.isNaN(price) || price <= 0) {
+            return t("validation.priceInvalid");
+          }
+          return null;
+        },
+      },
+      image: {
+        required: true,
+        pattern: PATTERNS.url,
+        requiredMessage: t("validation.imageRequired"),
+        patternMessage: t("validation.imageInvalid"),
+      },
+    });
+
+    if (Object.keys(errors).length) {
+      setProductErrors(errors);
+      return;
+    }
+    setProductErrors({});
 
     const productData = {
       title: productForm.title,
@@ -256,18 +295,44 @@ const AdminDashboard = () => {
       category: "",
     });
     setEditingProduct(null);
+    setProductErrors({});
   };
 
   const handleReservationSubmit = async () => {
-    if (
-      !reservationForm.nombre ||
-      !reservationForm.apellido ||
-      !reservationForm.telefono ||
-      !reservationForm.fecha ||
-      !reservationForm.hora
-    ) {
+    const errors = validateForm(reservationForm, {
+      nombre: {
+        required: true,
+        minLength: 2,
+        pattern: PATTERNS.name,
+        requiredMessage: t("validation.nameRequired"),
+        patternMessage: t("validation.nameInvalid"),
+      },
+      apellido: {
+        required: true,
+        minLength: 2,
+        pattern: PATTERNS.name,
+        requiredMessage: t("validation.nameRequired"),
+        patternMessage: t("validation.nameInvalid"),
+      },
+      telefono: {
+        required: true,
+        pattern: PATTERNS.phone,
+        requiredMessage: t("validation.phoneRequired"),
+        patternMessage: t("validation.phoneInvalid"),
+      },
+      email: {
+        pattern: PATTERNS.email,
+        patternMessage: t("validation.emailInvalid"),
+      },
+      fecha: { required: true, requiredMessage: t("reservation.errors.datetimeRequired") },
+      hora: { required: true, requiredMessage: t("reservation.errors.datetimeRequired") },
+    });
+
+    if (Object.keys(errors).length) {
+      setReservationErrors(errors);
       return;
     }
+    setReservationErrors({});
 
     try {
       const flat = {
@@ -326,6 +391,7 @@ const AdminDashboard = () => {
       notas: "",
     });
     setEditingReservation(null);
+    setReservationErrors({});
   };
 
   const handleDeleteSuggestion = async (id) => {
@@ -471,20 +537,35 @@ const AdminDashboard = () => {
                   placeholder={t("admin.productNamePlaceholder")}
                   value={productForm.title}
                   onChange={(e) =>
-                    setProductForm({ ...productForm, title: e.target.value })
+                    setProductForm({
+                      ...productForm,
+                      title: e.target.value,
+                    })
+                  }
+                  error={
+                    productErrors.title
+                      ? { content: productErrors.title }
+                      : null
                   }
                   required
                 />
 
                 <Form.Field
                   control={Input}
-                  type="number"
-                  step="0.01"
+                  inputMode="decimal"
                   label={t("admin.price")}
                   placeholder="0.00"
                   value={productForm.price}
                   onChange={(e) =>
-                    setProductForm({ ...productForm, price: e.target.value })
+                    setProductForm({
+                      ...productForm,
+                      price: sanitizePriceInput(e.target.value),
+                    })
+                  }
+                  error={
+                    productErrors.price
+                      ? { content: productErrors.price }
+                      : null
                   }
                   required
                 />
@@ -510,6 +591,11 @@ const AdminDashboard = () => {
                   value={productForm.image}
                   onChange={(e) =>
                     setProductForm({ ...productForm, image: e.target.value })
+                  }
+                  error={
+                    productErrors.image
+                      ? { content: productErrors.image }
+                      : null
                   }
                   required
                 />
@@ -568,14 +654,37 @@ const AdminDashboard = () => {
               onSubmit={async (e) => {
                 e.preventDefault();
 
-                if (
-                  !workerForm.name ||
-                  !workerForm.email ||
-                  !workerForm.password ||
-                  workerForm.password.length < 5
-                ) {
+                const errors = validateForm(workerForm, {
+                  name: {
+                    required: true,
+                    minLength: 2,
+                    pattern: PATTERNS.name,
+                    requiredMessage: t("validation.nameRequired"),
+                    patternMessage: t("validation.nameInvalid"),
+                  },
+                  email: {
+                    required: true,
+                    pattern: PATTERNS.email,
+                    requiredMessage: t("validation.emailRequired"),
+                    patternMessage: t("validation.emailInvalid"),
+                  },
+                  password: {
+                    required: true,
+                    minLength: 5,
+                    requiredMessage: t("validation.passwordMin"),
+                    minLengthMessage: t("validation.passwordMin"),
+                  },
+                  phone: {
+                    pattern: PATTERNS.phone,
+                    patternMessage: t("validation.phoneInvalid"),
+                  },
+                });
+
+                if (Object.keys(errors).length) {
+                  setWorkerErrors(errors);
                   return;
                 }
+                setWorkerErrors({});
 
                 try {
                   await createWorker(workerForm);
@@ -597,7 +706,13 @@ const AdminDashboard = () => {
                   label={t("admin.firstName")}
                   value={workerForm.name}
                   onChange={(e) =>
-                    setWorkerForm({ ...workerForm, name: e.target.value })
+                    setWorkerForm({
+                      ...workerForm,
+                      name: sanitizeNameInput(e.target.value),
+                    })
+                  }
+                  error={
+                    workerErrors.name ? { content: workerErrors.name } : null
                   }
                   required
                 />
@@ -606,7 +721,15 @@ const AdminDashboard = () => {
                   label={t("admin.lastName")}
                   value={workerForm.lastName}
                   onChange={(e) =>
-                    setWorkerForm({ ...workerForm, lastName: e.target.value })
+                    setWorkerForm({
+                      ...workerForm,
+                      lastName: sanitizeNameInput(e.target.value),
+                    })
+                  }
+                  error={
+                    workerErrors.lastName
+                      ? { content: workerErrors.lastName }
+                      : null
                   }
                 />
               </Form.Group>
@@ -620,6 +743,9 @@ const AdminDashboard = () => {
                   onChange={(e) =>
                     setWorkerForm({ ...workerForm, email: e.target.value })
                   }
+                  error={
+                    workerErrors.email ? { content: workerErrors.email } : null
+                  }
                   required
                 />
                 <Form.Field
@@ -630,16 +756,30 @@ const AdminDashboard = () => {
                   onChange={(e) =>
                     setWorkerForm({ ...workerForm, password: e.target.value })
                   }
+                  error={
+                    workerErrors.password
+                      ? { content: workerErrors.password }
+                      : null
+                  }
                   required
                 />
               </Form.Group>
 
               <Form.Field
                 control={Input}
+                type="tel"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 label={t("admin.phoneLabel")}
                 value={workerForm.phone}
                 onChange={(e) =>
-                  setWorkerForm({ ...workerForm, phone: e.target.value })
+                  setWorkerForm({
+                    ...workerForm,
+                    phone: sanitizePhoneInput(e.target.value),
+                  })
+                }
+                error={
+                  workerErrors.phone ? { content: workerErrors.phone } : null
                 }
               />
 
@@ -859,8 +999,13 @@ const AdminDashboard = () => {
                     onChange={(e) =>
                       setReservationForm({
                         ...reservationForm,
-                        nombre: e.target.value,
+                        nombre: sanitizeNameInput(e.target.value),
                       })
+                    }
+                    error={
+                      reservationErrors.nombre
+                        ? { content: reservationErrors.nombre }
+                        : null
                     }
                     required
                   />
@@ -873,8 +1018,13 @@ const AdminDashboard = () => {
                     onChange={(e) =>
                       setReservationForm({
                         ...reservationForm,
-                        apellido: e.target.value,
+                        apellido: sanitizeNameInput(e.target.value),
                       })
+                    }
+                    error={
+                      reservationErrors.apellido
+                        ? { content: reservationErrors.apellido }
+                        : null
                     }
                     required
                   />
@@ -883,14 +1033,22 @@ const AdminDashboard = () => {
                 <Form.Group widths="equal">
                   <Form.Field
                     control={Input}
+                    type="tel"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     label={t("admin.phoneLabel")}
                     placeholder={t("admin.phoneLabel")}
                     value={reservationForm.telefono}
                     onChange={(e) =>
                       setReservationForm({
                         ...reservationForm,
-                        telefono: e.target.value,
+                        telefono: sanitizePhoneInput(e.target.value),
                       })
+                    }
+                    error={
+                      reservationErrors.telefono
+                        ? { content: reservationErrors.telefono }
+                        : null
                     }
                     required
                   />
@@ -906,6 +1064,11 @@ const AdminDashboard = () => {
                         ...reservationForm,
                         email: e.target.value,
                       })
+                    }
+                    error={
+                      reservationErrors.email
+                        ? { content: reservationErrors.email }
+                        : null
                     }
                   />
                 </Form.Group>
@@ -1121,6 +1284,30 @@ const AdminDashboard = () => {
   const handleLoginSubmit = async (e) => {
     e?.preventDefault?.();
     setLoginError("");
+
+    const errors = validateForm(
+      { email: loginEmail.trim(), password: loginPassword },
+      {
+        email: {
+          required: true,
+          pattern: PATTERNS.email,
+          requiredMessage: t("validation.emailRequired"),
+          patternMessage: t("validation.emailInvalid"),
+        },
+        password: {
+          required: true,
+          minLength: 5,
+          requiredMessage: t("validation.passwordMin"),
+          minLengthMessage: t("validation.passwordMin"),
+        },
+      }
+    );
+
+    if (Object.keys(errors).length) {
+      setLoginError(Object.values(errors)[0]);
+      return;
+    }
+
     setLoginLoading(true);
 
     try {

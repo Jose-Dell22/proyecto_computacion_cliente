@@ -41,13 +41,17 @@
 }
 
 .card-hover {
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
   position: relative;
 }
 
-.card-hover:hover {
-  transform: translateY(-15px) scale(1.02);
-  box-shadow: 0 15px 35px rgba(255, 106, 31, 0.4);
+/* Tarjetas animadas con GSAP (evita conflicto con CSS hover) */
+.ui.card.gsap-card {
+  transition: box-shadow 0.3s ease !important;
+  will-change: transform, opacity;
+}
+
+.ui.card.gsap-card:hover {
+  transform: none !important;
 }
 
 .image-enhanced {
@@ -78,14 +82,14 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Enhanced transitions for better UX */
-.ui.card {
-  transition: all 0.3s ease !important;
+/* Tarjetas sin clase gsap-card mantienen hover CSS suave */
+.ui.card:not(.gsap-card) {
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
 }
 
-.ui.card:hover {
+.ui.card:not(.gsap-card):hover {
   transform: translateY(-5px) !important;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Button animations */

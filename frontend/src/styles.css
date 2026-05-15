@@ -2,13 +2,69 @@
 @import './styles/variables.css';
 
 /* Reset y configuración base */
-body, html {
+html {
+  font-family: var(--font-family);
+}
+
+body,
+#root {
   margin: 0 !important;
   padding: 0 !important;
   background-color: var(--color-background) !important;
   color: var(--color-text);
-  font-family: "Lato", sans-serif;
+  font-family: var(--font-family);
   overflow-x: hidden;
+}
+
+/* Tipografía unificada (Semantic UI y componentes) */
+body,
+#root,
+button,
+input,
+optgroup,
+select,
+textarea,
+.ui,
+.ui.button,
+.ui.header,
+.ui.input,
+.ui.input input,
+.ui.menu,
+.ui.menu .item,
+.ui.card,
+.ui.card .header,
+.ui.card .description,
+.ui.card .content,
+.ui.segment,
+.ui.form,
+.ui.form label,
+.ui.table,
+.ui.message,
+.ui.modal,
+.ui.modal .header,
+.ui.modal .content,
+.ui.dropdown,
+.ui.dropdown .menu > .item,
+.ui.label,
+.ui.list,
+.ui.steps,
+.ui.tab,
+.ui.accordion,
+.ui.statistic,
+.ui.breadcrumb,
+.ui.popup,
+.ui.search,
+.ui.checkbox label,
+h1, h2, h3, h4, h5, h6,
+p, span, a, li, label, strong, em, small {
+  font-family: var(--font-family) !important;
+}
+
+/* Iconos de Semantic UI conservan su fuente */
+i.icon:before,
+i.icons:before,
+.ui.icon:before {
+  font-family: Icons !important;
 }
 
 /* Navbar */

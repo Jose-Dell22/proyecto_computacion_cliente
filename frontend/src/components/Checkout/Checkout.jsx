@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Container,
   Header,
@@ -16,6 +16,11 @@ import {
 } from 'semantic-ui-react';
 import { useApp } from '../../context/AppContext';
 import { useForm } from '../../hooks/useForm';
+import {
+  PATTERNS,
+  sanitizeNameInput,
+  sanitizePhoneInput,
+} from '../../utils/formValidation';
 import { APP_CONFIG, MESSAGES, ICONS } from '../../config/constants';
 import { useTranslation } from 'react-i18next';
 import { apiFetch } from '../../api/client';
@@ -32,8 +37,49 @@ export default function Checkout() {
     clearCart,
   } = useApp();
 
-  const { values, errors, isSubmitting, handleChange, handleSubmit, reset } = useForm();
   const { t } = useTranslation();
+
+  const checkoutRules = useMemo(
+    () => ({
+      nombre: {
+        required: true,
+        minLength: 2,
+        pattern: PATTERNS.name,
+        sanitize: sanitizeNameInput,
+        requiredMessage: t('validation.nameRequired'),
+        minLengthMessage: t('validation.nameMin'),
+        patternMessage: t('validation.nameInvalid'),
+      },
+      email: {
+        required: true,
+        pattern: PATTERNS.email,
+        requiredMessage: t('validation.emailRequired'),
+        message: t('validation.emailInvalid'),
+      },
+      telefono: {
+        required: true,
+        pattern: PATTERNS.phone,
+        sanitize: sanitizePhoneInput,
+        requiredMessage: t('validation.phoneRequired'),
+        message: t('validation.phoneInvalid'),
+      },
+      direccion: {
+        required: true,
+        minLength: 5,
+        requiredMessage: t('validation.addressRequired'),
+        message: t('validation.addressMin'),
+      },
+      terms: {
+        required: true,
+        type: 'checkbox',
+        message: t('validation.termsRequired'),
+      },
+    }),
+    [t]
+  );
+
+  const { values, errors, isSubmitting, handleChange, handleSubmit, reset } =
+    useForm({}, checkoutRules);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderData, setOrderData] = useState(null);
 
@@ -200,6 +246,9 @@ export default function Checkout() {
 
               <Form.Field
                 control={Input}
+                type="tel"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 label={t('checkout.phone')}
                 placeholder={t('checkout.phone_placeholder')}
                 name="telefono"
@@ -244,7 +293,9 @@ export default function Checkout() {
                   label={t('checkout.terms_label')}
                   name="terms"
                   checked={values.terms || false}
-                  onChange={(e, { checked }) => handleChange({ target: { name: 'terms', value: checked } })}
+                  onChange={(_e, { checked }) =>
+                    handleChange(_e, { name: 'terms', checked })
+                  }
                   error={errors.terms ? { content: errors.terms } : null}
                   required
                 />

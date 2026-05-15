@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
   Card,
   Image,
@@ -12,14 +12,13 @@ import {
 import { useApp } from "../../context/AppContext";
 import { ICONS } from "../../config/constants";
 import { useTranslation } from "react-i18next";
-import { 
-  createStaggeredCardAnimation, 
-  createImageHoverEffect,
-  scrollTriggerAnimations,
-  animations,
-  refreshScrollTrigger
+import {
+  bindCardInteractions,
+  revealOnScroll,
+  staggerCardsOnScroll,
 } from "../../utils/animations";
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGsapScroll } from "../../hooks/useGsapScroll";
+import { matchesCategoryFilter } from "../../utils/productCategory";
 import "./Products.css";
 
 const Products = () => {
@@ -29,74 +28,53 @@ const Products = () => {
   const [addedMessage, setAddedMessage] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const { t } = useTranslation();
 
   const loading = productsLoading;
 
-  // Refs for animations
   const productCardsRef = useRef([]);
   const headerRef = useRef(null);
+  const filtersRef = useRef(null);
+  const sectionRef = useRef(null);
 
-  useEffect(() => {
-    try {
-      // Animate header
-      if (headerRef.current) {
-        animations.slideInLeft(headerRef.current, { duration: 1, opacity: 0, x: -50 });
-      }
-
-      // Animate product cards with stagger effect
-      if (productCardsRef.current.length > 0) {
-        createStaggeredCardAnimation(productCardsRef.current);
-        productCardsRef.current.forEach(card => {
-          if (card) {
-            const img = card.querySelector('img');
-            if (img) {
-              createImageHoverEffect(img, { scale: 1.05 });
-            }
-          }
-        });
-      }
-    } catch (error) {
-      console.error('Error in GSAP animations:', error);
-    }
-
-    // Refresh ScrollTrigger after animations are set up
-    refreshScrollTrigger();
-
-    // Cleanup animations on unmount
-    return () => {
-      try {
-        // Kill all ScrollTrigger instances and animations for this component
-        ScrollTrigger.getAll().forEach(trigger => {
-          if (trigger.trigger && (
-            trigger.trigger.closest('[data-products-component]') ||
-            productCardsRef.current.includes(trigger.trigger) ||
-            trigger.trigger === headerRef.current
-          )) {
-            trigger.kill();
-          }
-        });
-        
-        // Kill animations on refs
-        if (headerRef.current) {
-          gsap.killTweensOf(headerRef.current);
-        }
-        productCardsRef.current.forEach(card => {
-          if (card) gsap.killTweensOf(card);
-        });
-      } catch (error) {
-        console.error('Error cleaning up animations:', error);
-      }
-    };
-  }, [products, searchTerm, visibleCount]);
-
-  // FILTRO DE BÚSQUEDA
-  const filteredProducts = products.filter((item) =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProducts = products.filter(
+    (item) =>
+      matchesCategoryFilter(item, categoryFilter) &&
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
+
+  useGsapScroll(() => {
+    if (loading) return;
+
+    if (headerRef.current) {
+      revealOnScroll(headerRef.current, {
+        trigger: sectionRef.current,
+        x: -40,
+        y: 0,
+      });
+    }
+
+    if (filtersRef.current) {
+      revealOnScroll(filtersRef.current, {
+        trigger: sectionRef.current,
+        y: 24,
+        delay: 0.1,
+      });
+    }
+
+    const cards = productCardsRef.current.filter(Boolean);
+    if (cards.length) {
+      staggerCardsOnScroll(cards, {
+        trigger: sectionRef.current,
+        stagger: 0.08,
+      });
+      cards.forEach((wrapper) => bindCardInteractions(wrapper));
+    }
+  }, [loading, visibleProducts.length, categoryFilter, searchTerm]);
 
   const handleAddToCart = (item) => {
     addToCart(item);
@@ -118,13 +96,14 @@ const Products = () => {
   return (
     <div
       className="products-container"
+      data-products-component
+      ref={sectionRef}
       style={{
         position: "relative",
         backgroundColor: "#000",
         paddingBottom: "0.5em",
       }}
     >
-      {/* OVERLAY OSCURO */}
       <div
         className="products-overlay"
         style={{
@@ -143,28 +122,50 @@ const Products = () => {
         className="products-content"
         style={{ position: "relative", zIndex: 1, paddingTop: "4em" }}
       >
-        {/* TÍTULO */}
-        <Header
-          ref={headerRef}
-          as="h1"
-          className="products-header"
-          style={{
-            color: "#fff",
-            display: "inline-block",
-            padding: "0.6em 1.5em",
-            borderRadius: "14px",
-            textTransform: "uppercase",
-            letterSpacing: "2px",
-            background: "linear-gradient(45deg, #ff7b00, #ff4500)",
-            boxShadow: "0 4px 15px rgba(255,123,0,0.4)",
-            fontSize: "1.8em",
-            fontWeight: "800",
-          }}
-        >
-          {config.RESTAURANT.name}
-        </Header>
+        <div ref={headerRef} style={{ display: "inline-block" }}>
+          <Header
+            as="h1"
+            className="products-header"
+            style={{
+              color: "#fff",
+              display: "inline-block",
+              padding: "0.6em 1.5em",
+              borderRadius: "14px",
+              textTransform: "uppercase",
+              letterSpacing: "2px",
+              background: "linear-gradient(45deg, #ff7b00, #ff4500)",
+              boxShadow: "0 4px 15px rgba(255,123,0,0.4)",
+              fontSize: "1.8em",
+              fontWeight: "800",
+              margin: 0,
+            }}
+          >
+            {config.RESTAURANT.name}
+          </Header>
+        </div>
 
-        {/* INPUT DE BÚSQUEDA */}
+        <div ref={filtersRef} className="products-category-filters">
+          {[
+            { key: "all", label: t("products.filter_all") },
+            { key: "food", label: t("products.filter_food") },
+            { key: "drink", label: t("products.filter_drinks") },
+          ].map(({ key, label }) => (
+            <button
+              key={key}
+              type="button"
+              className={`products-filter-btn${
+                categoryFilter === key ? " products-filter-btn--active" : ""
+              }`}
+              onClick={() => {
+                setCategoryFilter(key);
+                setVisibleCount(config.APP.productsPerPage);
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         <div style={{ marginTop: "1.5em", marginBottom: "2em" }}>
           <input
             type="text"
@@ -192,7 +193,6 @@ const Products = () => {
           />
         </div>
 
-        {/* MENSAJE CUANDO SE AGREGA */}
         {addedMessage && (
           <Message positive style={{ marginTop: "1em" }}>
             <Icon name={ICONS.check} />
@@ -200,7 +200,6 @@ const Products = () => {
           </Message>
         )}
 
-        {/* LISTADO DE PRODUCTOS */}
         <Card.Group
           centered
           itemsPerRow={4}
@@ -208,10 +207,13 @@ const Products = () => {
           style={{ marginTop: "2em", marginBottom: "3em" }}
         >
           {visibleProducts.map((item, index) => (
-            <Card
+            <div
               key={item.id ?? item._id}
-              ref={el => productCardsRef.current[index] = el}
-              className="card-hover"
+              ref={(el) => (productCardsRef.current[index] = el)}
+              className="product-card-wrap"
+            >
+              <Card
+              className="gsap-card card-hover"
               style={{
                 background: "#fff",
                 borderRadius: "16px",
@@ -301,10 +303,10 @@ const Products = () => {
                 </Button>
               </Card.Content>
             </Card>
+            </div>
           ))}
         </Card.Group>
 
-        {/* BOTÓN CARGAR MÁS */}
         {visibleCount < filteredProducts.length && (
           <div
             style={{

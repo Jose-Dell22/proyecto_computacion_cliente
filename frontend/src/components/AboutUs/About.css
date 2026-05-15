@@ -1,0 +1,106 @@
+.about-hero.ui.segment {
+  position: relative;
+  padding: 6em 0;
+  margin: 0;
+  border: none;
+  border-radius: 0 0 1em 1em;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  background-image: url("https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=2000&q=80");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.about-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.55) 50%,
+    rgba(0, 0, 0, 0.68) 100%
+  );
+  z-index: 1;
+}
+
+.about-hero__content {
+  position: relative;
+  z-index: 2;
+}
+
+.about-hero .ui.header,
+.about-hero .ui.header .icon {
+  color: #fff !important;
+}
+
+.about-page {
+  background: #0f0f0f;
+  color: #fff;
+  padding-bottom: 3em;
+}
+
+.about-page .ui.container {
+  color: #fff;
+}
+
+.about-page .ui.header,
+.about-page .ui.header .content,
+.about-page .ui.header .sub.header,
+.about-page .ui.header .icon,
+.about-page p,
+.about-page .ui.card .header,
+.about-page .ui.card .description,
+.about-page .ui.card .meta,
+.about-page .ui.card .content {
+  color: #fff !important;
+}
+
+.about-page .ui.segment {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  color: #fff;
+}
+
+.about-page .ui.segment.raised,
+.about-page .about-history-body {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #fff;
+}
+
+.about-page .ui.divider {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.about-page .ui.card {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+  color: #fff;
+}
+
+.about-page .ui.card .header {
+  color: #fff !important;
+}
+
+.about-page .about-stat-number.ui.header {
+  color: #fff !important;
+}
+
+.about-page .about-cta.ui.segment {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 123, 0, 0.35) 0%,
+    rgba(211, 84, 0, 0.25) 100%
+  ) !important;
+  border: 1px solid rgba(255, 123, 0, 0.4) !important;
+  border-radius: 12px;
+  margin-top: 2em;
+}
+
+.about-page .about-cta p {
+  color: #fff !important;
+}

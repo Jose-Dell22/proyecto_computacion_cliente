@@ -35,6 +35,7 @@
   "menu": {
     "title": "Especialidades al Barril",
     "added_message": "Agregado al carrito.",
+    "no_specialties": "No hay especialidades disponibles en este momento.",
     "items": {
       "beef_barrel": {
         "title": "Carne al Barril",
@@ -64,8 +65,10 @@
   },
   "products": {
     "load_more": "Cargar más",
-    "search_placeholder": "Buscar producto..."
-
+    "search_placeholder": "Buscar producto...",
+    "filter_all": "Todos",
+    "filter_food": "Comidas",
+    "filter_drinks": "Bebidas"
   },
   "contact": {
     "title": "Contáctanos",
@@ -177,9 +180,9 @@
     "errors": {
       "header": "Revisa el formulario",
       "nameRequired": "El nombre y apellido son obligatorios.",
-      "nameInvalid": "El nombre solo debe contener letras y espacios.",
+      "nameInvalid": "El nombre solo debe contener letras y espacios (incluye caracteres chinos).",
       "nameTooShort": "El nombre debe tener al menos 2 caracteres.",
-      "lastNameInvalid": "El apellido solo debe contener letras y espacios.",
+      "lastNameInvalid": "El apellido solo debe contener letras y espacios (incluye caracteres chinos).",
       "lastNameTooShort": "El apellido debe tener al menos 2 caracteres.",
       "phoneRequired": "Ingresa un número de teléfono.",
       "phoneInvalid": "Ingresa un número de teléfono válido (ej: 3001234567).",
@@ -328,5 +331,26 @@
     "orderDetails": "Detalles del Pedido",
     "items": "Ítems",
     "viewItems": "Ver Ítems"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio.",
+    "nameRequired": "Ingresa tu nombre.",
+    "nameInvalid": "Solo letras y espacios (incluye caracteres chinos).",
+    "nameMin": "Mínimo 2 caracteres.",
+    "emailRequired": "Ingresa tu correo.",
+    "emailInvalid": "Correo no válido.",
+    "phoneRequired": "Ingresa tu teléfono.",
+    "phoneInvalid": "Solo números (7 a 15 dígitos, ej: 3001234567).",
+    "addressRequired": "Ingresa la dirección de entrega.",
+    "addressMin": "La dirección es muy corta.",
+    "messageRequired": "Escribe tu mensaje.",
+    "messageMin": "El mensaje debe tener al menos 10 caracteres.",
+    "termsRequired": "Debes aceptar los términos y condiciones.",
+    "priceRequired": "Ingresa un precio válido.",
+    "priceInvalid": "Precio inválido (solo números).",
+    "imageRequired": "Ingresa la URL de la imagen.",
+    "imageInvalid": "URL de imagen inválida (debe empezar con http:// o https://).",
+    "passwordMin": "La contraseña debe tener al menos 5 caracteres.",
+    "productTitleMin": "El nombre del producto es muy corto."
   }
 }

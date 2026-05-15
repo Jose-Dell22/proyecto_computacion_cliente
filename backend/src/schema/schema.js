@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+const phoneSchema = z
+  .string()
+  .regex(/^\d{7,15}$/, {
+    message: "Phone must contain 7 to 15 digits only",
+  })
+  .optional()
+  .or(z.literal(""));
+
 export const registerSchema = z.object({
   name: z.string({
     required_error: "The name is required",
@@ -21,7 +29,7 @@ export const registerSchema = z.object({
     message: "Password must be at least 5 characters",
   }),
 
-  phone: z.string().optional(),
+  phone: phoneSchema,
 });
 
 export const workerCreateSchema = z.object({
@@ -31,7 +39,7 @@ export const workerCreateSchema = z.object({
   password: z
     .string()
     .min(5, { message: "Password must be at least 5 characters" }),
-  phone: z.string().optional(),
+  phone: phoneSchema,
 });
 
 export const loginSchema = z.object({

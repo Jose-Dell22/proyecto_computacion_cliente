@@ -24,6 +24,12 @@ export function normalizeProduct(p) {
   return { ...p, id };
 }
 
+export function normalizeSpecialty(s) {
+  if (!s) return null;
+  const id = toId(s);
+  return { ...s, id };
+}
+
 function mapProfileToAdmin(u) {
   return {
     id: toId({ _id: u.userId ?? u.id }) ?? u.userId,
@@ -127,6 +133,8 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(true);
+  const [specialties, setSpecialties] = useState([]);
+  const [specialtiesLoading, setSpecialtiesLoading] = useState(true);
   
   // Inicializar carrito desde localStorage
   const [cart, setCart] = useState(() => {
@@ -240,6 +248,20 @@ export const AppProvider = ({ children }) => {
     }
   }, []);
 
+  const loadSpecialties = useCallback(async () => {
+    try {
+      setSpecialtiesLoading(true);
+      const res = await apiFetch('/api/objects/specialties');
+      if (!res.ok) throw new Error('Error al cargar especialidades');
+      const data = await res.json();
+      setSpecialties(data.map(normalizeSpecialty).filter(Boolean));
+    } catch (error) {
+      console.error('Error al cargar especialidades:', error);
+    } finally {
+      setSpecialtiesLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), APP_CONFIG.APP.loadingTime);
     return () => clearTimeout(timer);
@@ -247,7 +269,8 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     loadProducts();
-  }, [loadProducts]);
+    loadSpecialties();
+  }, [loadProducts, loadSpecialties]);
 
   useEffect(() => {
     (async () => {
@@ -566,6 +589,8 @@ export const AppProvider = ({ children }) => {
     loading,
     products,
     productsLoading,
+    specialties,
+    specialtiesLoading,
     cart,
     contactForm,
     suggestions,
@@ -586,6 +611,7 @@ export const AppProvider = ({ children }) => {
     submitContactMessage,
     loadSuggestions: fetchContactsAsSuggestions,
     loadProducts,
+    loadSpecialties,
     addProduct,
     updateProduct,
     deleteProduct,

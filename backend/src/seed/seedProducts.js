@@ -1,6 +1,59 @@
 import Product from "../models/Product.js";
 
-/** Catálogo inicial (Neiva / parrilla). Solo se inserta si la colección está vacía. */
+const BEVERAGES = [
+  {
+    _id: "507f1f77bcf86cd799439031",
+    title: "Gaseosa personal",
+    description: "Coca-Cola, Sprite o Colombiana, fría.",
+    price: 5000,
+    category: "drink",
+    image:
+      "https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=800&q=80",
+    available: true,
+  },
+  {
+    _id: "507f1f77bcf86cd799439032",
+    title: "Cerveza nacional",
+    description: "Cerveza fría, botella o lata.",
+    price: 8000,
+    category: "drink",
+    image:
+      "https://images.unsplash.com/photo-1608270586620-248524c67de9?auto=format&fit=crop&w=800&q=80",
+    available: true,
+  },
+  {
+    _id: "507f1f77bcf86cd799439033",
+    title: "Jugo natural",
+    description: "Jugo de fruta de temporada, sin azúcar añadida.",
+    price: 7000,
+    category: "drink",
+    image:
+      "https://images.unsplash.com/photo-1622597467836-f3285f2131b8?auto=format&fit=crop&w=800&q=80",
+    available: true,
+  },
+  {
+    _id: "507f1f77bcf86cd799439035",
+    title: "Agua con gas",
+    description: "Agua mineral con gas, vaso 500 ml.",
+    price: 4000,
+    category: "drink",
+    image:
+      "https://images.pexels.com/photos/4045205/pexels-photo-4045205.jpeg?auto=compress&cs=tinysrgb&w=800",
+    available: true,
+  },
+  {
+    _id: "507f1f77bcf86cd799439036",
+    title: "Agua natural",
+    description: "Agua natural sin gas, vaso 500 ml.",
+    price: 3500,
+    category: "drink",
+    image:
+      "https://images.pexels.com/photos/4792690/pexels-photo-4792690.jpeg?auto=compress&cs=tinysrgb&w=800",
+    available: true,
+  },
+];
+
+/** Catálogo inicial (Neiva / parrilla). */
 const BASE_PRODUCTS = [
   {
     _id: "507f1f77bcf86cd799439011",
@@ -8,7 +61,7 @@ const BASE_PRODUCTS = [
     description:
       "Selección de cortes premium a la parrilla con guarnición y chimichurri de la casa.",
     price: 48000,
-    category: "parrilla",
+    category: "food",
     image:
       "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80",
     available: true,
@@ -18,7 +71,7 @@ const BASE_PRODUCTS = [
     title: "Picanha (punta de anca)",
     description: "Corte jugoso en su punto, ideal para compartir.",
     price: 42000,
-    category: "parrilla",
+    category: "food",
     image:
       "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80",
     available: true,
@@ -28,7 +81,7 @@ const BASE_PRODUCTS = [
     title: "Costillas BBQ",
     description: "Costillas glaseadas con salsa BBQ ahumada, tiernas al horno y parrilla.",
     price: 38000,
-    category: "parrilla",
+    category: "food",
     image:
       "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=800&q=80",
     available: true,
@@ -38,7 +91,7 @@ const BASE_PRODUCTS = [
     title: "Chorizo parrillero",
     description: "Chorizo artesanal dorado a la parrilla con arepa o papas.",
     price: 25000,
-    category: "parrilla",
+    category: "food",
     image:
       "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80",
     available: true,
@@ -46,9 +99,10 @@ const BASE_PRODUCTS = [
   {
     _id: "507f1f77bcf86cd799439015",
     title: "Hamburguesa a la parrilla",
-    description: "Jugosa hamburguesa de carne premium a la parrilla, servida con lechuga, tomate, queso y nuestra salsa especial.",
+    description:
+      "Jugosa hamburguesa de carne premium a la parrilla, servida con lechuga, tomate, queso y nuestra salsa especial.",
     price: 45000,
-    category: "parrilla",
+    category: "food",
     image:
       "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
     available: true,
@@ -58,7 +112,7 @@ const BASE_PRODUCTS = [
     title: "Pechuga a la parrilla",
     description: "Pechuga marinada, jugosa y con notas ahumadas.",
     price: 30000,
-    category: "parrilla",
+    category: "food",
     image:
       "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=800&q=80",
     available: true,
@@ -68,7 +122,7 @@ const BASE_PRODUCTS = [
     title: "Trilogía parrillera",
     description: "Tres cortes en un solo plato: mezcla de sabores de la casa.",
     price: 52000,
-    category: "parrilla",
+    category: "food",
     image:
       "https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=800&q=80",
     available: true,
@@ -78,17 +132,17 @@ const BASE_PRODUCTS = [
     title: "Churrasco",
     description: "Lomo fino a la parrilla, acompañado de ensalada y papa.",
     price: 39000,
-    category: "parrilla",
+    category: "food",
     image:
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
     available: true,
   },
+  ...BEVERAGES,
 ];
 
-export async function seedProductsIfEmpty() {
-  const count = await Product.countDocuments();
-  if (count > 0) return;
-
+export async function seedProducts() {
   await Product.insertMany(BASE_PRODUCTS);
-  console.log(`Catálogo inicial: ${BASE_PRODUCTS.length} productos cargados en la base de datos.`);
+  console.log(
+    `Catálogo: ${BASE_PRODUCTS.length} productos cargados en la base de datos.`
+  );
 }

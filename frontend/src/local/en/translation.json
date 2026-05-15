@@ -35,6 +35,7 @@
   "menu": {
     "title": "Barrel Specialties",
     "added_message": "Added to cart.",
+    "no_specialties": "No specialties are available at the moment.",
     "items": {
       "beef_barrel": {
         "title": "Barrel Beef",
@@ -64,8 +65,10 @@
   },
   "products": {
     "load_more": "Load More",
-    "search_placeholder": "Search product..."
-
+    "search_placeholder": "Search product...",
+    "filter_all": "All",
+    "filter_food": "Food",
+    "filter_drinks": "Drinks"
   },
   "contact": {
     "title": "Contact Us",
@@ -177,9 +180,9 @@
     "errors": {
       "header": "Please check the form",
       "nameRequired": "First and last name are required.",
-      "nameInvalid": "Name must only contain letters and spaces.",
+      "nameInvalid": "Name must only contain letters and spaces (including Chinese).",
       "nameTooShort": "Name must be at least 2 characters.",
-      "lastNameInvalid": "Last name must only contain letters and spaces.",
+      "lastNameInvalid": "Last name must only contain letters and spaces (including Chinese).",
       "lastNameTooShort": "Last name must be at least 2 characters.",
       "phoneRequired": "Please enter a phone number.",
       "phoneInvalid": "Please enter a valid phone number (e.g. 3001234567).",
@@ -277,5 +280,26 @@
     "workerRole": "Worker",
     "noWorkers": "No workers registered yet.",
     "testAccountsHint": "Test accounts: admin@carnesalbarril.com / admin123 (admin). cliente@carnesalbarril.com / cliente123 (customer)."
+  },
+  "validation": {
+    "required": "This field is required.",
+    "nameRequired": "Enter your name.",
+    "nameInvalid": "Letters and spaces only (including Chinese characters).",
+    "nameMin": "At least 2 characters.",
+    "emailRequired": "Enter your email.",
+    "emailInvalid": "Invalid email.",
+    "phoneRequired": "Enter your phone number.",
+    "phoneInvalid": "Numbers only (7–15 digits, e.g. 3001234567).",
+    "addressRequired": "Enter the delivery address.",
+    "addressMin": "Address is too short.",
+    "messageRequired": "Write your message.",
+    "messageMin": "Message must be at least 10 characters.",
+    "termsRequired": "You must accept the terms and conditions.",
+    "priceRequired": "Enter a valid price.",
+    "priceInvalid": "Invalid price (numbers only).",
+    "imageRequired": "Enter the image URL.",
+    "imageInvalid": "Invalid image URL (must start with http:// or https://).",
+    "passwordMin": "Password must be at least 5 characters.",
+    "productTitleMin": "Product name is too short."
   }
 }

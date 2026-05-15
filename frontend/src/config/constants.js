@@ -59,29 +59,11 @@ export const APP_CONFIG = {
   },
 };
 
-// Configuración de validación de formularios
-export const VALIDATION_RULES = {
-  name: {
-    required: true,
-    minLength: 2,
-    message: 'Ingresa tu nombre.',
-  },
-  email: {
-    required: true,
-    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i,
-    message: 'Correo no válido.',
-  },
-  message: {
-    required: true,
-    minLength: 10,
-    message: 'Cuéntanos un poco más (≥ 10 caracteres).',
-  },
-};
-
 // Configuración de mensajes
 export const MESSAGES = {
   loading: 'Cargando Carnes al Barril...',
   loadingProducts: 'Cargando productos...',
+  loadingSpecialties: 'Cargando especialidades...',
   contactSuccess: '¡Gracias! Recibimos tu mensaje y te contactaremos pronto.',
   contactError: 'Ocurrió un error al enviar. Intenta de nuevo.',
   productAdded: 'fue agregado al carrito 🛒',

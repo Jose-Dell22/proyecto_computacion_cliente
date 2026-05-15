@@ -6,6 +6,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useApp } from "../../context/AppContext";
+import {
+  PATTERNS,
+  sanitizeNameInput,
+  sanitizePhoneInput,
+} from "../../utils/formValidation";
 import "./ReservationForm.css";
 
 const CUT_KEYS = ["picanha", "asado", "entrania", "churrasco"];
@@ -78,11 +83,11 @@ export default function ReservationForm() {
 
   const handleChange = (_e, { name, value }) => {
     if (name === "nombre" || name === "apellido") {
-      value = value.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]/g, '');
+      value = sanitizeNameInput(value);
     } else if (name === "telefono") {
-      value = value.replace(/[^\d\s\-()+]/g, '');
+      value = sanitizePhoneInput(value);
     }
-    setValues(v => ({ ...v, [name]: value }));
+    setValues((v) => ({ ...v, [name]: value }));
   };
 
   const handleCheckbox = (_e, { name, checked }) =>
@@ -118,8 +123,8 @@ export default function ReservationForm() {
   );
 
   const validate = () => {
-    const nameRegex = /^[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]+$/;
-    const phoneRegex = /^[+\d][\d\s\-()]{6,14}$/;
+    const nameRegex = PATTERNS.name;
+    const phoneRegex = PATTERNS.phone;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!values.nombre?.trim()) return t("reservation.errors.nameRequired");
@@ -233,6 +238,9 @@ export default function ReservationForm() {
             <Form.Group widths="equal">
               <Form.Field
                 control={Input}
+                type="tel"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 label={t("reservation.fields.phone.label")}
                 placeholder={t("reservation.fields.phone.placeholder")}
                 name="telefono"

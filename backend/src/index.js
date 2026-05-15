@@ -7,8 +7,7 @@ import dotenv from "dotenv";
 
 import authRoutes from "./routes/Auth.routes.js";
 import taskRoute from "./routes/task.routes.js";
-import { seedProductsIfEmpty } from "./seed/seedProducts.js";
-import { seedTestUsersIfMissing } from "./seed/seedUsers.js";
+import { resetAndSeedDatabase } from "./seed/resetDatabase.js";
 
 const app = express();
 dotenv.config();
@@ -71,8 +70,7 @@ const PORT = 4000;
 
 async function start() {
   await connectDB();
-  await seedProductsIfEmpty();
-  await seedTestUsersIfMissing();
+  await resetAndSeedDatabase();
   app.listen(PORT, () => {
     console.log(`🚀 Backend corriendo en puerto: ${PORT}`);
     console.log(`🌐 Frontend corre en puerto separado: http://localhost:5173`);

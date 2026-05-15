@@ -28,11 +28,8 @@ const TEST_ACCOUNTS = [
   },
 ];
 
-export async function seedTestUsersIfMissing() {
+export async function seedTestUsers() {
   for (const acc of TEST_ACCOUNTS) {
-    const exists = await User.findOne({ email: acc.email });
-    if (exists) continue;
-
     const passwordHash = await bcrypt.hash(acc.plainPassword, 10);
     await User.create({
       email: acc.email,
