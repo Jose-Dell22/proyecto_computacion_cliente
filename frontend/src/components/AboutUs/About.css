@@ -1,6 +1,6 @@
 .about-hero.ui.segment {
   position: relative;
-  padding: 6em 0;
+  padding: 6em 1em;
   margin: 0;
   border: none;
   border-radius: 0 0 1em 1em;
@@ -15,12 +15,14 @@
 .about-hero__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.72) 0%,
-    rgba(0, 0, 0, 0.55) 50%,
-    rgba(0, 0, 0, 0.68) 100%
-  );
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.78) 0%,
+      rgba(0, 0, 0, 0.58) 48%,
+      rgba(0, 0, 0, 0.76) 100%
+    ),
+    radial-gradient(circle at center, rgba(255, 123, 0, 0.22), transparent 45%);
   z-index: 1;
 }
 
@@ -29,31 +31,36 @@
   z-index: 2;
 }
 
-.about-hero .ui.header,
-.about-hero .ui.header .icon {
+.about-hero__title.ui.header {
   color: #fff !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
 }
 
+.about-hero__title.ui.header .icon {
+  color: #ff7b00 !important;
+  margin-right: 0.45rem !important;
+}
+
+.about-hero__subtitle.ui.header {
+  color: rgba(255, 255, 255, 0.88) !important;
+  font-weight: 400 !important;
+  margin-top: 0.8rem !important;
+}
+
+/* === Página general === */
 .about-page {
-  background: #0f0f0f;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 123, 0, 0.08), transparent 30%),
+    radial-gradient(circle at 85% 40%, rgba(255, 69, 0, 0.06), transparent 32%),
+    #0f0f0f;
   color: #fff;
-  padding-bottom: 3em;
+  padding: 3em 0 3.5em;
 }
 
 .about-page .ui.container {
   color: #fff;
-}
-
-.about-page .ui.header,
-.about-page .ui.header .content,
-.about-page .ui.header .sub.header,
-.about-page .ui.header .icon,
-.about-page p,
-.about-page .ui.card .header,
-.about-page .ui.card .description,
-.about-page .ui.card .meta,
-.about-page .ui.card .content {
-  color: #fff !important;
 }
 
 .about-page .ui.segment {
@@ -63,44 +70,380 @@
   color: #fff;
 }
 
-.about-page .ui.segment.raised,
-.about-page .about-history-body {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  color: #fff;
+.about-section.ui.segment {
+  padding: 2.6em 0 !important;
 }
 
+.about-section--history.ui.segment {
+  padding-top: 1.2em !important;
+}
+
+.about-section-title.ui.header,
+.about-cta__title.ui.header {
+  color: #fff !important;
+  font-size: 1.65rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 1.4rem !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.85rem;
+  letter-spacing: 0.03em;
+}
+
+.about-section-title__icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff7b00, #ff4500);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(255, 91, 0, 0.28);
+  flex-shrink: 0;
+}
+
+.about-section-title__icon .icon {
+  margin: 0 !important;
+  font-size: 1.05rem !important;
+  color: #fff !important;
+}
+
+.about-divider.ui.divider,
 .about-page .ui.divider {
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
 }
 
-.about-page .ui.card {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+/* === Historia === */
+.about-history-body.ui.segment.raised {
+  max-width: 980px;
+  margin: 0 auto !important;
+  padding: 2.3em 2.5em !important;
+  background: rgba(255, 255, 255, 0.065) !important;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
+  border-radius: 18px !important;
   color: #fff;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28) !important;
+  backdrop-filter: blur(8px);
 }
 
-.about-page .ui.card .header {
+.about-history-text {
+  font-size: 1.08em;
+  line-height: 1.85em;
+  text-align: center;
+  margin: 0 0 1.4em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.about-history-text:last-child {
+  margin-bottom: 0;
+}
+
+/* === Tarjetas generales === */
+.about-card.ui.card {
+  width: 100% !important;
+  height: 100%;
+  min-height: 150px;
+  background: rgba(255, 255, 255, 0.075) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3) !important;
+  color: #fff;
+  overflow: hidden;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.about-card.ui.card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.095) !important;
+  border-color: rgba(255, 123, 0, 0.55) !important;
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.38),
+    0 0 22px rgba(255, 123, 0, 0.14) !important;
+}
+
+.about-card.ui.card > .content {
+  padding: 1.45rem 1.25rem !important;
+}
+
+.about-card.ui.card .header {
+  color: #fff !important;
+  font-size: 1.08rem !important;
+  font-weight: 800 !important;
+  margin-top: 0.85rem !important;
+  margin-bottom: 0.45rem !important;
+  line-height: 1.25 !important;
+}
+
+.about-card.ui.card .description {
+  color: rgba(255, 255, 255, 0.86) !important;
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+.about-card.ui.card .meta {
+  color: rgba(255, 255, 255, 0.72) !important;
+  font-size: 0.92rem;
+}
+
+/* === Estadísticas === */
+.about-stats-grid.ui.grid,
+.about-values-grid.ui.grid,
+.about-team-grid.ui.grid {
+  margin-top: 0.6rem !important;
+}
+
+.about-stat-card.ui.card {
+  min-height: 145px;
+}
+
+.about-small-icon {
+  width: 34px;
+  height: 34px;
+  margin: 0 auto 0.55rem;
+  border-radius: 50%;
+  background: rgba(255, 123, 0, 0.14);
+  color: #ff8a1d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-small-icon .icon {
+  margin: 0 !important;
+  color: #ff8a1d !important;
+  font-size: 1rem !important;
+}
+
+.about-stat-number.ui.header {
+  color: #fff !important;
+  font-size: 1.9rem !important;
+  font-weight: 800 !important;
+  margin: 0.15rem 0 0.45rem !important;
+}
+
+/* === Valores === */
+.about-value-card.ui.card {
+  min-height: 225px;
+}
+
+.about-card-icon {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff7b00, #ff4500);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px rgba(255, 91, 0, 0.26);
+}
+
+.about-card-icon .icon {
+  margin: 0 !important;
+  font-size: 1.75rem !important;
   color: #fff !important;
 }
 
-.about-page .about-stat-number.ui.header {
+/* === Equipo === */
+.about-team-description {
+  max-width: 780px;
+  margin: 0 auto 2em;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1.08em;
+  line-height: 1.75em;
+  text-align: center;
+}
+
+.about-team-card.ui.card {
+  min-height: 175px;
+}
+
+.about-team-avatar {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 123, 0, 0.45);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-team-avatar .icon {
+  margin: 0 !important;
+  font-size: 1.9rem !important;
   color: #fff !important;
 }
 
-.about-page .about-cta.ui.segment {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 123, 0, 0.35) 0%,
-    rgba(211, 84, 0, 0.25) 100%
-  ) !important;
-  border: 1px solid rgba(255, 123, 0, 0.4) !important;
-  border-radius: 12px;
-  margin-top: 2em;
+/* === CTA === */
+.about-cta.ui.segment {
+  max-width: 980px;
+  margin: 2.5em auto 0 !important;
+  padding: 2.5em 2em !important;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 123, 0, 0.36) 0%,
+      rgba(211, 84, 0, 0.25) 100%
+    ) !important;
+  border: 1px solid rgba(255, 123, 0, 0.42) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.3) !important;
 }
 
-.about-page .about-cta p {
+.about-cta__title.ui.header {
+  margin-bottom: 1.3rem !important;
+}
+
+.about-cta__button.ui.button {
+  margin-bottom: 0.8rem !important;
+  background: linear-gradient(45deg, #ff7b00, #ff4500) !important;
   color: #fff !important;
+  box-shadow: 0 8px 18px rgba(255, 91, 0, 0.3);
+}
+
+.about-cta__description {
+  max-width: 720px;
+  margin: 0.7rem auto 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.05em;
+  line-height: 1.75em;
+}
+
+/* === Responsive === */
+@media (max-width: 991px) {
+  .about-hero.ui.segment {
+    padding: 5em 1em;
+  }
+
+  .about-section.ui.segment {
+    padding: 2.2em 0 !important;
+  }
+
+  .about-history-body.ui.segment.raised {
+    padding: 2em 1.6em !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .about-page {
+    padding-top: 2em;
+  }
+
+  .about-hero.ui.segment {
+    padding: 4em 1em;
+  }
+
+  .about-section-title.ui.header,
+  .about-cta__title.ui.header {
+    font-size: 1.35rem !important;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .about-section-title__icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .about-history-text,
+  .about-team-description,
+  .about-cta__description {
+    font-size: 1rem;
+    line-height: 1.65em;
+  }
+
+  .about-card.ui.card {
+    min-height: auto;
+  }
+
+  .about-value-card.ui.card,
+  .about-team-card.ui.card {
+    min-height: auto;
+  }
+}
+
+/* =====================================================
+   AJUSTE VISUAL: Iconos principales de secciones About
+   ===================================================== */
+
+.about-section-title.ui.header,
+.about-cta__title.ui.header {
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  text-align: center !important;
+  margin-bottom: 1.8rem !important;
+}
+
+.about-section-title__icon {
+  width: 64px !important;
+  height: 64px !important;
+  min-width: 64px !important;
+  min-height: 64px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #ff7b00, #ff4500) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow:
+    0 10px 24px rgba(255, 91, 0, 0.35),
+    0 0 0 6px rgba(255, 123, 0, 0.08) !important;
+  margin: 0 auto !important;
+}
+
+.about-section-title__icon .icon {
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  font-size: 1.65rem !important;
+  color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.about-section-title.ui.header span:last-child,
+.about-cta__title.ui.header span:last-child {
+  display: block !important;
+  color: #fff !important;
+  font-size: 1.65rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* Icono del CTA un poco más integrado con el bloque naranja */
+.about-cta .about-section-title__icon {
+  background: #ff5c00 !important;
+  box-shadow:
+    0 10px 24px rgba(255, 91, 0, 0.4),
+    0 0 0 7px rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Mejor proporción en móviles */
+@media (max-width: 767px) {
+  .about-section-title__icon {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    min-height: 56px !important;
+  }
+
+  .about-section-title__icon .icon {
+    font-size: 1.45rem !important;
+  }
+
+  .about-section-title.ui.header span:last-child,
+  .about-cta__title.ui.header span:last-child {
+    font-size: 1.35rem !important;
+  }
 }

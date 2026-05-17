@@ -18,205 +18,206 @@ export default function AboutUs() {
   const { config } = useApp();
   const { t } = useTranslation();
 
+  const stats = [
+    {
+      value: "15+",
+      label: t("about.stats_years"),
+      icon: "calendar check",
+    },
+    {
+      value: "1000+",
+      label: t("about.stats_clients"),
+      icon: "users",
+    },
+    {
+      value: "50+",
+      label: t("about.stats_cuts"),
+      icon: "food",
+    },
+    {
+      value: "100%",
+      label: t("about.stats_satisfaction"),
+      icon: "thumbs up",
+    },
+  ];
+
+  const values = [
+    {
+      icon: "star",
+      title: t("about.value_quality_title"),
+      description: t("about.value_quality_desc"),
+    },
+    {
+      icon: "fire",
+      title: t("about.value_tradition_title"),
+      description: t("about.value_tradition_desc"),
+    },
+    {
+      icon: "users",
+      title: t("about.value_experience_title"),
+      description: t("about.value_experience_desc"),
+    },
+  ];
+
+  const team = [
+    {
+      name: "Jose Dell",
+      role: t("about.team_owner"),
+    },
+    {
+      name: "Santiago Perdomo",
+      role: t("about.team_grill_chef"),
+    },
+    {
+      name: "Miguel Cordoba",
+      role: t("about.team_manager"),
+    },
+    {
+      name: "David Roa",
+      role: t("about.team_assistant_chef"),
+    },
+  ];
+
   return (
     <>
       <Segment textAlign="center" className="about-hero">
         <div className="about-hero__overlay" aria-hidden="true" />
+
         <div className="about-hero__content">
-          <Header as="h1" size="huge">
+          <Header as="h1" size="huge" className="about-hero__title">
             <Icon name="fire" />
             {config.RESTAURANT.name}
           </Header>
-          <Header as="h3">{t("about.hero_subtitle")}</Header>
+
+          <Header as="h3" className="about-hero__subtitle">
+            {t("about.hero_subtitle")}
+          </Header>
         </div>
       </Segment>
 
-      <div className="about-page">
+      <main className="about-page">
         <Container>
-          <Segment vertical>
-            <Header as="h2" textAlign="center">
-              <Icon name="history" />
-              {t("about.history_title")}
+          {/* Historia */}
+          <Segment vertical className="about-section about-section--history">
+            <Header as="h2" textAlign="center" className="about-section-title">
+              <span className="about-section-title__icon">
+                <Icon name="history" />
+              </span>
+              <span>{t("about.history_title")}</span>
             </Header>
-            <Divider />
+
+            <Divider className="about-divider" />
+
             <Segment raised className="about-history-body">
-              <p
-                style={{
-                  fontSize: "1.2em",
-                  lineHeight: "1.8em",
-                  textAlign: "center",
-                  margin: "2em 0",
-                }}
-              >
-                {t("about.history_paragraph1", { name: config.RESTAURANT.name })}
+              <p className="about-history-text">
+                {t("about.history_paragraph1", {
+                  name: config.RESTAURANT.name,
+                })}
               </p>
-              <p
-                style={{
-                  fontSize: "1.2em",
-                  lineHeight: "1.8em",
-                  textAlign: "center",
-                  margin: "2em 0",
-                }}
-              >
+
+              <p className="about-history-text">
                 {t("about.history_paragraph2")}
               </p>
             </Segment>
-            <Divider />
           </Segment>
 
-          <Segment vertical>
-            <Header as="h2" textAlign="center">
-              <Icon name="chart line" />
-              {t("about.stats_title")}
+          {/* Estadísticas */}
+          <Segment vertical className="about-section">
+            <Header as="h2" textAlign="center" className="about-section-title">
+              <span className="about-section-title__icon">
+                <Icon name="chart line" />
+              </span>
+              <span>{t("about.stats_title")}</span>
             </Header>
-            <Grid columns={4} stackable textAlign="center">
-              <Grid.Column>
-                <Card>
-                  <Card.Content>
-                    <Header as="h2" className="about-stat-number">
-                      15+
-                    </Header>
-                    <Card.Description>{t("about.stats_years")}</Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card>
-                  <Card.Content>
-                    <Header as="h2" className="about-stat-number">
-                      1000+
-                    </Header>
-                    <Card.Description>{t("about.stats_clients")}</Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card>
-                  <Card.Content>
-                    <Header as="h2" className="about-stat-number">
-                      50+
-                    </Header>
-                    <Card.Description>{t("about.stats_cuts")}</Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card>
-                  <Card.Content>
-                    <Header as="h2" className="about-stat-number">
-                      100%
-                    </Header>
-                    <Card.Description>
-                      {t("about.stats_satisfaction")}
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
+
+            <Grid columns={4} stackable textAlign="center" className="about-stats-grid">
+              {stats.map((stat) => (
+                <Grid.Column key={stat.label}>
+                  <Card className="about-card about-stat-card">
+                    <Card.Content>
+                      <div className="about-small-icon">
+                        <Icon name={stat.icon} />
+                      </div>
+
+                      <Header as="h2" className="about-stat-number">
+                        {stat.value}
+                      </Header>
+
+                      <Card.Description>{stat.label}</Card.Description>
+                    </Card.Content>
+                  </Card>
+                </Grid.Column>
+              ))}
             </Grid>
           </Segment>
 
-          <Segment vertical>
-            <Header as="h2" textAlign="center">
-              <Icon name="heart" />
-              {t("about.values_title")}
+          {/* Valores */}
+          <Segment vertical className="about-section">
+            <Header as="h2" textAlign="center" className="about-section-title">
+              <span className="about-section-title__icon">
+                <Icon name="heart" />
+              </span>
+              <span>{t("about.values_title")}</span>
             </Header>
-            <Grid columns={3} stackable>
-              <Grid.Column>
-                <Card raised>
-                  <Card.Content textAlign="center">
-                    <Icon name="star" size="huge" />
-                    <Card.Header>{t("about.value_quality_title")}</Card.Header>
-                    <Card.Description>
-                      {t("about.value_quality_desc")}
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card raised>
-                  <Card.Content textAlign="center">
-                    <Icon name="fire" size="huge" />
-                    <Card.Header>{t("about.value_tradition_title")}</Card.Header>
-                    <Card.Description>
-                      {t("about.value_tradition_desc")}
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card raised>
-                  <Card.Content textAlign="center">
-                    <Icon name="users" size="huge" />
-                    <Card.Header>{t("about.value_experience_title")}</Card.Header>
-                    <Card.Description>
-                      {t("about.value_experience_desc")}
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
+
+            <Grid columns={3} stackable className="about-values-grid">
+              {values.map((value) => (
+                <Grid.Column key={value.title}>
+                  <Card raised className="about-card about-value-card">
+                    <Card.Content textAlign="center">
+                      <div className="about-card-icon">
+                        <Icon name={value.icon} />
+                      </div>
+
+                      <Card.Header>{value.title}</Card.Header>
+
+                      <Card.Description>{value.description}</Card.Description>
+                    </Card.Content>
+                  </Card>
+                </Grid.Column>
+              ))}
             </Grid>
           </Segment>
 
-          <Segment vertical>
-            <Header as="h2" textAlign="center">
-              <Icon name="users" />
-              {t("about.team_title")}
+          {/* Equipo */}
+          <Segment vertical className="about-section">
+            <Header as="h2" textAlign="center" className="about-section-title">
+              <span className="about-section-title__icon">
+                <Icon name="users" />
+              </span>
+              <span>{t("about.team_title")}</span>
             </Header>
-            <p
-              style={{
-                fontSize: "1.2em",
-                lineHeight: "1.8em",
-                textAlign: "center",
-                margin: "2em 0",
-              }}
-            >
-              {t("about.team_description")}
-            </p>
-            <Grid columns={4} stackable textAlign="center">
-              <Grid.Column>
-                <Card raised>
-                  <Card.Content textAlign="center">
-                    <Icon name="user" size="huge" />
-                    <Card.Header>Jose Dell</Card.Header>
-                    <Card.Meta>{t("about.team_owner")}</Card.Meta>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card raised>
-                  <Card.Content textAlign="center">
-                    <Icon name="user" size="huge" />
-                    <Card.Header>Santiago Perdomo</Card.Header>
-                    <Card.Meta>{t("about.team_grill_chef")}</Card.Meta>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card raised>
-                  <Card.Content textAlign="center">
-                    <Icon name="user" size="huge" />
-                    <Card.Header>Miguel Cordoba</Card.Header>
-                    <Card.Meta>{t("about.team_manager")}</Card.Meta>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column>
-                <Card raised>
-                  <Card.Content textAlign="center">
-                    <Icon name="user" size="huge" />
-                    <Card.Header>David Roa</Card.Header>
-                    <Card.Meta>{t("about.team_assistant_chef")}</Card.Meta>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
+
+            <p className="about-team-description">{t("about.team_description")}</p>
+
+            <Grid columns={4} stackable textAlign="center" className="about-team-grid">
+              {team.map((member) => (
+                <Grid.Column key={member.name}>
+                  <Card raised className="about-card about-team-card">
+                    <Card.Content textAlign="center">
+                      <div className="about-team-avatar">
+                        <Icon name="user" />
+                      </div>
+
+                      <Card.Header>{member.name}</Card.Header>
+
+                      <Card.Meta>{member.role}</Card.Meta>
+                    </Card.Content>
+                  </Card>
+                </Grid.Column>
+              ))}
             </Grid>
           </Segment>
 
+          {/* CTA */}
           <Segment vertical textAlign="center" className="about-cta">
-            <Header as="h2">
-              <Icon name="calendar" />
-              {t("about.cta_title")}
+            <Header as="h2" className="about-cta__title">
+              <span className="about-section-title__icon">
+                <Icon name="calendar" />
+              </span>
+              <span>{t("about.cta_title")}</span>
             </Header>
+
             <Button
               as={Link}
               to="/contacto"
@@ -224,23 +225,16 @@ export default function AboutUs() {
               size="large"
               icon
               labelPosition="left"
-              style={{ marginBottom: "0.5rem" }}
+              className="about-cta__button"
             >
               <Icon name="mail" />
               {t("contact.title")}
             </Button>
-            <p
-              style={{
-                fontSize: "1.2em",
-                lineHeight: "1.8em",
-                margin: "0.5rem 0 0 0",
-              }}
-            >
-              {t("about.cta_description")}
-            </p>
+
+            <p className="about-cta__description">{t("about.cta_description")}</p>
           </Segment>
         </Container>
-      </div>
+      </main>
     </>
   );
 }
