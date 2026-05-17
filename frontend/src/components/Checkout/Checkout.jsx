@@ -325,18 +325,17 @@ export default function Checkout() {
               {t('checkout.cart_summary')} ({cartItemsCount} {t('checkout.items')})
             </Header>
 
-            <div style={{ textAlign: 'right', marginBottom: '1em' }}>
-              <Button
-                as="a"
-                href={config.ROUTES.PRODUCTS}
-                basic
-                size="small"
-                style={{ color: 'var(--accent)', borderColor: 'var(--accent)' }}
-              >
-                <Icon name="arrow left" />
-                {t('checkout.continue_shopping')}
-              </Button>
-            </div>
+                          <div className="continue-shopping-wrapper">
+                <Button
+                  as="a"
+                  href={config.ROUTES.PRODUCTS}
+                  size="small"
+                  className="continue-shopping-button"
+                >
+                  <Icon name="arrow left" />
+                  {t('checkout.continue_shopping')}
+                </Button>
+              </div>
 
             <List divided relaxed className="checkout-product-list">
               {cart.map((item, index) => (
