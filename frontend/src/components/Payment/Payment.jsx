@@ -20,8 +20,76 @@ const Payment = () => {
   const [paymentDone, setPaymentDone] = useState(false);
   const [error, setError] = useState('');
 
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardName, setCardName] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cardCvv, setCardCvv] = useState('');
+  const [cardErrors, setCardErrors] = useState({});
+
+  const formatCardNumber = (value) => {
+    const digits = value.replace(/\D/g, '').slice(0, 16);
+    return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+  };
+
+  const handleCardNumberChange = (e) => {
+    setCardNumber(formatCardNumber(e.target.value));
+    if (cardErrors.cardNumber) {
+      setCardErrors((prev) => ({ ...prev, cardNumber: '' }));
+    }
+  };
+
+  const formatExpiry = (value) => {
+    const digits = value.replace(/\D/g, '').slice(0, 4);
+    if (digits.length > 2) {
+      return digits.slice(0, 2) + '/' + digits.slice(2);
+    }
+    return digits;
+  };
+
+  const handleCardExpiryChange = (e) => {
+    setCardExpiry(formatExpiry(e.target.value));
+    if (cardErrors.cardExpiry) {
+      setCardErrors((prev) => ({ ...prev, cardExpiry: '' }));
+    }
+  };
+
+  const handleCvvChange = (e) => {
+    const digits = e.target.value.replace(/\D/g, '').slice(0, 4);
+    setCardCvv(digits);
+    if (cardErrors.cardCvv) {
+      setCardErrors((prev) => ({ ...prev, cardCvv: '' }));
+    }
+  };
+
+  const handleCardNameChange = (e) => {
+    const lettersOnly = e.target.value.replace(/[0-9]/g, '');
+    setCardName(lettersOnly);
+    if (cardErrors.cardName) {
+      setCardErrors((prev) => ({ ...prev, cardName: '' }));
+    }
+  };
+
+  const validateCardForm = () => {
+    const errors = {};
+    const num = cardNumber.replace(/\s/g, '');
+    if (!num) errors.cardNumber = t('payment.card_number_required');
+    else if (!/^\d{13,19}$/.test(num)) errors.cardNumber = t('payment.card_number_invalid');
+
+    if (!cardName.trim()) errors.cardName = t('payment.card_name_required');
+
+    if (!cardExpiry) errors.cardExpiry = t('payment.card_expiry_required');
+    else if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) errors.cardExpiry = t('payment.card_expiry_invalid');
+
+    if (!cardCvv) errors.cardCvv = t('payment.card_cvv_required');
+    else if (!/^\d{3,4}$/.test(cardCvv)) errors.cardCvv = t('payment.card_cvv_invalid');
+
+    setCardErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handlePayment = async () => {
     if (!selectedMethod) return;
+    if (selectedMethod === 'card' && !validateCardForm()) return;
     setIsProcessing(true);
     setError('');
     try {
@@ -138,7 +206,7 @@ const Payment = () => {
         <div className="payment-methods-grid">
           <div
             className={`payment-method-card ${selectedMethod === 'card' ? 'selected' : ''}`}
-            onClick={() => setSelectedMethod('card')}
+            onClick={() => { setSelectedMethod('card'); setCardErrors({}); }}
           >
             <div className="payment-method-icon-wrap">
               <Icon name="credit card" size="big" />
@@ -150,7 +218,7 @@ const Payment = () => {
 
           <div
             className={`payment-method-card ${selectedMethod === 'cash' ? 'selected' : ''}`}
-            onClick={() => setSelectedMethod('cash')}
+            onClick={() => { setSelectedMethod('cash'); setCardErrors({}); }}
           >
             <div className="payment-method-icon-wrap">
               <Icon name="money bill alternate" size="big" />
@@ -161,6 +229,68 @@ const Payment = () => {
           </div>
         </div>
 
+        {selectedMethod === 'card' && (
+          <Segment className="payment-card-form-segment">
+            <Header as="h4" className="payment-card-form-title">
+              <Icon name="credit card" />
+              {t('payment.card_form_title')}
+            </Header>
+            <Divider />
+            <div className="payment-card-form-grid">
+              <div className="payment-card-field">
+                <label>{t('payment.card_number')}</label>
+                <input
+                  className="payment-card-input"
+                  placeholder={t('payment.card_number_placeholder')}
+                  value={cardNumber}
+                  onChange={handleCardNumberChange}
+                  maxLength={19}
+                  autoComplete="cc-number"
+                />
+                {cardErrors.cardNumber && <span className="payment-card-error">{cardErrors.cardNumber}</span>}
+              </div>
+              <div className="payment-card-field">
+                <label>{t('payment.card_name')}</label>
+                <input
+                  className="payment-card-input"
+                  placeholder={t('payment.card_name_placeholder')}
+                  value={cardName}
+                  onChange={handleCardNameChange}
+                  autoComplete="cc-name"
+                />
+                {cardErrors.cardName && <span className="payment-card-error">{cardErrors.cardName}</span>}
+              </div>
+              <div className="payment-card-row">
+                <div className="payment-card-field payment-card-expiry">
+                  <label>{t('payment.card_expiry')}</label>
+                  <input
+                    className="payment-card-input"
+                    placeholder={t('payment.card_expiry_placeholder')}
+                    value={cardExpiry}
+                    onChange={handleCardExpiryChange}
+                    maxLength={5}
+                    autoComplete="cc-exp"
+                  />
+                  {cardErrors.cardExpiry && <span className="payment-card-error">{cardErrors.cardExpiry}</span>}
+                </div>
+                <div className="payment-card-field payment-card-cvv">
+                  <label>{t('payment.card_cvv')}</label>
+                  <input
+                    className="payment-card-input"
+                    placeholder={t('payment.card_cvv_placeholder')}
+                    value={cardCvv}
+                    onChange={handleCvvChange}
+                    maxLength={4}
+                    type="password"
+                    autoComplete="cc-csc"
+                  />
+                  {cardErrors.cardCvv && <span className="payment-card-error">{cardErrors.cardCvv}</span>}
+                </div>
+              </div>
+            </div>
+          </Segment>
+        )}
+
         <Button
           color="orange"
           fluid
@@ -170,8 +300,10 @@ const Payment = () => {
           onClick={handlePayment}
           className="payment-confirm-btn"
         >
-          <Icon name="check circle" />
-          {t('payment.confirm_payment')}
+          <Icon name={selectedMethod === 'card' ? 'lock' : 'check circle'} />
+          {selectedMethod === 'card'
+            ? t('payment.pay_with_card', { total: `$${(orderData?.total || 0).toLocaleString('es-CO')}` })
+            : t('payment.confirm_payment')}
         </Button>
       </Segment>
     </Container>
