@@ -78,6 +78,8 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("products");
   const [productModalOpen, setProductModalOpen] = useState(false);
   const [reservationModalOpen, setReservationModalOpen] = useState(false);
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
   const [editingReservation, setEditingReservation] = useState(null);
   const [productErrors, setProductErrors] = useState({});
@@ -1245,20 +1247,8 @@ const AdminDashboard = () => {
                         icon
                         className="admin-icon-btn info"
                         onClick={() => {
-                          const itemsText = order.items.map(item => 
-                            `${item.title} x${item.quantity} ($${item.price.toLocaleString('es-CO')})`
-                          ).join('\n');
-                          const addressText = order.deliveryAddress + 
-                            (order.deliveryReference ? `\nRef: ${order.deliveryReference}` : '');
-                          window.alert(
-                            `${t("admin.orderDetails")}:\n\n` +
-                            `${t("admin.customer")}: ${order.customerName}\n` +
-                            `${t("admin.phone")}: ${order.customerPhone}\n` +
-                            `${t("admin.email")}: ${order.customerEmail}\n` +
-                            `${t("admin.deliveryAddress")}: ${addressText}\n\n` +
-                            `${t("admin.items")}:\n${itemsText}\n\n` +
-                            `${t("admin.total")}: $${formatNumber(order.total)}`
-                          );
+                          setSelectedOrder(order);
+                          setOrderModalOpen(true);
                         }}
                         title={t("admin.orderDetails")}
                       >
@@ -1270,6 +1260,133 @@ const AdminDashboard = () => {
               </Table.Body>
             </Table>
           )}
+
+          <Modal
+            open={orderModalOpen}
+            onClose={() => {
+              setOrderModalOpen(false);
+              setSelectedOrder(null);
+            }}
+            size="large"
+            className="admin-modal"
+            closeIcon
+          >
+            <Modal.Header className="admin-order-modal-header">
+              <div className="admin-order-header-content">
+                <span className="admin-order-id">
+                  <Icon name="shopping cart" />
+                  Pedido #{selectedOrder?.id?.slice(-8) || selectedOrder?.id}
+                </span>
+              </div>
+            </Modal.Header>
+
+            <Modal.Content className="admin-order-modal-content">
+              {selectedOrder && (
+                <div className="admin-order-details">
+                  {/* Delivery Information Section */}
+                  <div className="admin-order-section">
+                    <h3 className="admin-order-section-title">
+                      <Icon name="truck" />
+                      Información de Entrega
+                    </h3>
+                    <div className="admin-order-info-grid">
+                      <div className="admin-order-info-item">
+                        <Icon name="user" />
+                        <div>
+                          <span className="admin-info-label">Cliente:</span>
+                          <strong>{selectedOrder.customerName}</strong>
+                        </div>
+                      </div>
+                      <div className="admin-order-info-item">
+                        <Icon name="phone" />
+                        <div>
+                          <span className="admin-info-label">Teléfono:</span>
+                          <strong>{selectedOrder.customerPhone || "N/A"}</strong>
+                        </div>
+                      </div>
+                      {selectedOrder.customerEmail && (
+                        <div className="admin-order-info-item">
+                          <Icon name="mail" />
+                          <div>
+                            <span className="admin-info-label">Email:</span>
+                            <strong>{selectedOrder.customerEmail}</strong>
+                          </div>
+                        </div>
+                      )}
+                      <div className="admin-order-info-item admin-order-info-full">
+                        <Icon name="map marker" />
+                        <div>
+                          <span className="admin-info-label">Dirección:</span>
+                          <strong>{selectedOrder.deliveryAddress}</strong>
+                          {selectedOrder.deliveryReference && (
+                            <div className="admin-info-reference">
+                              Ref: {selectedOrder.deliveryReference}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Items Section */}
+                  <div className="admin-order-section">
+                    <h3 className="admin-order-section-title">
+                      <Icon name="list" />
+                      Ítems del Pedido
+                    </h3>
+                    <Table celled className="admin-order-items-table">
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell>Cantidad</Table.HeaderCell>
+                          <Table.HeaderCell>Producto</Table.HeaderCell>
+                          <Table.HeaderCell>Precio Unitario</Table.HeaderCell>
+                          <Table.HeaderCell>Subtotal</Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+                      <Table.Body>
+                        {selectedOrder.items.map((item, index) => (
+                          <Table.Row key={index}>
+                            <Table.Cell>
+                              <Label className="admin-tag">{item.quantity}</Label>
+                            </Table.Cell>
+                            <Table.Cell className="admin-cell-title">
+                              {item.title}
+                            </Table.Cell>
+                            <Table.Cell>${formatNumber(item.price)}</Table.Cell>
+                            <Table.Cell>
+                              <strong>${formatNumber(item.price * item.quantity)}</strong>
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table>
+                  </div>
+
+                  {/* Total Section */}
+                  <div className="admin-order-total-section">
+                    <div className="admin-order-total-label">Total del Pedido</div>
+                    <div className="admin-order-total-amount">
+                      ${formatNumber(selectedOrder.total)}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </Modal.Content>
+
+            <Modal.Actions>
+              <Button
+                color="orange"
+                onClick={() => {
+                  setOrderModalOpen(false);
+                  setSelectedOrder(null);
+                }}
+                className="admin-primary-btn"
+              >
+                <Icon name="close" />
+                Cerrar
+              </Button>
+            </Modal.Actions>
+          </Modal>
         </Tab.Pane>
       ),
     },

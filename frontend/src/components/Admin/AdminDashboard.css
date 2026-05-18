@@ -379,6 +379,11 @@
   color: #dc2626 !important;
 }
 
+.admin-icon-btn.info {
+  background: #e8f5ff !important;
+  color: #1677d2 !important;
+}
+
 .admin-actions-cell {
   white-space: nowrap;
 }
@@ -520,6 +525,147 @@
 .ui.modal.admin-modal > .content,
 .ui.modal.admin-modal > .actions {
   background: #fff !important;
+}
+
+/* Order Modal Specific Styles */
+.admin-order-modal-header {
+  background: linear-gradient(135deg, #ff8d1f, #ff5a00) !important;
+  color: #fff !important;
+  border-bottom: none !important;
+  padding: 1.5rem !important;
+}
+
+.admin-order-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-order-id {
+  font-size: 1.3rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-order-id .icon {
+  color: #fff !important;
+  margin: 0 !important;
+}
+
+.admin-order-modal-content {
+  padding: 2rem !important;
+  background: #fafafa !important;
+}
+
+.admin-order-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.admin-order-section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #e8eaee;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.admin-order-section-title {
+  color: #ff7a1a !important;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-order-section-title .icon {
+  margin: 0 !important;
+}
+
+.admin-order-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.admin-order-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #fffaf5;
+  border-radius: 12px;
+  border: 1px solid #ffe8d6;
+}
+
+.admin-order-info-full {
+  grid-column: 1 / -1;
+}
+
+.admin-order-info-item .icon {
+  color: #ff7a1a !important;
+  margin-top: 0.1rem !important;
+  font-size: 1.1rem !important;
+}
+
+.admin-info-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+}
+
+.admin-info-reference {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 0.3rem;
+}
+
+.admin-order-items-table.ui.table {
+  margin: 0 !important;
+  border-radius: 12px !important;
+  border: 1px solid #e8eaee !important;
+  box-shadow: none !important;
+}
+
+.admin-order-items-table thead th {
+  background: #fff7f0 !important;
+  color: #8b4200 !important;
+  font-weight: 700 !important;
+  padding: 0.8rem !important;
+  border-color: #f1e4d7 !important;
+}
+
+.admin-order-items-table tbody td {
+  padding: 0.8rem !important;
+  border-color: #eceef2 !important;
+}
+
+.admin-order-total-section {
+  background: linear-gradient(135deg, #ff8d1f, #ff5a00);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(255, 106, 0, 0.25);
+}
+
+.admin-order-total-label {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.admin-order-total-amount {
+  font-size: 2rem;
+  font-weight: 800;
 }
 
 .admin-form .field > label {
