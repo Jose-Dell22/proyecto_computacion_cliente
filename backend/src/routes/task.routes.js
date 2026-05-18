@@ -213,6 +213,9 @@ router.put("/objects/orders/:id/payment", async (req, res) => {
 
     res.json(order);
   } catch (error) {
+    if (error.name === "CastError") {
+      return res.status(400).json({ message: `ID de pedido inválido` });
+    }
     return res.status(500).json({ message: error.message });
   }
 });

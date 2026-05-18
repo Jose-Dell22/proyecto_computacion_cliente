@@ -98,6 +98,13 @@ export const createResource = async (req, res) => {
 
     res.status(201).json(savedItem);
   } catch (error) {
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((e) => e.message);
+      return res.status(400).json({ message: messages.join(". ") });
+    }
+    if (error.name === "CastError") {
+      return res.status(400).json({ message: `Valor inválido para el campo "${error.path}"` });
+    }
     return res.status(500).json({ message: error.message });
   }
 };
@@ -141,7 +148,7 @@ export const updateResource = async (req, res) => {
     }
 
     console.log("Attempting to find and update document with ID:", req.params.id);
-    const item = await Model.findByIdAndUpdate(req.params.id, payload, { new: true });
+    const item = await Model.findByIdAndUpdate(req.params.id, payload, { new: true, runValidators: true });
     console.log("Update result:", item);
     
     if (!item) {
@@ -158,6 +165,13 @@ export const updateResource = async (req, res) => {
     res.json(item);
   } catch (error) {
     console.log("❌ Error in updateResource:", error);
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((e) => e.message);
+      return res.status(400).json({ message: messages.join(". ") });
+    }
+    if (error.name === "CastError") {
+      return res.status(400).json({ message: `Valor inválido para el campo "${error.path}"` });
+    }
     return res.status(500).json({ message: error.message });
   }
 };
