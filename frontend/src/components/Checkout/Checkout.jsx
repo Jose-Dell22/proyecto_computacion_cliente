@@ -137,13 +137,13 @@ export default function Checkout() {
   if (cart.length === 0) {
     return (
       <Container className="checkout-page">
-        <Segment textAlign="center" style={{ marginTop: '3em' }}>
-          <Header as="h2" icon>
+        <Segment className="checkout-empty-card" textAlign="center">
+          <Header as="h2" icon className="checkout-empty-header">
             <Icon name="shopping cart" />
             {t('checkout.empty_title')}
           </Header>
-          <p>{t('checkout.empty_message')}</p>
-          <Button primary onClick={() => window.location.href = config.ROUTES.MENU_COMPONENT}>
+          <p className="checkout-empty-text">{t('checkout.empty_message')}</p>
+          <Button primary className="checkout-empty-btn" onClick={() => window.location.href = config.ROUTES.MENU_COMPONENT}>
             <Icon name="utensils" />
             {t('checkout.go_menu')}
           </Button>
