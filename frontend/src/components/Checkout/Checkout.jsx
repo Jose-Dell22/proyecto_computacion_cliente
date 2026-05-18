@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   Container,
   Header,
@@ -21,12 +21,14 @@ import {
   sanitizeNameInput,
   sanitizePhoneInput,
 } from '../../utils/formValidation';
-import { APP_CONFIG, MESSAGES, ICONS } from '../../config/constants';
+import { ICONS } from '../../config/constants';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiFetch } from '../../api/client';
 import './Checkout.css';
 
 export default function Checkout() {
+  const navigate = useNavigate();
   const {
     config,
     cart,
@@ -80,8 +82,6 @@ export default function Checkout() {
 
   const { values, errors, isSubmitting, handleChange, handleSubmit, reset } =
     useForm({}, checkoutRules);
-  const [orderSuccess, setOrderSuccess] = useState(false);
-  const [orderData, setOrderData] = useState(null);
 
   const onSubmit = async (formValues) => {
     try {
@@ -120,10 +120,9 @@ export default function Checkout() {
       }
 
       const savedOrder = await response.json();
-      setOrderData(savedOrder);
-      setOrderSuccess(true);
       clearCart();
       reset();
+      navigate(`/payment/${savedOrder._id}`, { state: { orderData: savedOrder } });
 
     } catch (error) {
       console.error('Error submitting order:', error);
@@ -134,28 +133,6 @@ export default function Checkout() {
 
   const cartItemsCount = cart.reduce((total, item) => total + (item.quantity || 1), 0);
   const cartTotal = getCartTotal();
-
-  if (orderSuccess) {
-    return (
-      <Container className="checkout-page">
-        <Segment color="green" textAlign="center" style={{ marginTop: '3em' }}>
-          <Header as="h1" color="green">
-            <Icon name="check circle" />
-            {t('checkout.success_title')}
-          </Header>
-          <p>{t('checkout.success_message')}</p>
-          <Message success>
-            <Message.Header>{t('checkout.order_number')}</Message.Header>
-            <p>#{orderData?._id || 'N/A'}</p>
-          </Message>
-          <Button primary onClick={() => window.location.href = config.ROUTES.HOME}>
-            <Icon name="home" />
-            {t('checkout.back_home')}
-          </Button>
-        </Segment>
-      </Container>
-    );
-  }
 
   if (cart.length === 0) {
     return (

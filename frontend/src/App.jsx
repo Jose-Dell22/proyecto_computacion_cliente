@@ -9,10 +9,11 @@ import NotFound from "./components/Notfound/Notfound";
 import AboutUs from "./components/AboutUs/About";
 import MenuComponent from "./components/MenuComponent/menuComponent";
 import Checkout from "./components/Checkout/Checkout";
-import FloatingCart from "./components/common/FloatingCart";
+import CartDrawer from "./components/common/CartDrawer";
 import Footer from "./components/common/Footer";
 import ReservationForm from "./components/Reservations/ReservationForm";
 import AdminDashboard from "./components/Admin/AdminDashboard";
+import Payment from "./components/Payment/Payment";
 
 import { useApp } from "./context/AppContext";
 import { MESSAGES } from "./config/constants";
@@ -164,13 +165,14 @@ const App = () => {
           <Route path={config.ROUTES.RESERVATION} element={<ReservationForm />} />
           <Route path={config.ROUTES.ADMIN} element={<AdminDashboard />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/payment/:orderId" element={<Payment />} />
 
           {/* Página 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
 
-        {/* Carrito flotante siempre visible */}
-        <FloatingCart />
+        {/* Carrito lateral siempre visible */}
+        <CartDrawer />
       </div>
 
       {/* FOOTER  */}

@@ -56,6 +56,7 @@ export const APP_CONFIG = {
     MENU_COMPONENT: '/MenuComponent',
     RESERVATION: "/reservar",
     ADMIN: "/admin",
+    PAYMENT: "/payment/:orderId",
   },
 };
 

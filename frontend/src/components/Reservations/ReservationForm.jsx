@@ -163,7 +163,8 @@ export default function ReservationForm() {
     return "";
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (e) => {
+    if (e) e.preventDefault();
     const v = validate();
     if (v) { setErrorMsg(v); setStatus("error"); return; }
 

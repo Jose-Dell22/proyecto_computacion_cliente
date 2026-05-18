@@ -1,0 +1,207 @@
+/* ===== Payment Page ===== */
+.payment-page {
+  padding: 3rem 0 4rem;
+  max-width: 800px !important;
+}
+
+.payment-title {
+  color: #eaecef !important;
+  margin-bottom: 2rem !important;
+}
+.payment-title .sub.header {
+  color: #acb2b8 !important;
+}
+
+/* ===== Order Summary ===== */
+.payment-order-summary.ui.segment,
+.payment-methods-card.ui.segment {
+  background: linear-gradient(180deg, #232427, #1b1c1d) !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35) !important;
+  padding: 2rem !important;
+  margin-bottom: 2rem !important;
+}
+
+.payment-section-title {
+  color: #eaecef !important;
+  margin-bottom: 0.5rem !important;
+}
+.payment-section-title .icon {
+  color: #ff7a1a;
+}
+
+.payment-order-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  color: #eaecef;
+}
+.payment-order-label {
+  color: #acb2b8;
+  font-size: 0.95em;
+}
+.payment-order-value {
+  font-weight: bold;
+  color: #eaecef;
+}
+.payment-total-amount {
+  color: #ff7a1a;
+  font-size: 1.3em;
+}
+
+.payment-items-header {
+  color: #ff7a1a !important;
+  margin-top: 0.5rem !important;
+}
+
+.payment-items-list {
+  margin: 0 !important;
+}
+.payment-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.8rem !important;
+  padding: 0.5rem 0 !important;
+  color: #acb2b8 !important;
+}
+.payment-item-name {
+  flex: 1;
+  color: #eaecef;
+}
+.payment-item-qty {
+  color: #acb2b8;
+  font-size: 0.9em;
+}
+.payment-item-price {
+  color: #ff7a1a;
+  font-weight: bold;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* ===== Payment Methods ===== */
+.payment-methods-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.payment-method-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.payment-method-card:hover {
+  border-color: rgba(255, 122, 26, 0.4);
+  background: rgba(255, 122, 26, 0.05);
+  transform: translateY(-3px);
+}
+.payment-method-card.selected {
+  border-color: #ff7a1a;
+  background: rgba(255, 122, 26, 0.1);
+  box-shadow: 0 0 20px rgba(255, 122, 26, 0.15);
+}
+
+.payment-method-icon-wrap {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1rem;
+  background: rgba(255, 122, 26, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.payment-method-card.selected .payment-method-icon-wrap {
+  background: rgba(255, 122, 26, 0.2);
+}
+.payment-method-icon-wrap .icon {
+  color: #ff7a1a;
+  margin: 0 !important;
+}
+
+.payment-method-name {
+  color: #eaecef !important;
+  margin-bottom: 0.5rem !important;
+}
+.payment-method-desc {
+  color: #acb2b8;
+  font-size: 0.9em;
+  margin: 0;
+}
+
+.payment-selected-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #ff7a1a !important;
+  margin: 0 !important;
+  font-size: 1.3em !important;
+}
+
+.payment-confirm-btn {
+  margin-top: 1rem !important;
+  background: #ff7a1a !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 1em !important;
+  font-weight: bold !important;
+}
+.payment-confirm-btn:hover {
+  background: #ff9d4d !important;
+}
+
+/* ===== Success ===== */
+.payment-success-card.ui.segment {
+  background: linear-gradient(180deg, #232427, #1b1c1d) !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35) !important;
+  padding: 3rem 2rem !important;
+  margin-top: 3rem;
+}
+.payment-success-icon {
+  color: #2ecc71;
+}
+.payment-success-title {
+  color: #2ecc71 !important;
+  margin: 1rem 0 !important;
+}
+.payment-success-msg {
+  color: #acb2b8;
+  font-size: 1.1em;
+  margin-bottom: 1.5rem;
+}
+.payment-order-ref {
+  display: inline-block !important;
+  text-align: center !important;
+  margin-bottom: 1.5rem !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+.payment-home-btn {
+  border-radius: 12px !important;
+  background: #ff7a1a !important;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 767px) {
+  .payment-methods-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .payment-order-summary.ui.segment,
+  .payment-methods-card.ui.segment {
+    padding: 1.2rem !important;
+  }
+  .payment-method-card {
+    padding: 1.5rem 1rem;
+  }
+}

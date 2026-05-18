@@ -245,6 +245,26 @@
     "error_header": "Error en el Formulario",
     "go_to_products": "Ir a Productos"
   },
+  "payment": {
+    "title": "Método de Pago",
+    "subtitle": "Selecciona cómo deseas pagar tu pedido",
+    "order_summary": "Resumen del Pedido",
+    "order_number": "Número de Pedido",
+    "customer": "Cliente",
+    "total": "Total",
+    "items": "Productos",
+    "select_method": "Selecciona un método de pago",
+    "card_title": "Tarjeta",
+    "card_desc": "Paga con tu tarjeta de crédito o débito de forma segura",
+    "cash_title": "Contra Entrega",
+    "cash_desc": "Paga en efectivo cuando recibas tu pedido",
+    "confirm_payment": "Confirmar método de pago",
+    "success_title": "¡Pago Confirmado!",
+    "cash_success_msg": "Tu pedido será pagado contra entrega. Prepárate con el efectivo cuando recibas tu pedido.",
+    "card_success_msg": "Tu pago con tarjeta ha sido procesado exitosamente.",
+    "back_home": "Volver al Inicio",
+    "error_header": "Error de Pago"
+  },
   "notFound": {
   "title": "Error 404",
   "subtitle": "Ostras, se nos quemó el asado tío",

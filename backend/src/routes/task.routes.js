@@ -19,6 +19,7 @@ import {
   updateResource,
 
 } from "../controllers/taskcontroller.js";
+import Order from "../models/Order.js";
 
 
 
@@ -191,5 +192,29 @@ router.put("/objects/:resource/:id", authRequired, adminRequired, updateResource
 router.delete("/objects/:resource/:id", authRequired, adminRequired, deleteResource);
 
 
+
+// Actualización pública del método de pago (no requiere autenticación)
+router.put("/objects/orders/:id/payment", async (req, res) => {
+  try {
+    const { paymentMethod } = req.body;
+    if (!["cash", "card"].includes(paymentMethod)) {
+      return res.status(400).json({ message: "Método de pago inválido. Use 'cash' o 'card'." });
+    }
+
+    const order = await Order.findByIdAndUpdate(
+      req.params.id,
+      { paymentMethod },
+      { new: true }
+    );
+
+    if (!order) {
+      return res.status(404).json({ message: "Pedido no encontrado" });
+    }
+
+    res.json(order);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
 
 export default router;
