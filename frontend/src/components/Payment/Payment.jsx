@@ -51,13 +51,13 @@ const Payment = () => {
           <Header as="h1" className="payment-success-title">
             {t('payment.success_title')}
           </Header>
-          <p className="payment-success-msg">
-            {isCash ? t('payment.cash_success_msg') : t('payment.card_success_msg')}
-          </p>
           <Message info className="payment-order-ref">
             <Message.Header>{t('payment.order_number')}</Message.Header>
             <p>#{orderId}</p>
           </Message>
+          <p className="payment-success-msg">
+            {isCash ? t('payment.cash_success_msg') : t('payment.card_success_msg')}
+          </p>
           <Button
             color="orange"
             size="large"
