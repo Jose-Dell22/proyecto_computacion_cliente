@@ -98,29 +98,12 @@ const Products = () => {
       className="products-container"
       data-products-component
       ref={sectionRef}
-      style={{
-        position: "relative",
-        backgroundColor: "#000",
-        paddingBottom: "0.5em",
-      }}
     >
-      <div
-        className="products-overlay"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          background: "rgba(0,0,0,0.75)",
-          zIndex: 0,
-        }}
-      />
 
       <Container
         textAlign="center"
         className="products-content"
-        style={{ position: "relative", zIndex: 1, paddingTop: "4em" }}
+        style={{ position: "relative", zIndex: 1 }}
       >
         <div ref={headerRef} style={{ display: "inline-block" }}>
           <Header
@@ -212,97 +195,39 @@ const Products = () => {
               ref={(el) => (productCardsRef.current[index] = el)}
               className="product-card-wrap"
             >
-              <Card
-              className="gsap-card card-hover"
-              style={{
-                background: "#fff",
-                borderRadius: "16px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                overflow: "hidden",
-                border: "none",
-              }}
-            >
-              <Image
-                src={item.image}
-                alt={item.title}
-                style={{
-                  width: "100%",
-                  height: "180px",
-                  objectFit: "cover",
-                }}
-              />
-
-              <Card.Content textAlign="center" style={{ padding: "1em" }}>
-                <Card.Header
-                  style={{
-                    color: "#ff7b00",
-                    fontWeight: "700",
-                    fontSize: "1.1em",
-                    marginBottom: "0.4em",
-                  }}
-                >
-                  {item.title}
-                </Card.Header>
-                <Card.Description
-                  style={{
-                    color: "#555",
-                    fontSize: "0.9em",
-                    lineHeight: "1.4",
-                  }}
-                >
-                  {(item.description || "").slice(0, 80)}
-                  {(item.description || "").length > 80 ? "..." : ""}
-                </Card.Description>
-              </Card.Content>
-
-              <Card.Content
-                extra
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: "0.9em",
-                  borderTop: "1px solid #eee",
-                  gap: "0.7em",
-                }}
-              >
-                <strong
-                  style={{
-                    color: "#ff7b00",
-                    fontSize: "1.1em",
-                    fontWeight: "700",
-                  }}
-                >
-                  ${" "}
-                  {item.price.toLocaleString("es-CO", {
-                    minimumFractionDigits: 0,
-                  })}
-                </strong>
-
-                <Button
-                  circular
-                  icon
-                  color="orange"
-                  onClick={() => handleAddToCart(item)}
-                  style={{
-                    boxShadow: "0 0 12px rgba(255,136,0,0.4)",
-                    transition: "all 0.2s ease-in-out",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "scale(1.1)";
-                    e.currentTarget.style.boxShadow =
-                      "0 0 18px rgba(255,136,0,0.6)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "scale(1)";
-                    e.currentTarget.style.boxShadow =
-                      "0 0 12px rgba(255,136,0,0.4)";
-                  }}
-                >
-                  <Icon name={ICONS.plus} />
-                </Button>
-              </Card.Content>
-            </Card>
+              <Card className="products-card gsap-card">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  className="products-image"
+                />
+                <Card.Content textAlign="center">
+                  <Card.Header className="products-title">
+                    {item.title}
+                  </Card.Header>
+                  <Card.Description className="products-description">
+                    {(item.description || "").slice(0, 80)}
+                    {(item.description || "").length > 80 ? "..." : ""}
+                  </Card.Description>
+                </Card.Content>
+                <Card.Content extra textAlign="center">
+                  <strong className="products-price">
+                    $
+                    {item.price.toLocaleString("es-CO", {
+                      minimumFractionDigits: 0,
+                    })}
+                  </strong>
+                  <Button
+                    circular
+                    icon
+                    color="orange"
+                    onClick={() => handleAddToCart(item)}
+                    className="products-button"
+                  >
+                    <Icon name={ICONS.plus} />
+                  </Button>
+                </Card.Content>
+              </Card>
             </div>
           ))}
         </Card.Group>
