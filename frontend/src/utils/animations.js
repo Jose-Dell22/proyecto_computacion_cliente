@@ -331,7 +331,7 @@ export const revealOnScroll = (element, options = {}) => {
   }
 
   const tween = gsap.from(el, {
-    opacity: 0,
+    opacity: 1,
     x,
     y,
     duration,
@@ -378,7 +378,7 @@ export const staggerCardsOnScroll = (cards, options = {}) => {
   }
 
   const tween = gsap.from(valid, {
-    opacity: 0,
+    opacity: 1,
     y,
     scale,
     duration,
